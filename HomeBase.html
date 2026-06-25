@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Base — Life Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Parkinsans:wght@300;400;500;600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme="dark"]{
+  --bg:#141418;--bg2:#1C1C22;--bg3:#242430;--bg4:#2E2E3C;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --text:#EEF0F8;--text2:#9FA4BC;--text3:#5C6180;
+  --accent:#4F7FD4;--accent-light:rgba(79,127,212,0.13);--accent-border:rgba(79,127,212,0.28);--accent-hover:#3A6AC4;
+  --sage:#5E9E7E;--sage-light:rgba(94,158,126,0.13);--sage-border:rgba(94,158,126,0.28);
+  --amber:#C4973A;--amber-light:rgba(196,151,58,0.13);--amber-border:rgba(196,151,58,0.28);
+  --plum:#8B6BAE;--plum-light:rgba(139,107,174,0.13);--plum-border:rgba(139,107,174,0.28);
+  --red-light:rgba(196,58,58,0.13);--red-border:rgba(196,58,58,0.26);--red-text:#E07878;
+  --nav-bg:rgba(20,20,24,0.92);--side-bg:rgba(20,20,24,0.97);
+}
+[data-theme="light"]{
+  --bg:#F4F6FB;--bg2:#FFFFFF;--bg3:#EDF0F7;--bg4:#E2E6F0;
+  --border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.12);
+  --text:#1A1D2E;--text2:#4A4F6A;--text3:#8A90AA;
+  --accent:#2D62C0;--accent-light:rgba(45,98,192,0.09);--accent-border:rgba(45,98,192,0.22);--accent-hover:#1F50A8;
+  --sage:#3A7A5A;--sage-light:rgba(58,122,90,0.09);--sage-border:rgba(58,122,90,0.22);
+  --amber:#9A6C10;--amber-light:rgba(154,108,16,0.09);--amber-border:rgba(154,108,16,0.22);
+  --plum:#6B4A9A;--plum-light:rgba(107,74,154,0.09);--plum-border:rgba(107,74,154,0.22);
+  --red-light:rgba(180,40,40,0.08);--red-border:rgba(180,40,40,0.2);--red-text:#B42828;
+  --nav-bg:rgba(244,246,251,0.94);--side-bg:rgba(244,246,251,0.97);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;min-height:100vh;font-weight:300;transition:background 0.2s,color 0.2s}
+
+/* ===== Layout shell ===== */
+.shell{display:flex;min-height:100vh}
+
+.sidebar{width:208px;flex-shrink:0;background:var(--side-bg);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;z-index:50}
+.side-brand{font-family:'Parkinsans',sans-serif;font-weight:600;font-size:17px;padding:22px 20px 18px;border-bottom:1px solid var(--border);letter-spacing:-0.01em}
+.side-brand em{color:var(--accent);font-style:normal;font-weight:600}
+.side-groups{flex:1;overflow-y:auto;padding:14px 10px}
+.side-group{display:flex;align-items:center;gap:11px;width:100%;padding:11px 12px;font-family:'Outfit',sans-serif;font-size:13.5px;font-weight:400;color:var(--text3);background:none;border:none;border-radius:9px;cursor:pointer;text-align:left;transition:all 0.15s;margin-bottom:2px}
+.side-group .sg-icon{font-size:15px;width:18px;text-align:center;flex-shrink:0;opacity:0.85}
+.side-group:hover{background:var(--bg3);color:var(--text2)}
+.side-group.active{background:var(--accent-light);color:var(--accent);font-weight:500}
+.side-foot{padding:14px 20px 18px;border-top:1px solid var(--border)}
+
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+
+nav{position:sticky;top:0;z-index:40;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 1.75rem;gap:0}
+.nav-tabs{display:flex;overflow-x:auto;flex:1;scrollbar-width:none}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{padding:18px 14px;font-size:13px;font-weight:400;color:var(--text3);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.2s;font-family:'Outfit',sans-serif}
+.nav-tab:hover{color:var(--text2)}
+.nav-tab.active{color:var(--accent);border-bottom:2px solid var(--accent);font-weight:500}
+.nav-right{margin-left:auto;padding-left:1rem;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.pill-btn{display:flex;align-items:center;gap:6px;font-size:12px;font-family:'Outfit',sans-serif;color:var(--text3);background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:6px 13px;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+.pill-btn:hover{border-color:var(--accent);color:var(--text2)}
+
+/* mobile sidebar toggle */
+.menu-btn{display:none;background:none;border:1px solid var(--border2);border-radius:8px;color:var(--text2);font-size:14px;padding:7px 10px;cursor:pointer;margin-right:10px}
+
+.page{display:none;max-width:920px;margin:0 auto;padding:2.5rem 2rem 2rem;width:100%}
+.page.active{display:block;animation:fadeUp 0.22s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+h1{font-family:'Parkinsans',sans-serif;font-size:30px;font-weight:600;margin-bottom:6px;line-height:1.2;letter-spacing:-0.01em}
+h1 em{color:var(--accent);font-style:normal}
+.sub{font-size:13px;color:var(--text3);margin-bottom:2rem;font-weight:300;line-height:1.6;max-width:580px}
+
+h2.sec-title{font-family:'Parkinsans',sans-serif;font-size:17px;font-weight:600;margin-bottom:2px}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1rem}
+.card-sm{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem}
+
+.badge{display:inline-flex;align-items:center;font-size:11px;font-weight:500;padding:3px 9px;border-radius:999px;letter-spacing:0.03em}
+.b-easy{background:var(--sage-light);color:var(--sage);border:1px solid var(--sage-border)}
+.b-med{background:var(--amber-light);color:var(--amber);border:1px solid var(--amber-border)}
+.b-inv{background:var(--red-light);color:var(--red-text);border:1px solid var(--red-border)}
+.b-thaw{background:var(--plum-light);color:var(--plum);border:1px solid var(--plum-border)}
+.b-nothaw{background:var(--sage-light);color:var(--sage);border:1px solid var(--sage-border)}
+.b-blue{background:var(--accent-light);color:var(--accent);border:1px solid var(--accent-border)}
+.b-grey{background:var(--bg3);color:var(--text3);border:1px solid var(--border2)}
+
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;border-radius:10px;cursor:pointer;transition:all 0.18s;border:1px solid var(--border2);background:var(--bg3);color:var(--text)}
+.btn:hover{background:var(--bg4)}
+.btn-p{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-p:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+.btn-sm{padding:5px 12px;font-size:12px;border-radius:7px}
+.btn-del{color:var(--red-text);border-color:var(--red-border);background:var(--red-light)}
+.btn-del:hover{background:rgba(196,58,58,0.2)}
+
+select,input[type=text],input[type=number],input[type=date],input[type=time]{font-family:'Outfit',sans-serif;font-size:13px;font-weight:300;padding:8px 11px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);width:100%;transition:border 0.2s}
+select:focus,input:focus{outline:none;border-color:var(--accent)}
+select option{background:var(--bg3)}
+textarea{font-family:'Outfit',sans-serif;font-size:13px;font-weight:300;padding:9px 11px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);width:100%;resize:vertical}
+textarea:focus{outline:none;border-color:var(--accent)}
+label{font-size:12px;font-weight:500;color:var(--text2);letter-spacing:0.03em;display:block;margin-bottom:5px}
+input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
+
+.day-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:10px;margin-bottom:1.5rem}
+.day-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem}
+.day-lbl{font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:3px;font-weight:500}
+.day-name{font-family:'Parkinsans',sans-serif;font-weight:600;font-size:16px;margin-bottom:10px}
+
+.info-strip{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:11px 15px;font-size:12px;color:var(--text3);font-weight:300}
+.isd{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
+
+.plan-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:1rem}
+.plan-row{display:grid;grid-template-columns:110px 1fr 48px;border-bottom:1px solid var(--border);transition:background 0.15s}
+.plan-row:last-child{border-bottom:none}
+.plan-row:hover{background:var(--bg3)}
+.pcell{padding:14px 16px;display:flex;flex-direction:column;justify-content:center}
+.pday{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);font-weight:500;margin-bottom:2px}
+.pdate{font-size:12px;color:var(--text3)}
+.pmeal{font-family:'Parkinsans',sans-serif;font-weight:500;font-size:15px;margin-bottom:6px;cursor:pointer;display:flex;align-items:center;gap:7px;transition:color 0.15s}
+.pmeal:hover{color:var(--accent)}
+.chev{font-size:11px;color:var(--text3);transition:transform 0.2s;display:inline-block}
+.chev.open{transform:rotate(180deg)}
+.pbadges{display:flex;gap:5px;flex-wrap:wrap}
+.pexpand{overflow:hidden;max-height:0;transition:max-height 0.3s ease}
+.pexpand.open{max-height:320px;border-top:1px solid var(--border)}
+.pexpand-inner{padding:14px 16px;background:var(--bg)}
+.ing-grid{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.ing-pill{font-size:11px;padding:3px 9px;border-radius:999px;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);font-weight:300}
+.paction{display:flex;align-items:center;justify-content:center;padding:12px 8px;border-left:1px solid var(--border)}
+.rspin{background:none;border:1px solid var(--border2);border-radius:8px;padding:6px 9px;cursor:pointer;font-size:15px;color:var(--text3);transition:all 0.18s;line-height:1}
+.rspin:hover{background:var(--accent-light);color:var(--accent);border-color:var(--accent-border)}
+
+.gsplit{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem}
+@media(max-width:600px){.gsplit{grid-template-columns:1fr}}
+.gcol-title{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;padding:5px 11px;border-radius:999px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;transition:all 0.15s;user-select:none;font-weight:300}
+.chip:hover{border-color:var(--accent);color:var(--text)}
+.chip.done{text-decoration:line-through;opacity:0.3}
+
+.trow{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--border)}
+.trow:last-child{border-bottom:none}
+.tname{font-family:'Parkinsans',sans-serif;font-weight:500;font-size:14px;margin-bottom:4px}
+.twhen{font-size:12px;color:var(--text3);font-weight:300}
+
+.ing-tag{font-size:11px;padding:3px 9px;border-radius:999px;background:var(--bg3);border:1px solid var(--border2);display:inline-flex;align-items:center;gap:5px;color:var(--text2)}
+.ing-x{cursor:pointer;color:var(--text3);font-size:12px;line-height:1;transition:color 0.15s}
+.ing-x:hover{color:var(--accent)}
+
+.dcard{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.25rem;margin-bottom:10px}
+.dcard-h{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.dcard-b{font-size:13px;color:var(--text3);font-weight:300;line-height:1.65}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex;animation:fadeIn 0.18s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:2rem;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
+.modal-title{font-family:'Parkinsans',sans-serif;font-weight:600;font-size:19px;margin-bottom:4px}
+.modal-x{position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;font-size:18px;cursor:pointer;color:var(--text3);transition:color 0.15s}
+.modal-x:hover{color:var(--text)}
+
+.sec-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:10px}
+.empty{color:var(--text3);font-size:14px;padding:3rem 0;text-align:center;font-weight:300}
+.green-strip{display:flex;align-items:center;gap:10px;padding:11px 15px;background:var(--sage-light);border:1px solid var(--sage-border);border-radius:10px;font-size:13px;color:var(--sage);margin-top:1rem;font-weight:300}
+.warn-strip{display:flex;align-items:center;gap:10px;padding:11px 15px;background:var(--amber-light);border:1px solid var(--amber-border);border-radius:10px;font-size:13px;color:var(--amber);margin-top:1rem;font-weight:300}
+footer{border-top:1px solid var(--border);padding:1.5rem 2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;max-width:920px;margin:0 auto}
+.foot-l{font-family:'Parkinsans',sans-serif;font-size:13px;color:var(--text3);font-weight:400}
+.foot-l span{color:var(--accent)}
+.foot-r{font-size:11px;color:var(--text3);font-weight:300;letter-spacing:0.04em;text-transform:uppercase}
+
+.toast{position:fixed;bottom:1.75rem;right:1.75rem;background:var(--bg4);color:var(--text);border:1px solid var(--border2);padding:11px 20px;border-radius:10px;font-size:13px;z-index:999;opacity:0;transition:opacity 0.2s;pointer-events:none;font-weight:300}
+.toast.show{opacity:1;pointer-events:auto}
+
+/* ===== Overview dashboard ===== */
+.ov-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:1.5rem}
+@media(max-width:760px){.ov-grid{grid-template-columns:1fr}}
+.ov-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.4rem}
+.ov-card-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.ov-card-h .t{font-family:'Parkinsans',sans-serif;font-weight:600;font-size:14px}
+.ov-stat{font-family:'Parkinsans',sans-serif;font-weight:600;font-size:28px;line-height:1}
+.ov-stat-lbl{font-size:11px;color:var(--text3);margin-top:4px}
+.ov-row{display:flex;align-items:center;gap:9px;padding:7px 0;font-size:13px;border-bottom:1px solid var(--border)}
+.ov-row:last-child{border-bottom:none}
+.ov-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* ===== Finance ===== */
+.fin-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:1.5rem;align-items:start}
+@media(max-width:800px){.fin-grid{grid-template-columns:1fr}}
+.fin-row{display:grid;grid-template-columns:1fr 110px 36px;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.fin-row:last-child{border-bottom:none}
+.fin-row .fname{font-size:13.5px;font-weight:400}
+.fin-row .fcat{font-size:11px;color:var(--text3);font-weight:300}
+.fin-input{text-align:right;padding:7px 9px!important}
+.fin-x{background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;transition:color 0.15s}
+.fin-x:hover{color:var(--red-text)}
+.fin-total{display:flex;justify-content:space-between;align-items:center;padding:14px 0 4px;font-family:'Parkinsans',sans-serif;font-weight:600;font-size:15px}
+.bal-pos{color:var(--sage)}
+.bal-neg{color:var(--red-text)}
+.bar-track{height:8px;border-radius:99px;background:var(--bg3);overflow:hidden;margin-top:8px}
+.bar-fill{height:100%;border-radius:99px;transition:width 0.4s ease}
+.goal-row{margin-bottom:1.1rem}
+.goal-top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px}
+.goal-top .gname{font-weight:500}
+.goal-top .gnum{color:var(--text3);font-weight:300}
+
+/* ===== Lists (todo/urgent/grocery) ===== */
+.task-row{display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-bottom:1px solid var(--border)}
+.task-row:last-child{border-bottom:none}
+.task-row.done .task-name{text-decoration:line-through;color:var(--text3)}
+.task-name{font-size:13.5px;font-weight:400;line-height:1.45}
+.task-meta{font-size:11px;color:var(--text3);margin-top:2px;display:flex;gap:8px;flex-wrap:wrap}
+.task-del{margin-left:auto;background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:2px;flex-shrink:0;transition:color 0.15s}
+.task-del:hover{color:var(--red-text)}
+.add-row{display:flex;gap:8px;margin-bottom:1.25rem}
+.add-row input{flex:1}
+
+/* ===== Weekly planner grid ===== */
+.wk-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+@media(max-width:900px){.wk-grid{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}}
+.wk-day{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.9rem;display:flex;flex-direction:column;gap:7px;min-height:230px}
+.wk-day-name{font-family:'Parkinsans',sans-serif;font-weight:600;font-size:13.5px;margin-bottom:2px}
+.wk-day-date{font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.07em}
+.wk-block-lbl{font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);font-weight:500;margin-top:2px}
+.wk-block textarea{min-height:46px;font-size:12px;padding:6px 8px}
+
+/* ===== Meal planner (simple) ===== */
+.mp-grid{display:grid;grid-template-columns:90px repeat(7,1fr);gap:6px;align-items:stretch}
+.mp-grid input{font-size:12px;padding:7px 8px}
+.mp-hdr{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);font-weight:500;padding:6px 4px;text-align:center}
+.mp-lbl{font-size:11px;color:var(--text2);font-weight:500;display:flex;align-items:center;padding:0 4px}
+@media(max-width:900px){.mp-grid{grid-template-columns:1fr;gap:14px}.mp-hdr{display:none}.mp-lbl{padding-top:6px}}
+
+/* responsive sidebar */
+@media(max-width:880px){
+  .sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform 0.22s ease;box-shadow:0 0 30px rgba(0,0,0,0.3)}
+  .sidebar.open{transform:translateX(0)}
+  .menu-btn{display:inline-flex;align-items:center}
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:45}
+  .overlay.show{display:block}
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="side-brand">Home <em>Base</em></div>
+    <div class="side-groups">
+      <button class="side-group active" data-group="overview" onclick="showGroup('overview',this)"><span class="sg-icon">◈</span>Overview</button>
+      <button class="side-group" data-group="daily" onclick="showGroup('daily',this)"><span class="sg-icon">☰</span>Daily</button>
+      <button class="side-group" data-group="meals" onclick="showGroup('meals',this)"><span class="sg-icon">◍</span>Meals</button>
+      <button class="side-group" data-group="finance" onclick="showGroup('finance',this)"><span class="sg-icon">◆</span>Finance</button>
+    </div>
+    <div class="side-foot">
+      <button class="pill-btn" onclick="toggleTheme()" id="theme-btn" style="width:100%;justify-content:center">☀ Light</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <nav>
+      <button class="menu-btn" onclick="openSidebar()">☰</button>
+      <div class="nav-tabs" id="nav-tabs-overview">
+        <button class="nav-tab active" onclick="showPage('overview-home',this)">Overview</button>
+      </div>
+      <div class="nav-tabs" id="nav-tabs-daily" style="display:none">
+        <button class="nav-tab" onclick="showPage('weekly',this)">Weekly Planner</button>
+        <button class="nav-tab" onclick="showPage('todo',this)">To-Do List</button>
+        <button class="nav-tab" onclick="showPage('urgent',this)">Urgent</button>
+      </div>
+      <div class="nav-tabs" id="nav-tabs-meals" style="display:none">
+        <button class="nav-tab" onclick="showPage('mealplan',this)">Meal Planner</button>
+        <button class="nav-tab" onclick="showPage('dp-setup',this)">Dinner Planner</button>
+        <button class="nav-tab" onclick="showPage('grocery',this)">Grocery List</button>
+      </div>
+      <div class="nav-tabs" id="nav-tabs-finance" style="display:none">
+        <button class="nav-tab" onclick="showPage('budget',this)">Monthly Budget</button>
+        <button class="nav-tab" onclick="showPage('bills',this)">Bills Tracker</button>
+        <button class="nav-tab" onclick="showPage('goals',this)">Savings Goals</button>
+      </div>
+      <div class="nav-right">
+        <span id="nav-clock" style="font-size:12px;color:var(--text3)"></span>
+      </div>
+    </nav>
+
+    <!-- PAGES WILL BE INSERTED HERE -->
+    <div id="pages-root">
+
+    <!-- ============ OVERVIEW ============ -->
+    <div id="page-overview-home" class="page active">
+      <h1>Good to see you, <em>Stalets</em></h1>
+      <p class="sub" id="ov-date-sub">Here's where things stand today.</p>
+      <div class="ov-grid">
+        <div class="ov-card">
+          <div class="ov-card-h"><span class="t">Urgent</span><span class="badge b-inv" id="ov-urgent-count">0</span></div>
+          <div id="ov-urgent-list"><div class="empty" style="padding:1rem 0">Nothing urgent — nice.</div></div>
+        </div>
+        <div class="ov-card">
+          <div class="ov-card-h"><span class="t">To-Do today</span><span class="badge b-blue" id="ov-todo-count">0</span></div>
+          <div id="ov-todo-list"><div class="empty" style="padding:1rem 0">No tasks yet.</div></div>
+        </div>
+        <div class="ov-card">
+          <div class="ov-card-h"><span class="t">Tonight's dinner</span></div>
+          <div id="ov-dinner"><div class="empty" style="padding:1rem 0">No plan yet.</div></div>
+        </div>
+      </div>
+      <div class="ov-grid" style="grid-template-columns:1fr 1fr">
+        <div class="ov-card">
+          <div class="ov-card-h"><span class="t">This month's balance</span></div>
+          <div class="ov-stat" id="ov-balance">€0</div>
+          <div class="ov-stat-lbl">Income minus expenses</div>
+          <div class="bar-track" style="margin-top:14px"><div class="bar-fill" id="ov-bal-bar" style="width:0%;background:var(--accent)"></div></div>
+        </div>
+        <div class="ov-card">
+          <div class="ov-card-h"><span class="t">Driving licence goal</span><span class="badge b-blue">€970</span></div>
+          <div class="ov-stat" id="ov-goal-amt">€0</div>
+          <div class="ov-stat-lbl">Saved so far</div>
+          <div class="bar-track" style="margin-top:14px"><div class="bar-fill" id="ov-goal-bar" style="width:0%;background:var(--sage)"></div></div>
+        </div>
+      </div>
+      <div class="info-strip"><span class="isd"></span><span>Use the sidebar to jump between Daily, Meals and Finance — each opens with its own set of tabs.</span></div>
+    </div>
+
+    <!-- ============ DAILY: WEEKLY PLANNER ============ -->
+    <div id="page-weekly" class="page">
+      <h1>Weekly <em>planner</em></h1>
+      <p class="sub">A simple overview of the week — jot down what's happening morning, afternoon and evening for each day.</p>
+      <div class="wk-grid" id="weekly-grid"></div>
+    </div>
+
+    <!-- ============ DAILY: TO-DO ============ -->
+    <div id="page-todo" class="page">
+      <h1>To-Do <em>list</em></h1>
+      <p class="sub">Everything that needs doing, but nothing on fire. Check items off as you go.</p>
+      <div class="add-row">
+        <input type="text" id="todo-input" placeholder="Add a task..." onkeydown="if(event.key==='Enter')addTodo()">
+        <button class="btn btn-p" onclick="addTodo()">Add</button>
+      </div>
+      <div class="card" id="todo-list"><div class="empty">No tasks yet. Add one above.</div></div>
+    </div>
+
+    <!-- ============ DAILY: URGENT ============ -->
+    <div id="page-urgent" class="page">
+      <h1><em>Urgent</em></h1>
+      <p class="sub">Time-sensitive items that need attention first. Keep this list short on purpose — if everything is urgent, nothing is.</p>
+      <div class="add-row">
+        <input type="text" id="urgent-input" placeholder="Add an urgent item..." onkeydown="if(event.key==='Enter')addUrgent()">
+        <button class="btn btn-p" onclick="addUrgent()">Add</button>
+      </div>
+      <div class="card" id="urgent-list"><div class="empty">All clear.</div></div>
+    </div>
+
+    <!-- ============ MEALS: MEAL PLANNER ============ -->
+    <div id="page-mealplan" class="page">
+      <h1>Meal <em>planner</em></h1>
+      <p class="sub">Breakfast, lunch and dinner for each day — quick notes, not full recipes. For dinner ideas with ingredients and grocery lists, switch to the Dinner Planner tab.</p>
+      <div class="card"><div class="mp-grid" id="mealplan-grid"></div></div>
+    </div>
+
+    <!-- ============ MEALS: DINNER PLANNER (full) ============ -->
+    <div id="page-dp-setup" class="page">
+      <h1>Week <em>setup</em></h1>
+      <p class="sub">Set each day's difficulty based on how busy the week looks, then generate your plan. Easy days get quick meals, involved days leave room for something more ambitious.</p>
+      <div id="day-grid" class="day-grid"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+        <button class="btn btn-p" onclick="generatePlan()">↻ Generate week</button>
+        <button class="btn" onclick="resetDiffs()">Reset to medium</button>
+      </div>
+      <div class="info-strip"><span class="isd"></span><span>Best done on Sundays — set difficulty for the week ahead, generate, then head to Grocery List in the Dinner Planner tab.</span></div>
+    </div>
+    <div id="page-dp-plan" class="page">
+      <h1>This <em>week</em></h1>
+      <p class="sub">Tap any meal to see what's in it. If it doesn't feel right for the day, hit ↻ to swap it out.</p>
+      <div id="plan-content"><div class="empty">No plan yet — head to Week setup to generate one.</div></div>
+    </div>
+    <div id="page-dp-grocery" class="page">
+      <h1>Dinner <em>grocery list</em></h1>
+      <p class="sub">Everything needed for the week's dinners. Check off what you already have, use the rest as your shopping list.</p>
+      <div id="dp-grocery-content"><div class="empty">Generate a plan first to see the grocery list.</div></div>
+    </div>
+    <div id="page-dp-thaw" class="page">
+      <h1>Thaw <em>reminders</em></h1>
+      <p class="sub">Download a calendar reminder for each meal that needs thawing. One tap adds it to your calendar.</p>
+      <div class="card" style="margin-bottom:1.25rem">
+        <div style="font-size:12px;text-transform:uppercase;letter-spacing:0.07em;color:var(--text3);font-weight:500;margin-bottom:12px">How to add to your calendar</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:12px;align-items:flex-start"><div style="width:22px;height:22px;border-radius:50%;background:var(--accent-light);border:1px solid var(--accent-border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--accent);flex-shrink:0">1</div><div style="font-size:13px;color:var(--text2);font-weight:300">Tap <strong style="font-weight:500;color:var(--text)">⬇ .ics</strong> next to the meal below.</div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start"><div style="width:22px;height:22px;border-radius:50%;background:var(--accent-light);border:1px solid var(--accent-border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--accent);flex-shrink:0">2</div><div style="font-size:13px;color:var(--text2);font-weight:300"><strong style="font-weight:500;color:var(--text)">iPhone / Mac:</strong> tap or double-click the .ics file — Calendar opens and asks to add it.</div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start"><div style="width:22px;height:22px;border-radius:50%;background:var(--accent-light);border:1px solid var(--accent-border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--accent);flex-shrink:0">3</div><div style="font-size:13px;color:var(--text2);font-weight:300"><strong style="font-weight:500;color:var(--text)">Google Calendar:</strong> Settings → Import → select the file.</div></div>
+        </div>
+      </div>
+      <div id="thaw-content"><div class="empty">Generate a plan first to see thaw reminders.</div></div>
+    </div>
+    <div id="page-dp-meals" class="page">
+      <div class="sec-hdr">
+        <div><h1>All <em>meals</em></h1><p class="sub">The full rotation — every meal with ingredients and difficulty.</p></div>
+        <button class="btn btn-p" onclick="openAddMeal()" style="flex-shrink:0;margin-top:6px">+ Add meal</button>
+      </div>
+      <div style="display:flex;gap:7px;margin-bottom:1.25rem;flex-wrap:wrap">
+        <button class="btn btn-sm" onclick="filterMeals('all')" id="fb-all">All</button>
+        <button class="btn btn-sm" onclick="filterMeals('easy')" id="fb-easy">Easy</button>
+        <button class="btn btn-sm" onclick="filterMeals('medium')" id="fb-medium">Medium</button>
+        <button class="btn btn-sm" onclick="filterMeals('involved')" id="fb-involved">Involved</button>
+        <button class="btn btn-sm" onclick="filterMeals('nothaw')" id="fb-nothaw">No thaw</button>
+      </div>
+      <div id="meals-list"></div>
+    </div>
+    <div id="page-dp-guide" class="page">
+      <h1>Difficulty <em>guide</em></h1>
+      <p class="sub">How each level is defined. Adjust individual meal difficulties in All Meals.</p>
+      <div class="dcard"><div class="dcard-h"><span class="badge b-easy" style="font-size:12px;padding:4px 12px">Easy</span><span style="font-size:13px;color:var(--text3)">≤ 30 min · minimal technique</span></div><div class="dcard-b">Simple prep, mostly shelf-stable or fresh ingredients. Good for tired weeknights.</div></div>
+      <div class="dcard"><div class="dcard-h"><span class="badge b-med" style="font-size:12px;padding:4px 12px">Medium</span><span style="font-size:13px;color:var(--text3)">30–60 min · some multitasking</span></div><div class="dcard-b">Multiple components at once — protein, sauce, side. Some technique involved. Usually needs thawing.</div></div>
+      <div class="dcard"><div class="dcard-h"><span class="badge b-inv" style="font-size:12px;padding:4px 12px">Involved</span><span style="font-size:13px;color:var(--text3)">60+ min · plan ahead</span></div><div class="dcard-b">Long cook times, complex prep, or precise multi-dish timing. Best for relaxed evenings or weekends.</div></div>
+      <div class="warn-strip" style="margin-top:4px"><span>⚠</span><span><strong>Thaw flag:</strong> marked when the main protein needs to come out of the freezer the night before.</span></div>
+    </div>
+
+    <!-- ============ MEALS: GROCERY LIST (custom) ============ -->
+    <div id="page-grocery" class="page">
+      <h1>Grocery <em>list</em></h1>
+      <p class="sub">Your running shopping list, organised by category. Add items as you think of them, check them off at the store.</p>
+      <div class="add-row">
+        <input type="text" id="grocery-item-input" placeholder="Add an item..." onkeydown="if(event.key==='Enter')addGroceryItem()">
+        <select id="grocery-cat-input" style="max-width:148px">
+          <option>Produce</option><option>Dairy</option><option>Meat &amp; fish</option>
+          <option>Pantry</option><option>Frozen</option><option>Household</option><option>Other</option>
+        </select>
+        <button class="btn btn-p" onclick="addGroceryItem()">Add</button>
+      </div>
+      <div id="grocery-list-content"></div>
+    </div>
+
+    <!-- ============ FINANCE: BUDGET ============ -->
+    <div id="page-budget" class="page">
+      <h1>Monthly <em>budget</em></h1>
+      <p class="sub">Your income and recurring expenses. Balance updates automatically.</p>
+      <div class="fin-grid">
+        <div>
+          <div class="card">
+            <h2 class="sec-title" style="margin-bottom:14px">Income</h2>
+            <div class="fin-row">
+              <div><div class="fname">Monthly income</div></div>
+              <input type="number" class="fin-input" id="fin-income" placeholder="0" oninput="renderFinance()">
+              <div></div>
+            </div>
+          </div>
+          <div class="card">
+            <h2 class="sec-title" style="margin-bottom:14px">Recurring expenses</h2>
+            <div id="fin-expense-rows"></div>
+            <div class="add-row" style="margin-top:14px;margin-bottom:0">
+              <input type="text" id="fin-new-name" placeholder="Expense name..." onkeydown="if(event.key==='Enter')addExpenseRow()">
+              <button class="btn btn-sm btn-p" onclick="addExpenseRow()">+ Add</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <h2 class="sec-title" style="margin-bottom:14px">Summary</h2>
+            <div style="font-size:12px;color:var(--text3);margin-bottom:2px">Income</div>
+            <div class="ov-stat" id="fin-total-income" style="margin-bottom:14px">€0</div>
+            <div style="font-size:12px;color:var(--text3);margin-bottom:2px">Expenses</div>
+            <div class="ov-stat" id="fin-total-expenses" style="margin-bottom:14px">€0</div>
+            <div class="fin-total"><span>Balance</span><span id="fin-balance">€0</span></div>
+            <div class="bar-track"><div class="bar-fill" id="fin-bar" style="width:0%"></div></div>
+            <div style="font-size:11px;color:var(--text3);margin-top:6px" id="fin-bar-note"></div>
+          </div>
+          <div class="card">
+            <h2 class="sec-title" style="margin-bottom:12px">Breakdown</h2>
+            <div id="fin-breakdown"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ FINANCE: BILLS TRACKER ============ -->
+    <div id="page-bills" class="page">
+      <h1>Bills <em>tracker</em></h1>
+      <p class="sub">Check off each bill as you pay it this month. Hit "Reset" at the start of a new month to start fresh.</p>
+      <div style="margin-bottom:1.25rem">
+        <button class="btn btn-sm" onclick="resetBills()">Reset all for new month</button>
+      </div>
+      <div class="card" id="bills-tracker-list"></div>
+    </div>
+
+    <!-- ============ FINANCE: GOALS ============ -->
+    <div id="page-goals" class="page">
+      <h1>Savings <em>goals</em></h1>
+      <p class="sub">One-off targets you're saving towards, separate from monthly expenses.</p>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="goal-row">
+          <div class="goal-top"><span class="gname">🚗 Driving licence</span><span class="gnum" id="goal-lic-nums">€0 / €970</span></div>
+          <div class="bar-track"><div class="bar-fill" id="goal-lic-bar" style="width:0%;background:var(--accent)"></div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-end;margin-top:14px">
+          <div style="flex:1"><label>Saved so far (€)</label><input type="number" id="goal-lic-input" placeholder="0" oninput="renderGoals()"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="sec-hdr" style="margin-bottom:12px"><h2 class="sec-title">Other goals</h2></div>
+        <div id="goals-extra-list"></div>
+        <div class="add-row" style="margin-top:14px;margin-bottom:0">
+          <input type="text" id="goal-new-name" placeholder="Goal name...">
+          <input type="number" id="goal-new-target" placeholder="Target €" style="max-width:110px">
+          <button class="btn btn-sm btn-p" onclick="addExtraGoal()">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- modals -->
+    <div class="modal-overlay" id="add-modal" onclick="if(event.target===this)closeModal('add-modal')">
+      <div class="modal">
+        <button class="modal-x" onclick="closeModal('add-modal')">✕</button>
+        <div class="modal-title">Add a meal</div>
+        <p style="font-size:13px;color:var(--text3);margin-bottom:1.25rem;font-weight:300">New meals are immediately available for planning.</p>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div><label>Meal name</label><input type="text" id="new-name" placeholder="e.g. Chicken tikka masala"></div>
+          <div><label>Difficulty</label><select id="new-diff"><option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="involved">Involved</option></select></div>
+          <div><label>Needs thawing?</label><select id="new-thaw"><option value="false">No — buy fresh or from fridge</option><option value="true">Yes — needs overnight thaw</option></select></div>
+          <div><label>Ingredients (comma-separated)</label><input type="text" id="new-ings" placeholder="chicken, garlic, cream, rice..."></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:1.5rem">
+          <button class="btn btn-p" onclick="addNewMeal()">Add meal</button>
+          <button class="btn" onclick="closeModal('add-modal')">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-overlay" id="edit-modal" onclick="if(event.target===this)closeModal('edit-modal')">
+      <div class="modal">
+        <button class="modal-x" onclick="closeModal('edit-modal')">✕</button>
+        <div class="modal-title" id="edit-modal-title"></div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:1.25rem">
+          <div><label>Difficulty</label><select id="edit-diff"></select></div>
+          <div><label>Needs thawing?</label><select id="edit-thaw"><option value="false">No</option><option value="true">Yes</option></select></div>
+          <div>
+            <label>Ingredients</label>
+            <div id="edit-ing-tags" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px"></div>
+            <div style="display:flex;gap:8px"><input type="text" id="edit-ing-input" placeholder="Add ingredient..." onkeydown="if(event.key==='Enter')addIngToEdit()"><button class="btn btn-sm" onclick="addIngToEdit()">Add</button></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:1.5rem">
+          <button class="btn btn-p" onclick="saveEdit()">Save</button>
+          <button class="btn" onclick="closeModal('edit-modal')">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <footer>
+      <div class="foot-l">Home <span>Base</span></div>
+      <div class="foot-r" id="foot-date"></div>
+    </footer>
+  </div>
+</div>
+
+<script>
+// ======== THEME ========
+function toggleTheme(){
+  const d=document.documentElement;
+  const isDark=d.getAttribute('data-theme')==='dark';
+  d.setAttribute('data-theme',isDark?'light':'dark');
+  document.getElementById('theme-btn').textContent=isDark?'☽ Dark':'☀ Light';
+  save('theme',isDark?'light':'dark');
+}
+function initTheme(){
+  const t=load('theme','dark');
+  document.documentElement.setAttribute('data-theme',t);
+  document.getElementById('theme-btn').textContent=t==='dark'?'☀ Light':'☽ Dark';
+}
+
+// ======== NAV ========
+let currentGroup='overview';
+const groupFirstPage={overview:'overview-home',daily:'weekly',meals:'mealplan',finance:'budget'};
+
+function showGroup(group,btn){
+  currentGroup=group;
+  document.querySelectorAll('.side-group').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.nav-tabs[id^="nav-tabs-"]').forEach(el=>el.style.display='none');
+  const tabsEl=document.getElementById('nav-tabs-'+group);
+  if(tabsEl) tabsEl.style.display='flex';
+  const firstTab=tabsEl?tabsEl.querySelector('.nav-tab'):null;
+  if(firstTab){
+    tabsEl.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+    firstTab.classList.add('active');
+  }
+  const firstPage=groupFirstPage[group]||'overview-home';
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const pg=document.getElementById('page-'+firstPage);
+  if(pg) pg.classList.add('active');
+  closeSidebar();
+  refreshOverview();
+}
+
+function showPage(pageId,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const pg=document.getElementById('page-'+pageId);
+  if(pg) pg.classList.add('active');
+  const tabs=document.getElementById('nav-tabs-'+currentGroup);
+  if(tabs) tabs.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+// Meals sub-tabs wired to dinner planner pages
+function initMealsTabs(){
+  const tabsEl=document.getElementById('nav-tabs-meals');
+  if(!tabsEl) return;
+  tabsEl.innerHTML=`
+    <button class="nav-tab active" onclick="showPage('mealplan',this)">Meal Planner</button>
+    <button class="nav-tab" onclick="showMealsSub('dp-setup',this)">Dinner Planner</button>
+    <button class="nav-tab" onclick="showPage('grocery',this)">Grocery List</button>`;
+}
+function showMealsSub(sub,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+sub).classList.add('active');
+  const tabs=document.getElementById('nav-tabs-meals');
+  if(tabs) tabs.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  // inject sub-tabs for dinner planner
+  if(sub.startsWith('dp-')){
+    injectDpSubnav(sub,btn);
+  }
+}
+let dpSubnavInjected=false;
+function injectDpSubnav(active,callerBtn){
+  const tabsEl=document.getElementById('nav-tabs-meals');
+  if(!tabsEl) return;
+  tabsEl.innerHTML=`
+    <button class="nav-tab" onclick="showPage('mealplan',this);dpSubnavInjected=false;initMealsTabs();">Meal Planner</button>
+    <button class="nav-tab active" onclick="void 0">Dinner Planner ▾</button>
+    <button class="nav-tab" onclick="showPage('dp-setup',this)" style="font-size:12px;padding-left:6px">Setup</button>
+    <button class="nav-tab" onclick="showPage('dp-plan',this)" style="font-size:12px">This week</button>
+    <button class="nav-tab" onclick="showPage('dp-grocery',this)" style="font-size:12px">Groceries</button>
+    <button class="nav-tab" onclick="showPage('dp-thaw',this)" style="font-size:12px">Thaw</button>
+    <button class="nav-tab" onclick="showPage('dp-meals',this)" style="font-size:12px">All meals</button>
+    <button class="nav-tab" onclick="showPage('dp-guide',this)" style="font-size:12px">Guide</button>
+    <button class="nav-tab" onclick="showPage('grocery',this);initMealsTabs()">Grocery List</button>`;
+  document.getElementById('page-'+active).classList.add('active');
+}
+
+function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('sidebar-overlay').classList.add('show');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebar-overlay').classList.remove('show');}
+
+// ======== CLOCK / DATES ========
+function updateClock(){
+  const now=new Date();
+  document.getElementById('nav-clock').textContent=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('foot-date').textContent=now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('ov-date-sub').textContent='Here\'s what\'s on for '+now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})+'.';
+}
+setInterval(updateClock,1000);updateClock();
+
+// ======== STORAGE ========
+function save(k,v){try{localStorage.setItem('hb_'+k,JSON.stringify(v));}catch(e){}}
+function load(k,def){try{const r=localStorage.getItem('hb_'+k);return r!==null?JSON.parse(r):def;}catch(e){return def;}}
+
+// ======== TOAST ========
+let toastTimer;
+function toast(msg){
+  const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2200);
+}
+
+// ======== WEEKLY PLANNER ========
+const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const PERIODS=['Morning','Afternoon','Evening'];
+function initWeeklyGrid(){
+  const grid=document.getElementById('weekly-grid');if(!grid)return;
+  const data=load('weekly_plan',{});
+  let html='';
+  const today=new Date();
+  DAYS.forEach((day,i)=>{
+    const d=getDateForDayIdx(i);
+    const ds=d?d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'';
+    const isToday=d&&d.toDateString()===today.toDateString();
+    html+=`<div class="wk-day" style="${isToday?'border-color:var(--accent)':''}">
+      <div class="wk-day-name" style="${isToday?'color:var(--accent)':''}">${day}</div>
+      <div class="wk-day-date">${ds}</div>`;
+    PERIODS.forEach(p=>{
+      const key=day+'_'+p;
+      const val=data[key]||'';
+      html+=`<div class="wk-block">
+        <div class="wk-block-lbl">${p}</div>
+        <textarea rows="2" placeholder="..." onchange="saveWeekly('${key}',this.value)">${val}</textarea>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  grid.innerHTML=html;
+}
+function saveWeekly(key,val){
+  const d=load('weekly_plan',{});d[key]=val;save('weekly_plan',d);
+}
+function getDateForDayIdx(idx){
+  const today=new Date();today.setHours(0,0,0,0);
+  const dow=today.getDay();
+  const diff=dow===0?-6:1-dow;
+  const mon=new Date(today);mon.setDate(today.getDate()+diff);
+  const t=new Date(mon);t.setDate(mon.getDate()+idx);return t;
+}
+
+// ======== TO-DO ========
+let todos=load('todos',[]);
+function renderTodos(){
+  const el=document.getElementById('todo-list');if(!el)return;
+  if(!todos.length){el.innerHTML='<div class="empty">No tasks yet. Add one above.</div>';return;}
+  let html='';
+  todos.forEach((t,i)=>{
+    html+=`<div class="task-row${t.done?' done':''}">
+      <input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo(${i})">
+      <div style="flex:1"><div class="task-name">${esc2(t.text)}</div></div>
+      <button class="task-del" onclick="deleteTodo(${i})">✕</button>
+    </div>`;
+  });
+  el.innerHTML=html;
+  save('todos',todos);
+  refreshOverview();
+}
+function addTodo(){
+  const inp=document.getElementById('todo-input');
+  const v=inp.value.trim();if(!v)return;
+  todos.push({text:v,done:false});inp.value='';renderTodos();toast('Task added!');
+}
+function toggleTodo(i){todos[i].done=!todos[i].done;renderTodos();}
+function deleteTodo(i){todos.splice(i,1);renderTodos();}
+
+// ======== URGENT ========
+let urgents=load('urgents',[]);
+function renderUrgents(){
+  const el=document.getElementById('urgent-list');if(!el)return;
+  if(!urgents.length){el.innerHTML='<div class="empty">All clear.</div>';return;}
+  let html='';
+  urgents.forEach((t,i)=>{
+    html+=`<div class="task-row${t.done?' done':''}" style="${!t.done?'border-left:3px solid var(--red-text);padding-left:12px':''}">
+      <input type="checkbox" ${t.done?'checked':''} onchange="toggleUrgent(${i})">
+      <div style="flex:1"><div class="task-name">${esc2(t.text)}</div></div>
+      <button class="task-del" onclick="deleteUrgent(${i})">✕</button>
+    </div>`;
+  });
+  el.innerHTML=html;
+  save('urgents',urgents);
+  refreshOverview();
+}
+function addUrgent(){
+  const inp=document.getElementById('urgent-input');
+  const v=inp.value.trim();if(!v)return;
+  urgents.push({text:v,done:false});inp.value='';renderUrgents();toast('Added to urgent!');
+}
+function toggleUrgent(i){urgents[i].done=!urgents[i].done;renderUrgents();}
+function deleteUrgent(i){urgents.splice(i,1);renderUrgents();}
+
+// ======== MEAL PLANNER (simple) ========
+const MEALS_OF_DAY=['Breakfast','Lunch','Dinner'];
+function initMealplanGrid(){
+  const grid=document.getElementById('mealplan-grid');if(!grid)return;
+  const data=load('mealplan',{});
+  const today=new Date();
+  let html=`<div class="mp-hdr"></div>`;
+  DAYS.forEach((d,i)=>{
+    const dt=getDateForDayIdx(i);
+    const ds=dt?dt.toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'';
+    const isToday=dt&&dt.toDateString()===today.toDateString();
+    html+=`<div class="mp-hdr" style="${isToday?'color:var(--accent)':''}"><div>${d.slice(0,3)}</div><div style="font-size:9px;margin-top:2px;opacity:.7">${ds}</div></div>`;
+  });
+  MEALS_OF_DAY.forEach(meal=>{
+    html+=`<div class="mp-lbl">${meal}</div>`;
+    DAYS.forEach(day=>{
+      const key=day+'_'+meal;
+      const val=data[key]||'';
+      html+=`<input type="text" placeholder="—" value="${esc2(val)}" onchange="saveMealplan('${key}',this.value)">`;
+    });
+  });
+  grid.innerHTML=html;
+}
+function saveMealplan(key,val){
+  const d=load('mealplan',{});d[key]=val;save('mealplan',d);
+}
+
+// ======== GROCERY LIST (custom) ========
+let groceryItems=load('grocery_custom',[]);
+const GCAT_COLORS={Produce:'var(--sage)',Dairy:'var(--accent)',Pantry:'var(--amber)','Meat & fish':'var(--plum)',Frozen:'#6BAEC4',Household:'var(--text3)',Other:'var(--text3)'};
+function renderGroceryList(){
+  const el=document.getElementById('grocery-list-content');if(!el)return;
+  if(!groceryItems.length){el.innerHTML='<div class="card"><div class="empty">Your list is empty — add items above.</div></div>';return;}
+  const cats={};
+  groceryItems.forEach((item,i)=>{const c=item.cat||'Other';if(!cats[c])cats[c]=[];cats[c].push({...item,i});});
+  let html='';
+  Object.keys(cats).forEach(cat=>{
+    const col=GCAT_COLORS[cat]||'var(--text3)';
+    html+=`<div class="card" style="margin-bottom:.75rem">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:${col};font-weight:500;margin-bottom:10px">${cat}</div>`;
+    cats[cat].forEach(item=>{
+      html+=`<div class="task-row${item.done?' done':''}">
+        <input type="checkbox" ${item.done?'checked':''} onchange="toggleGrocery(${item.i})">
+        <div class="task-name" style="flex:1">${esc2(item.name)}</div>
+        <button class="task-del" onclick="deleteGrocery(${item.i})">✕</button>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  el.innerHTML=html;
+  save('grocery_custom',groceryItems);
+}
+function addGroceryItem(){
+  const inp=document.getElementById('grocery-item-input');
+  const cat=document.getElementById('grocery-cat-input').value;
+  const v=inp.value.trim();if(!v)return;
+  groceryItems.push({name:v,cat,done:false});inp.value='';renderGroceryList();toast('Added to list!');
+}
+function toggleGrocery(i){groceryItems[i].done=!groceryItems[i].done;renderGroceryList();}
+function deleteGrocery(i){groceryItems.splice(i,1);renderGroceryList();}
+
+// ======== FINANCE ========
+const DEFAULT_EXPENSES=[
+  {name:'Rent',cat:'Housing',val:''},
+  {name:'Phone',cat:'Utilities',val:''},
+  {name:'Energy',cat:'Utilities',val:''},
+  {name:'Groceries',cat:'Food',val:''},
+  {name:'Emergency fund / Savings',cat:'Savings',val:''},
+  {name:'House furniture & maintenance',cat:'Housing',val:''},
+  {name:'Portugal taxes',cat:'Taxes',val:''},
+  {name:'Travel',cat:'Lifestyle',val:''},
+  {name:'Clothes',cat:'Lifestyle',val:''},
+  {name:'Leisure',cat:'Lifestyle',val:''},
+  {name:'Subscriptions',cat:'Other',val:''},
+];
+let finExpenses=load('fin_expenses',DEFAULT_EXPENSES);
+function renderFinanceRows(){
+  const el=document.getElementById('fin-expense-rows');if(!el)return;
+  let html='';
+  finExpenses.forEach((exp,i)=>{
+    html+=`<div class="fin-row">
+      <div><div class="fname">${esc2(exp.name)}</div><div class="fcat">${exp.cat}</div></div>
+      <input type="number" class="fin-input" value="${exp.val}" placeholder="0" oninput="updateExpense(${i},this.value)">
+      <button class="fin-x" onclick="removeExpense(${i})" title="Remove">✕</button>
+    </div>`;
+  });
+  el.innerHTML=html;
+}
+function updateExpense(i,v){finExpenses[i].val=v;save('fin_expenses',finExpenses);renderFinance();}
+function removeExpense(i){finExpenses.splice(i,1);save('fin_expenses',finExpenses);renderFinanceRows();renderFinance();}
+function addExpenseRow(){
+  const inp=document.getElementById('fin-new-name');
+  const n=inp.value.trim();if(!n)return;
+  finExpenses.push({name:n,cat:'Other',val:''});
+  save('fin_expenses',finExpenses);inp.value='';renderFinanceRows();renderFinance();toast('Expense added!');
+}
+function renderFinance(){
+  const income=parseFloat(document.getElementById('fin-income')?.value||0)||0;
+  const total=finExpenses.reduce((s,e)=>s+(parseFloat(e.val)||0),0);
+  const bal=income-total;
+  const fmt=v=>'€'+v.toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});
+  if(document.getElementById('fin-total-income')) document.getElementById('fin-total-income').textContent=fmt(income);
+  if(document.getElementById('fin-total-expenses')) document.getElementById('fin-total-expenses').textContent=fmt(total);
+  const balEl=document.getElementById('fin-balance');
+  if(balEl){balEl.textContent=fmt(bal);balEl.className=bal>=0?'bal-pos':'bal-neg';}
+  const pct=income>0?Math.min((total/income)*100,100):0;
+  const barEl=document.getElementById('fin-bar');
+  if(barEl){barEl.style.width=pct+'%';barEl.style.background=pct>90?'var(--red-text)':pct>75?'var(--amber)':'var(--sage)';}
+  const noteEl=document.getElementById('fin-bar-note');
+  if(noteEl) noteEl.textContent=income>0?Math.round(pct)+'% of income spent':'Enter income to see percentage';
+  // breakdown
+  const bd=document.getElementById('fin-breakdown');
+  if(bd && income>0){
+    const cats={};
+    finExpenses.forEach(e=>{const v=parseFloat(e.val)||0;if(!v)return;if(!cats[e.cat])cats[e.cat]=0;cats[e.cat]+=v;});
+    const catColors={Housing:'var(--accent)',Utilities:'var(--plum)',Food:'var(--sage)',Savings:'var(--amber)',Taxes:'var(--red-text)',Lifestyle:'#6BAEC4',Other:'var(--text3)'};
+    let html='';
+    Object.entries(cats).sort((a,b)=>b[1]-a[1]).forEach(([cat,v])=>{
+      const p=income>0?Math.min((v/income)*100,100):0;
+      const col=catColors[cat]||'var(--text3)';
+      html+=`<div style="margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span style="color:${col};font-weight:500">${cat}</span><span style="color:var(--text3)">${fmt(v)}</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${col}"></div></div>
+      </div>`;
+    });
+    bd.innerHTML=html||'<div style="font-size:13px;color:var(--text3)">Enter expense values to see breakdown.</div>';
+  } else if(bd) bd.innerHTML='<div style="font-size:13px;color:var(--text3)">Enter income and expenses to see breakdown.</div>';
+  // save income
+  save('fin_income',document.getElementById('fin-income')?.value||'');
+  refreshOverview();
+}
+function initFinance(){
+  const incEl=document.getElementById('fin-income');
+  if(incEl) incEl.value=load('fin_income','');
+  renderFinanceRows();renderFinance();
+}
+
+// ======== BILLS TRACKER ========
+let billsPaid=load('bills_paid',{});
+function renderBillsTracker(){
+  const el=document.getElementById('bills-tracker-list');if(!el)return;
+  const bills=finExpenses.filter(e=>['Housing','Utilities','Taxes'].includes(e.cat)||e.name==='Phone'||e.name==='Energy'||e.name==='Rent');
+  const all=[...DEFAULT_EXPENSES.filter(e=>['Rent','Phone','Energy','Portugal taxes'].includes(e.name)),...finExpenses.filter(e=>e.cat==='Housing'||e.cat==='Utilities'||e.cat==='Taxes')].reduce((acc,e)=>{if(!acc.find(x=>x.name===e.name))acc.push(e);return acc;},[]);
+  if(!all.length){el.innerHTML='<div class="empty">No bills configured yet — add expenses in the Monthly Budget tab.</div>';return;}
+  let html='';
+  all.forEach(e=>{
+    const paid=!!billsPaid[e.name];
+    const val=parseFloat(e.val)||0;
+    html+=`<div class="task-row">
+      <input type="checkbox" ${paid?'checked':''} onchange="toggleBill('${e.name}',this.checked)">
+      <div style="flex:1"><div class="task-name" style="${paid?'text-decoration:line-through;color:var(--text3)':''}">${esc2(e.name)}</div>${val?`<div class="task-meta">€${val.toFixed(2)}</div>`:''}</div>
+      ${paid?'<span class="badge b-easy">Paid</span>':'<span class="badge b-grey">Pending</span>'}
+    </div>`;
+  });
+  el.innerHTML=html;
+}
+function toggleBill(name,checked){billsPaid[name]=checked;save('bills_paid',billsPaid);renderBillsTracker();toast(checked?'Marked as paid!':'Marked as pending');}
+function resetBills(){billsPaid={};save('bills_paid',billsPaid);renderBillsTracker();toast('Bills reset for new month');}
+
+// ======== SAVINGS GOALS ========
+let extraGoals=load('extra_goals',[]);
+function renderGoals(){
+  const amt=parseFloat(document.getElementById('goal-lic-input')?.value||0)||0;
+  const pct=Math.min((amt/970)*100,100);
+  if(document.getElementById('goal-lic-nums')) document.getElementById('goal-lic-nums').textContent='€'+amt.toFixed(2)+' / €970';
+  if(document.getElementById('goal-lic-bar')) document.getElementById('goal-lic-bar').style.width=pct+'%';
+  // overview
+  if(document.getElementById('ov-goal-amt')) document.getElementById('ov-goal-amt').textContent='€'+amt.toFixed(2);
+  if(document.getElementById('ov-goal-bar')) document.getElementById('ov-goal-bar').style.width=pct+'%';
+  // extra goals
+  const el=document.getElementById('goals-extra-list');if(!el)return;
+  if(!extraGoals.length){el.innerHTML='<div class="empty" style="padding:.5rem 0">No extra goals yet.</div>';return;}
+  let html='';
+  extraGoals.forEach((g,i)=>{
+    const p=g.target>0?Math.min((g.saved/g.target)*100,100):0;
+    html+=`<div style="margin-bottom:1.1rem">
+      <div class="goal-top"><span class="gname">${esc2(g.name)}</span><span class="gnum">€${g.saved.toFixed(2)} / €${g.target.toFixed(2)}</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${p}%;background:var(--plum)"></div></div>
+      <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+        <input type="number" value="${g.saved}" placeholder="0" style="max-width:110px" oninput="updateExtraGoal(${i},this.value)">
+        <button class="btn btn-sm btn-del" onclick="deleteExtraGoal(${i})">Remove</button>
+      </div>
+    </div>`;
+  });
+  el.innerHTML=html;
+  save('goal_lic_saved',document.getElementById('goal-lic-input')?.value||'0');
+  save('extra_goals',extraGoals);
+}
+function addExtraGoal(){
+  const name=document.getElementById('goal-new-name').value.trim();
+  const target=parseFloat(document.getElementById('goal-new-target').value)||0;
+  if(!name||!target)return;
+  extraGoals.push({name,target,saved:0});
+  document.getElementById('goal-new-name').value='';document.getElementById('goal-new-target').value='';
+  renderGoals();toast('Goal added!');
+}
+function updateExtraGoal(i,v){extraGoals[i].saved=parseFloat(v)||0;renderGoals();}
+function deleteExtraGoal(i){extraGoals.splice(i,1);renderGoals();}
+function initGoals(){
+  const inp=document.getElementById('goal-lic-input');
+  if(inp) inp.value=load('goal_lic_saved','0');
+  renderGoals();
+}
+
+// ======== OVERVIEW REFRESH ========
+function refreshOverview(){
+  // urgent
+  const urgPending=urgents.filter(t=>!t.done);
+  const ucEl=document.getElementById('ov-urgent-count');if(ucEl) ucEl.textContent=urgPending.length;
+  const ulEl=document.getElementById('ov-urgent-list');
+  if(ulEl){
+    if(!urgPending.length){ulEl.innerHTML='<div class="empty" style="padding:.5rem 0">Nothing urgent — nice.</div>';}
+    else{ulEl.innerHTML=urgPending.slice(0,4).map(t=>`<div class="ov-row"><div class="ov-dot" style="background:var(--red-text)"></div>${esc2(t.text)}</div>`).join('')+(urgPending.length>4?`<div style="font-size:11px;color:var(--text3);padding:6px 0">+${urgPending.length-4} more</div>`:'')}
+  }
+  // todo
+  const todoPending=todos.filter(t=>!t.done);
+  const tcEl=document.getElementById('ov-todo-count');if(tcEl) tcEl.textContent=todoPending.length;
+  const tlEl=document.getElementById('ov-todo-list');
+  if(tlEl){
+    if(!todoPending.length){tlEl.innerHTML='<div class="empty" style="padding:.5rem 0">All clear.</div>';}
+    else{tlEl.innerHTML=todoPending.slice(0,4).map(t=>`<div class="ov-row"><div class="ov-dot" style="background:var(--accent)"></div>${esc2(t.text)}</div>`).join('')+(todoPending.length>4?`<div style="font-size:11px;color:var(--text3);padding:6px 0">+${todoPending.length-4} more</div>`:'')}
+  }
+  // dinner tonight
+  const today=new Date();
+  const todayName=DAYS[today.getDay()===0?6:today.getDay()-1];
+  const todayDinner=weekPlan.find(p=>p.day===todayName);
+  const dinEl=document.getElementById('ov-dinner');
+  if(dinEl){
+    if(todayDinner){dinEl.innerHTML=`<div style="font-family:'Parkinsans',sans-serif;font-weight:600;font-size:16px;margin-bottom:6px">${todayDinner.meal.name}</div><div>${badge(todayDinner.meal.diff)} ${todayDinner.meal.thaw?'<span class="badge b-thaw">🧊 thaw tonight</span>':''}</div>`;}
+    else{dinEl.innerHTML='<div class="empty" style="padding:.5rem 0">No plan yet.</div>';}
+  }
+  // balance
+  const income=parseFloat(document.getElementById('fin-income')?.value||load('fin_income','')||0)||0;
+  const total=finExpenses.reduce((s,e)=>s+(parseFloat(e.val)||0),0);
+  const bal=income-total;
+  const balEl=document.getElementById('ov-balance');
+  if(balEl){balEl.textContent='€'+bal.toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});balEl.style.color=bal>=0?'var(--sage)':'var(--red-text)';}
+  const pct=income>0?Math.min((total/income)*100,100):0;
+  const barEl=document.getElementById('ov-bal-bar');
+  if(barEl){barEl.style.width=(100-pct)+'%';barEl.style.background=bal>=0?'var(--sage)':'var(--red-text)';}
+}
+
+// ======== MODALS ========
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+// ======== DINNER PLANNER (original logic, adapted) ========
+const DP_DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+let difficulties=load('dp_diffs',['medium','medium','medium','medium','medium','easy','easy']);
+let weekPlan=load('dp_plan',[]);
+let expandedRows=new Set();
+let currentFilter='all';
+let editIdx=null;
+let lastDeletedMeal=null,lastDeletedIdx=null;
+let nextId=load('dp_nextid',100);
+
+function initDayGrid(){
+  const el=document.getElementById('day-grid');if(!el)return;
+  let html='';
+  DP_DAYS.forEach((day,i)=>{
+    html+=`<div class="day-card">
+      <div class="day-lbl">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][i]}</div>
+      <div class="day-name">${day}</div>
+      <select onchange="setDiff(${i},this.value)">
+        <option value="easy" ${difficulties[i]==='easy'?'selected':''}>Easy</option>
+        <option value="medium" ${difficulties[i]==='medium'?'selected':''}>Medium</option>
+        <option value="involved" ${difficulties[i]==='involved'?'selected':''}>Involved</option>
+      </select>
+    </div>`;
+  });
+  el.innerHTML=html;
+}
+function setDiff(i,v){difficulties[i]=v;save('dp_diffs',difficulties);}
+function resetDiffs(){difficulties=['medium','medium','medium','medium','medium','easy','easy'];save('dp_diffs',difficulties);initDayGrid();toast('Reset to medium');}
+function getMealsForDiff(diff){
+  if(diff==='easy') return meals.filter(m=>m.diff==='easy');
+  if(diff==='involved') return meals;
+  return meals.filter(m=>m.diff==='easy'||m.diff==='medium');
+}
+function generatePlan(){
+  weekPlan=[];const used=new Set();
+  DP_DAYS.forEach((day,i)=>{
+    const pool=getMealsForDiff(difficulties[i]).filter(m=>!used.has(m.id));
+    if(!pool.length)return;
+    const meal=pool[Math.floor(Math.random()*pool.length)];
+    used.add(meal.id);
+    weekPlan.push({day,meal:JSON.parse(JSON.stringify(meal)),diff:difficulties[i]});
+  });
+  save('dp_plan',weekPlan);renderPlan();renderDpGrocery();renderThaw();toast('Week generated!');refreshOverview();
+}
+function badge(diff){const m={easy:'b-easy',medium:'b-med',involved:'b-inv'};return `<span class="badge ${m[diff]}">${diff}</span>`;}
+function renderPlan(){
+  const el=document.getElementById('plan-content');if(!el)return;
+  if(!weekPlan.length){el.innerHTML='<div class="empty">No plan yet — head to Week setup to generate one.</div>';return;}
+  let html='<div class="plan-wrap">';
+  weekPlan.forEach((p,i)=>{
+    const isOpen=expandedRows.has(i);
+    const d=getDateForDayName(p.day);
+    const ds=d?d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'';
+    const tb=p.meal.thaw?'<span class="badge b-thaw">🧊 thaw tonight</span>':'<span class="badge b-nothaw">no thaw</span>';
+    const ings=p.meal.ingredients.map(g=>`<span class="ing-pill">${g}</span>`).join('');
+    html+=`<div>
+      <div class="plan-row">
+        <div class="pcell" style="border-right:1px solid var(--border)">
+          <div class="pday">${p.day}</div><div class="pdate">${ds}</div>
+        </div>
+        <div class="pcell" style="cursor:pointer;flex:1" onclick="toggleRow(${i})">
+          <div class="pmeal">${p.meal.name} <span class="chev ${isOpen?'open':''}" id="chev-${i}">▾</span></div>
+          <div class="pbadges">${badge(p.meal.diff)} ${tb}</div>
+        </div>
+        <div class="paction"><button class="rspin" onclick="respin(${i})" title="Swap">↻</button></div>
+      </div>
+      <div class="pexpand ${isOpen?'open':''}" id="expand-${i}">
+        <div class="pexpand-inner">
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--text3);margin-bottom:7px;font-weight:500">Ingredients · ${p.meal.ingredients.length}</div>
+          <div class="ing-grid">${ings}</div>
+        </div>
+      </div>
+    </div>`;
+  });
+  html+='</div>';el.innerHTML=html;
+}
+function toggleRow(i){
+  expandedRows.has(i)?expandedRows.delete(i):expandedRows.add(i);
+  const exp=document.getElementById('expand-'+i);const chev=document.getElementById('chev-'+i);
+  if(exp) exp.classList.toggle('open',expandedRows.has(i));
+  if(chev) chev.classList.toggle('open',expandedRows.has(i));
+}
+function respin(i){
+  const used=new Set(weekPlan.map((p,j)=>j!==i?p.meal.id:null).filter(Boolean));
+  const pool=getMealsForDiff(weekPlan[i].diff).filter(m=>!used.has(m.id));
+  if(!pool.length)return;
+  weekPlan[i].meal=JSON.parse(JSON.stringify(pool[Math.floor(Math.random()*pool.length)]));
+  expandedRows.delete(i);save('dp_plan',weekPlan);renderPlan();renderDpGrocery();renderThaw();toast('Meal swapped!');refreshOverview();
+}
+const BULKY=['whole chicken','whole fish','prime rib roast','pork spare ribs','roast beef'];
+function renderDpGrocery(){
+  const el=document.getElementById('dp-grocery-content');if(!el)return;
+  if(!weekPlan.length){el.innerHTML='<div class="empty">Generate a plan first to see the grocery list.</div>';return;}
+  const all=new Set();
+  weekPlan.forEach(p=>p.meal.ingredients.forEach(i=>all.add(i.toLowerCase())));
+  const del=[],store=[];
+  [...all].sort().forEach(ing=>{if(BULKY.some(k=>ing.includes(k)))store.push(ing);else del.push(ing);});
+  let html=`<div class="gsplit">
+    <div>
+      <div class="gcol-title">🛵 Delivery <span class="badge b-blue" style="margin-left:4px">${del.length} items</span></div>
+      <div class="chips">${del.map(i=>`<span class="chip" onclick="this.classList.toggle('done')">${i}</span>`).join('')}</div>
+      <button class="btn btn-sm" style="margin-top:12px" onclick="copyGroceryList(${JSON.stringify(del)},'del')">Copy list</button>
+      <span id="copy-del" style="font-size:12px;color:var(--text3);margin-left:8px;display:none">Copied!</span>
+    </div>`;
+  if(store.length){html+=`<div>
+      <div class="gcol-title">🛒 Store run <span class="badge b-grey" style="margin-left:4px">${store.length}</span></div>
+      <div class="chips">${store.map(i=>`<span class="chip" onclick="this.classList.toggle('done')">${i}</span>`).join('')}</div>
+    </div>`;}
+  html+='</div>';el.innerHTML=html;
+}
+function copyGroceryList(items,id){
+  navigator.clipboard.writeText(items.map(i=>'• '+i).join('\n')).then(()=>{
+    const el=document.getElementById('copy-'+id);el.style.display='inline';setTimeout(()=>el.style.display='none',2000);
+  });
+}
+function renderThaw(){
+  const el=document.getElementById('thaw-content');if(!el)return;
+  if(!weekPlan.length){el.innerHTML='<div class="empty">Generate a plan first.</div>';return;}
+  const tm=weekPlan.filter(p=>p.meal.thaw);
+  if(!tm.length){el.innerHTML='<div class="card" style="text-align:center;padding:2rem;color:var(--text3);font-weight:300">No meals need thawing this week — you\'re all set.</div>';return;}
+  let html=`<div style="margin-bottom:1rem"><button class="btn btn-p" onclick="downloadAllIcs()">⬇ Download all reminders</button></div><div class="card">`;
+  tm.forEach(p=>{
+    const prev=getPrevDay(p.day);
+    const d=getDateForDayName(p.day);
+    const ds=d?d.toLocaleDateString('en-GB',{day:'numeric',month:'long'}):'';
+    html+=`<div class="trow"><div><div class="tname">${p.meal.name}</div><div class="twhen">🧊 Take out: <strong style="color:var(--text2)">${prev} evening</strong></div><div style="font-size:11px;color:var(--text3);margin-top:2px">Cooking on ${ds}</div></div><button class="btn btn-sm" onclick="downloadIcs('${esc2(p.meal.name)}','${prev}','${p.day}')">⬇ .ics</button></div>`;
+  });
+  html+='</div>';el.innerHTML=html;
+}
+function getPrevDay(day){const i=DP_DAYS.indexOf(day);return i>0?DP_DAYS[i-1]:'Sunday (previous week)';}
+function getDateForDayName(dayName){
+  const today=new Date();today.setHours(0,0,0,0);
+  const dow=today.getDay();const diff=dow===0?-6:1-dow;
+  const mon=new Date(today);mon.setDate(today.getDate()+diff);
+  const idx=DP_DAYS.indexOf(dayName);if(idx<0)return null;
+  const t=new Date(mon);t.setDate(mon.getDate()+idx);return t;
+}
+function fmtIcs(d){return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;}
+function esc2(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function makeIcs(mealName,remDay,cookDay){
+  const now=new Date();const stamp=now.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+  const uid=`thaw-${mealName.replace(/\s/g,'-')}-${Date.now()}@hb`;
+  const rd=getDateForDayName(remDay);const ds=rd?fmtIcs(rd):fmtIcs(new Date());
+  const de=rd?(()=>{const x=new Date(rd);x.setDate(x.getDate()+1);return fmtIcs(x);})():ds;
+  return `BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Home Base//EN\r\nCALSCALE:GREGORIAN\r\nMETHOD:PUBLISH\r\nBEGIN:VEVENT\r\nUID:${uid}\r\nDTSTAMP:${stamp}\r\nDTSTART;VALUE=DATE:${ds}\r\nDTEND;VALUE=DATE:${de}\r\nSUMMARY:🧊 Thaw ${mealName} tonight\r\nDESCRIPTION:Take ${mealName} out of the freezer tonight so it's ready to cook on ${cookDay}.\r\nBEGIN:VALARM\r\nTRIGGER:PT18H\r\nACTION:DISPLAY\r\nDESCRIPTION:Reminder: thaw ${mealName} for tomorrow\r\nEND:VALARM\r\nEND:VEVENT\r\nEND:VCALENDAR`;
+}
+function downloadIcs(mealName,remDay,cookDay){
+  const blob=new Blob([makeIcs(mealName,remDay,cookDay)],{type:'text/calendar'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`thaw-${mealName.replace(/\s+/g,'-').toLowerCase()}.ics`;a.click();toast('Downloading reminder');
+}
+function downloadAllIcs(){weekPlan.filter(p=>p.meal.thaw).forEach(p=>downloadIcs(p.meal.name,getPrevDay(p.day),p.day));}
+function filterMeals(f){
+  currentFilter=f;
+  document.querySelectorAll('[id^="fb-"]').forEach(b=>{b.style.fontWeight='300';b.style.borderColor='';b.style.color='';});
+  const btn=document.getElementById('fb-'+f);
+  if(btn){btn.style.fontWeight='500';btn.style.borderColor='var(--accent)';btn.style.color='var(--accent)';}
+  renderMealsList();
+}
+function renderMealsList(){
+  const el=document.getElementById('meals-list');if(!el)return;
+  let filtered=meals;
+  if(currentFilter==='easy') filtered=meals.filter(m=>m.diff==='easy');
+  else if(currentFilter==='medium') filtered=meals.filter(m=>m.diff==='medium');
+  else if(currentFilter==='involved') filtered=meals.filter(m=>m.diff==='involved');
+  else if(currentFilter==='nothaw') filtered=meals.filter(m=>!m.thaw);
+  filtered=[...filtered].sort((a,b)=>a.name.localeCompare(b.name));
+  let html='';
+  filtered.forEach(m=>{
+    const idx=meals.indexOf(m);
+    const tags=m.ingredients.map(i=>`<span class="ing-pill">${i}</span>`).join('');
+    html+=`<div class="card-sm" style="margin-bottom:10px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px">
+        <div>
+          <div style="font-family:'Parkinsans',sans-serif;font-size:17px;margin-bottom:6px;font-weight:600">${m.name}</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap">${badge(m.diff)} ${m.thaw?'<span class="badge b-thaw">thaw required</span>':'<span class="badge b-nothaw">no thaw needed</span>'}</div>
+        </div>
+        <div style="display:flex;gap:7px;flex-shrink:0">
+          <button class="btn btn-sm" onclick="openEdit(${idx})">Edit</button>
+          <button class="btn btn-sm btn-del" onclick="deleteMeal(${idx})">Remove</button>
+        </div>
+      </div>
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);margin-bottom:7px;font-weight:500">Ingredients · ${m.ingredients.length}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px">${tags}</div>
+    </div>`;
+  });
+  el.innerHTML=html||'<div class="empty">No meals match this filter.</div>';
+}
+function openEdit(idx){
+  editIdx=idx;const m=meals[idx];
+  document.getElementById('edit-modal-title').textContent=m.name;
+  document.getElementById('edit-diff').innerHTML=`<option value="easy" ${m.diff==='easy'?'selected':''}>Easy</option><option value="medium" ${m.diff==='medium'?'selected':''}>Medium</option><option value="involved" ${m.diff==='involved'?'selected':''}>Involved</option>`;
+  document.getElementById('edit-thaw').value=m.thaw?'true':'false';
+  renderEditTags(m.ingredients);openModal('edit-modal');
+}
+function renderEditTags(ings){document.getElementById('edit-ing-tags').innerHTML=ings.map((ing,i)=>`<span class="ing-tag">${ing} <span class="ing-x" onclick="removeIng(${i})">✕</span></span>`).join('');}
+function removeIng(i){meals[editIdx].ingredients.splice(i,1);renderEditTags(meals[editIdx].ingredients);}
+function addIngToEdit(){
+  const inp=document.getElementById('edit-ing-input');const v=inp.value.trim().toLowerCase();if(!v)return;
+  if(!meals[editIdx].ingredients.includes(v))meals[editIdx].ingredients.push(v);
+  inp.value='';renderEditTags(meals[editIdx].ingredients);
+}
+function saveEdit(){meals[editIdx].diff=document.getElementById('edit-diff').value;meals[editIdx].thaw=document.getElementById('edit-thaw').value==='true';closeModal('edit-modal');renderMealsList();toast('Saved!');}
+function deleteMeal(idx){
+  if(!confirm(`Remove "${meals[idx].name}" from the rotation?`))return;
+  lastDeletedMeal=JSON.parse(JSON.stringify(meals[idx]));lastDeletedIdx=idx;meals.splice(idx,1);renderMealsList();toast(`"${lastDeletedMeal.name}" removed`);
+}
+function openAddMeal(){openModal('add-modal');}
+function addNewMeal(){
+  const name=document.getElementById('new-name').value.trim();
+  if(!name){alert('Please enter a meal name.');return;}
+  const diff=document.getElementById('new-diff').value;
+  const thaw=document.getElementById('new-thaw').value==='true';
+  const ings=document.getElementById('new-ings').value.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
+  meals.push({id:nextId++,name,diff,thaw,ingredients:ings});
+  document.getElementById('new-name').value='';document.getElementById('new-ings').value='';
+  save('dp_nextid',nextId);closeModal('add-modal');renderMealsList();toast(`"${name}" added!`);
+}
+
+// ======== MEALS DATA ========
+const meals=[
+  {id:1,name:'Cheeseburger pasta',diff:'medium',thaw:true,ingredients:['ground beef','pasta','cheddar cheese','tomato sauce','onion','garlic','butter','salt','pepper','paprika']},
+  {id:2,name:'Meatloaf',diff:'medium',thaw:true,ingredients:['ground beef','breadcrumbs','eggs','ketchup','onion','garlic','worcestershire sauce','salt','pepper','olive oil']},
+  {id:3,name:'Fried chicken',diff:'involved',thaw:true,ingredients:['chicken pieces','all-purpose flour','eggs','vegetable oil','buttermilk','garlic powder','paprika','salt','pepper','cayenne']},
+  {id:4,name:'Chick-fil-a sandwiches',diff:'easy',thaw:true,ingredients:['chicken breasts','pickle juice','brioche buns','vegetable oil','powdered sugar','paprika','salt','pepper','cayenne','butter']},
+  {id:5,name:'Beef stew',diff:'involved',thaw:true,ingredients:['beef chuck','potatoes','carrots','celery','onion','garlic','beef broth','tomato paste','red wine','olive oil','thyme','bay leaves','salt','pepper','flour']},
+  {id:6,name:'Broccoli cheddar soup',diff:'easy',thaw:false,ingredients:['broccoli','cheddar cheese','heavy cream','onion','garlic','butter','all-purpose flour','chicken broth','salt','pepper','nutmeg']},
+  {id:7,name:'Grilled cheese & tomato soup',diff:'easy',thaw:false,ingredients:['sandwich bread','cheddar cheese','butter','canned crushed tomatoes','heavy cream','onion','garlic','olive oil','salt','pepper','sugar','basil']},
+  {id:8,name:'Pasta bolognese',diff:'medium',thaw:true,ingredients:['ground beef','pasta','canned tomatoes','onion','carrot','celery','garlic','red wine','olive oil','tomato paste','salt','pepper','parmesan','bay leaves','thyme']},
+  {id:9,name:'Spaghetti & meatballs',diff:'medium',thaw:true,ingredients:['ground beef','spaghetti','canned tomatoes','onion','garlic','eggs','breadcrumbs','parmesan','olive oil','salt','pepper','Italian seasoning','fresh parsley']},
+  {id:10,name:'Homemade pizza',diff:'medium',thaw:false,ingredients:['pizza dough','mozzarella','tomato sauce','olive oil','garlic','salt','sugar','yeast','all-purpose flour','toppings of choice']},
+  {id:11,name:'Seafood stew',diff:'involved',thaw:true,ingredients:['mixed seafood','potatoes','canned tomatoes','onion','garlic','fish stock','olive oil','white wine','saffron','paprika','salt','pepper','fresh parsley']},
+  {id:12,name:'Smash burgers',diff:'easy',thaw:true,ingredients:['ground beef','burger buns','cheddar cheese','onion','butter','vegetable oil','salt','pepper','mustard','ketchup','mayonnaise','pickles']},
+  {id:13,name:'British roast',diff:'involved',thaw:true,ingredients:['whole chicken or beef roast','potatoes','carrots','parsnips','onion','garlic','beef or chicken broth','all-purpose flour','butter','olive oil','rosemary','thyme','salt','pepper']},
+  {id:14,name:'Chicken casserole',diff:'medium',thaw:true,ingredients:['chicken thighs','cream of mushroom soup','chicken broth','mixed vegetables','rice','onion','garlic','butter','salt','pepper','thyme']},
+  {id:15,name:'Chicken & dumplings',diff:'medium',thaw:true,ingredients:['chicken','all-purpose flour','baking powder','milk','butter','chicken broth','carrots','celery','onion','garlic','salt','pepper','thyme']},
+  {id:16,name:'Chicken pot pie',diff:'involved',thaw:true,ingredients:['chicken','pie crust dough','peas','carrots','celery','onion','garlic','heavy cream','chicken broth','all-purpose flour','butter','salt','pepper','thyme','eggs']},
+  {id:17,name:'Ramen',diff:'medium',thaw:true,ingredients:['pork belly or chicken','ramen noodles','eggs','soy sauce','mirin','sesame oil','chicken or pork broth','garlic','ginger','bok choy','green onions','nori','chili oil']},
+  {id:18,name:'Tacos',diff:'easy',thaw:true,ingredients:['ground beef or chicken','corn or flour tortillas','cheddar cheese','salsa','sour cream','lettuce','tomato','onion','garlic','cumin','chili powder','salt','pepper','lime','vegetable oil']},
+  {id:19,name:'Nachos',diff:'easy',thaw:false,ingredients:['tortilla chips','cheddar cheese','jalapeños','sour cream','salsa','black beans','avocado','lime','cumin','salt']},
+  {id:20,name:'Chicken tikka masala',diff:'medium',thaw:true,ingredients:['chicken breasts','canned tomatoes','heavy cream','onion','garlic','ginger','butter','vegetable oil','garam masala','cumin','coriander','turmeric','paprika','salt','yogurt']},
+  {id:21,name:'Steaks & wedges',diff:'medium',thaw:true,ingredients:['steaks','potatoes','garlic','rosemary','butter','olive oil','salt','pepper','thyme']},
+  {id:22,name:'Bitoque',diff:'medium',thaw:true,ingredients:['beef steak','eggs','fries or rice','garlic','mustard','butter','olive oil','salt','pepper','bay leaves','white wine']},
+  {id:23,name:'Quesadillas',diff:'easy',thaw:false,ingredients:['flour tortillas','cheddar or Mexican blend cheese','salsa','sour cream','butter or oil','salt']},
+  {id:24,name:'Buffalo chicken quesadillas',diff:'easy',thaw:true,ingredients:['chicken breasts','flour tortillas','cheddar cheese','buffalo sauce','butter','ranch dressing','garlic powder','salt','pepper']},
+  {id:25,name:'Mac & cheese',diff:'easy',thaw:false,ingredients:['macaroni','cheddar cheese','butter','whole milk','all-purpose flour','salt','pepper','mustard powder','breadcrumbs']},
+  {id:26,name:'Hot dogs',diff:'easy',thaw:false,ingredients:['hot dogs','hot dog buns','mustard','ketchup','onion','relish','butter']},
+  {id:27,name:'Chili',diff:'medium',thaw:true,ingredients:['ground beef','kidney beans','canned tomatoes','onion','garlic','vegetable or beef broth','olive oil','chili powder','cumin','paprika','salt','pepper','cayenne']},
+  {id:28,name:'Chili dogs',diff:'easy',thaw:true,ingredients:['hot dogs','hot dog buns','ground beef chili','cheddar cheese','onion','mustard','chili powder','cumin','salt','pepper']},
+  {id:29,name:'Chili & rice',diff:'medium',thaw:true,ingredients:['ground beef','kidney beans','canned tomatoes','onion','garlic','olive oil','rice','chili powder','cumin','paprika','salt','pepper']},
+  {id:30,name:'Curry',diff:'medium',thaw:true,ingredients:['chicken or beef','coconut milk','curry paste','onion','garlic','ginger','tomatoes','rice','vegetable oil','salt','coriander','cumin','turmeric']},
+  {id:31,name:'Chicken noodle soup',diff:'easy',thaw:true,ingredients:['chicken breasts or thighs','egg noodles','carrots','celery','onion','garlic','chicken broth','butter','olive oil','salt','pepper','thyme','bay leaves','fresh parsley']},
+  {id:32,name:'Deep fried tacos',diff:'involved',thaw:true,ingredients:['ground beef','corn tortillas','vegetable oil','cheddar cheese','lettuce','tomato','sour cream','onion','garlic','cumin','chili powder','salt','pepper']},
+  {id:33,name:'Stroganoff',diff:'medium',thaw:true,ingredients:['beef strips','mushrooms','onion','garlic','sour cream','beef broth','butter','all-purpose flour','egg noodles or rice','salt','pepper','paprika','worcestershire sauce','fresh parsley']},
+  {id:34,name:'Pork chops & mash',diff:'medium',thaw:true,ingredients:['pork chops','potatoes','butter','milk','garlic','rosemary','olive oil','salt','pepper','dijon mustard']},
+  {id:35,name:'Fish & chips',diff:'medium',thaw:true,ingredients:['white fish fillets','potatoes','all-purpose flour','baking powder','beer or sparkling water','vegetable oil','salt','pepper','malt vinegar','tartar sauce']},
+];
+
+// ======== INIT ========
+(function init(){
+  initTheme();
+  initDayGrid();
+  initWeeklyGrid();
+  initMealplanGrid();
+  initMealsTabs();
+  initFinance();
+  initGoals();
+  renderTodos();
+  renderUrgents();
+  renderMealsList();
+  renderPlan();
+  renderDpGrocery();
+  renderThaw();
+  renderGroceryList();
+  renderBillsTracker();
+  refreshOverview();
+})();
+</script>
+</body>
+</html>
