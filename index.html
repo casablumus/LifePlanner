@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Base — Life Planner</title>
+<title>Me & You — Life Planner</title>
 <link href="https://fonts.googleapis.com/css2?family=Parkinsans:wght@300;400;500;600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root,[data-theme="dark"]{
@@ -1870,7 +1870,7 @@ function makeIcs(mealName,remDay,cookDay){
   const uid=`thaw-${mealName.replace(/\s/g,'-')}-${Date.now()}@hb`;
   const rd=getDateForDayName(remDay);const ds=rd?fmtIcs(rd):fmtIcs(new Date());
   const de=rd?(()=>{const x=new Date(rd);x.setDate(x.getDate()+1);return fmtIcs(x);})():ds;
-  return `BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Home Base//EN\r\nCALSCALE:GREGORIAN\r\nMETHOD:PUBLISH\r\nBEGIN:VEVENT\r\nUID:${uid}\r\nDTSTAMP:${stamp}\r\nDTSTART;VALUE=DATE:${ds}\r\nDTEND;VALUE=DATE:${de}\r\nSUMMARY:🧊 Thaw ${mealName} tonight\r\nDESCRIPTION:Take ${mealName} out of the freezer tonight so it's ready to cook on ${cookDay}.\r\nBEGIN:VALARM\r\nTRIGGER:PT18H\r\nACTION:DISPLAY\r\nDESCRIPTION:Reminder: thaw ${mealName} for tomorrow\r\nEND:VALARM\r\nEND:VEVENT\r\nEND:VCALENDAR`;
+  return `BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Me & You//EN\r\nCALSCALE:GREGORIAN\r\nMETHOD:PUBLISH\r\nBEGIN:VEVENT\r\nUID:${uid}\r\nDTSTAMP:${stamp}\r\nDTSTART;VALUE=DATE:${ds}\r\nDTEND;VALUE=DATE:${de}\r\nSUMMARY:🧊 Thaw ${mealName} tonight\r\nDESCRIPTION:Take ${mealName} out of the freezer tonight so it's ready to cook on ${cookDay}.\r\nBEGIN:VALARM\r\nTRIGGER:PT18H\r\nACTION:DISPLAY\r\nDESCRIPTION:Reminder: thaw ${mealName} for tomorrow\r\nEND:VALARM\r\nEND:VEVENT\r\nEND:VCALENDAR`;
 }
 function downloadIcs(mealName,remDay,cookDay){
   const blob=new Blob([makeIcs(mealName,remDay,cookDay)],{type:'text/calendar'});
