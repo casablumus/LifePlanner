@@ -248,6 +248,8 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 2.5rem;display:fle
       <button class="side-group" data-group="daily" onclick="showGroup('daily',this)"><span class="sg-icon">☰</span>Daily</button>
       <button class="side-group" data-group="meals" onclick="showGroup('meals',this)"><span class="sg-icon">◍</span>Meals</button>
       <button class="side-group" data-group="finance" onclick="showGroup('finance',this)"><span class="sg-icon">◆</span>Finance</button>
+      <button class="side-group" data-group="futureplans" onclick="showGroup('futureplans',this)"><span class="sg-icon">✦</span>Future Plans</button>
+      <button class="side-group" data-group="travel" onclick="showGroup('travel',this)"><span class="sg-icon">✈</span>Travel Planner</button>
     </div>
     <div class="side-foot">
       <button class="pill-btn" onclick="toggleTheme()" id="theme-btn" style="width:100%;justify-content:center">☀ Light</button>
@@ -264,6 +266,15 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 2.5rem;display:fle
         <button class="nav-tab" onclick="showPage('weekly',this)">Weekly Planner</button>
         <button class="nav-tab" onclick="showPage('todo',this)">To-Do List</button>
         <button class="nav-tab" onclick="showPage('urgent',this)">Urgent</button>
+        <button class="nav-tab" onclick="showPage('fridays',this)">Our Fridays</button>
+      </div>
+      <div class="nav-tabs" id="nav-tabs-futureplans" style="display:none">
+        <button class="nav-tab" onclick="showPage('future-plans',this)">Plans</button>
+        <button class="nav-tab" onclick="showPage('future-bucket',this)">Bucket List</button>
+        <button class="nav-tab" onclick="showPage('future-ideas',this)">Ideas</button>
+      </div>
+      <div class="nav-tabs" id="nav-tabs-travel" style="display:none">
+        <button class="nav-tab" onclick="showPage('travel-home',this)">My Trips</button>
       </div>
       <div class="nav-tabs" id="nav-tabs-meals" style="display:none">
         <button class="nav-tab" onclick="showPage('mealplan',this)">Meal Planner</button>
@@ -271,9 +282,10 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 2.5rem;display:fle
         <button class="nav-tab" onclick="showPage('grocery',this)">Grocery List</button>
       </div>
       <div class="nav-tabs" id="nav-tabs-finance" style="display:none">
-        <button class="nav-tab" onclick="showPage('budget',this)">Monthly Budget</button>
+        <button class="nav-tab" onclick="showPage('pockets',this)">Pockets</button>
         <button class="nav-tab" onclick="showPage('bills',this)">Bills Tracker</button>
         <button class="nav-tab" onclick="showPage('goals',this)">Savings Goals</button>
+        <button class="nav-tab" onclick="showPage('budget',this)">Monthly Budget</button>
       </div>
       <div class="nav-right">
         <span id="nav-clock" style="font-size:12px;color:var(--text3)"></span>
@@ -287,42 +299,53 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 2.5rem;display:fle
     <div id="page-overview-home" class="page active">
       <h1>Good to see you, <em>Stalets</em></h1>
       <p class="sub" id="ov-date-sub">Here's where things stand today.</p>
-      <div class="ov-grid">
-        <div class="ov-card">
-          <div class="ov-card-h"><span class="t">Urgent</span><span class="badge b-inv" id="ov-urgent-count">0</span></div>
-          <div id="ov-urgent-list"><div class="empty" style="padding:1rem 0">Nothing urgent — nice.</div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="ov-card">
+            <div class="ov-card-h"><span class="t">Urgent</span><span class="badge b-inv" id="ov-urgent-count">0</span></div>
+            <div id="ov-urgent-list"><div class="empty" style="padding:.5rem 0">Nothing urgent — nice.</div></div>
+          </div>
+          <div class="ov-card">
+            <div class="ov-card-h"><span class="t">To-Do today</span><span class="badge b-blue" id="ov-todo-count">0</span></div>
+            <div id="ov-todo-list"><div class="empty" style="padding:.5rem 0">No tasks yet.</div></div>
+          </div>
         </div>
         <div class="ov-card">
-          <div class="ov-card-h"><span class="t">To-Do today</span><span class="badge b-blue" id="ov-todo-count">0</span></div>
-          <div id="ov-todo-list"><div class="empty" style="padding:1rem 0">No tasks yet.</div></div>
-        </div>
-        <div class="ov-card">
-          <div class="ov-card-h"><span class="t">Tonight's dinner</span></div>
-          <div id="ov-dinner"><div class="empty" style="padding:1rem 0">No plan yet.</div></div>
-        </div>
-      </div>
-      <div class="ov-grid" style="grid-template-columns:1fr 1fr">
-        <div class="ov-card">
-          <div class="ov-card-h"><span class="t">This month's balance</span></div>
-          <div class="ov-stat" id="ov-balance">€0</div>
-          <div class="ov-stat-lbl">Income minus expenses</div>
-          <div class="bar-track" style="margin-top:14px"><div class="bar-fill" id="ov-bal-bar" style="width:0%;background:var(--accent)"></div></div>
-        </div>
-        <div class="ov-card">
-          <div class="ov-card-h"><span class="t">Driving licence goal</span><span class="badge b-blue">€970</span></div>
-          <div class="ov-stat" id="ov-goal-amt">€0</div>
-          <div class="ov-stat-lbl">Saved so far</div>
-          <div class="bar-track" style="margin-top:14px"><div class="bar-fill" id="ov-goal-bar" style="width:0%;background:var(--sage)"></div></div>
+          <div class="ov-card-h" style="margin-bottom:12px"><span class="t">Today's meals</span></div>
+          <div id="ov-meals-today"><div class="empty" style="padding:.5rem 0">Set up your meal plan to see today's meals.</div></div>
         </div>
       </div>
-      <div class="info-strip"><span class="isd"></span><span>Use the sidebar to jump between Daily, Meals and Finance — each opens with its own set of tabs.</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:10px">
+        <div class="ov-card">
+          <div class="ov-card-h"><span class="t">Monthly balance</span></div>
+          <div class="ov-stat" id="ov-balance" style="margin:6px 0 2px">€0</div>
+          <div class="ov-stat-lbl" id="ov-bal-lbl">Income minus budgeted expenses</div>
+          <div class="bar-track" style="margin-top:10px"><div class="bar-fill" id="ov-bal-bar" style="width:0%;background:var(--accent)"></div></div>
+        </div>
+        <div class="ov-card">
+          <div class="ov-card-h"><span class="t">Total savings</span><span class="badge b-blue">Goal €6 000</span></div>
+          <div class="ov-stat" id="ov-savings-total" style="margin:6px 0 2px">€0</div>
+          <div class="ov-stat-lbl">Across all pockets · incl. interest</div>
+          <div class="bar-track" style="margin-top:10px"><div class="bar-fill" id="ov-savings-bar" style="width:0%;background:var(--sage)"></div></div>
+        </div>
+      </div>
+      <div class="ov-card" style="padding:.85rem 1.25rem">
+        <div style="display:flex;align-items:center;gap:14px">
+          <span style="font-size:13px;font-weight:500;white-space:nowrap">🚗 Driving licence</span>
+          <div class="bar-track" style="flex:1;margin:0"><div class="bar-fill" id="ov-goal-bar" style="width:0%;background:var(--accent)"></div></div>
+          <span style="font-size:12px;color:var(--text3);white-space:nowrap" id="ov-goal-nums">€0 / €970</span>
+        </div>
+      </div>
+      <div id="ov-bills-alerts" style="margin-top:10px"></div>
     </div>
 
     <!-- ============ DAILY: WEEKLY PLANNER ============ -->
     <div id="page-weekly" class="page">
       <h1>Weekly <em>planner</em></h1>
-      <p class="sub">A simple overview of the week — jot down what's happening morning, afternoon and evening for each day.</p>
-      <div class="wk-grid" id="weekly-grid"></div>
+      <p class="sub">Click any cell to add notes for that period. Today is highlighted in blue.</p>
+      <div style="overflow-x:auto">
+        <div id="weekly-grid" style="min-width:680px"></div>
+      </div>
     </div>
 
     <!-- ============ DAILY: TO-DO ============ -->
@@ -347,11 +370,84 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 2.5rem;display:fle
       <div class="card" id="urgent-list"><div class="empty">All clear.</div></div>
     </div>
 
+    <!-- ============ DAILY: OUR FRIDAYS ============ -->
+    <div id="page-fridays" class="page">
+      <h1>Our <em>Fridays</em></h1>
+      <p class="sub">Special Friday evenings together — one activity per week, with food, drinks and everything you need. Appears on the Overview every Friday.</p>
+
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:1.25rem;margin-bottom:1.25rem">
+        <div class="card">
+          <div class="sec-hdr" style="margin-bottom:12px">
+            <h2 class="sec-title">This Friday</h2>
+            <button class="btn btn-sm btn-p" onclick="pickFridayActivity()">Pick random</button>
+          </div>
+          <div id="friday-this-week">
+            <div class="empty">No activity selected for this Friday.</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ov-card-h" style="margin-bottom:10px"><span class="t" style="font-weight:600;font-family:'Parkinsans',sans-serif">Items needed</span></div>
+          <p style="font-size:12px;color:var(--text3);margin-bottom:10px;font-weight:300">Things to buy or prepare for this Friday's activity.</p>
+          <div id="friday-items-list"></div>
+          <div class="add-row" style="margin-top:10px;margin-bottom:0">
+            <input type="text" id="friday-item-input" placeholder="Add item or ingredient..." onkeydown="if(event.key==='Enter')addFridayItem()">
+            <button class="btn btn-sm btn-p" onclick="addFridayItem()">Add</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sec-hdr" style="margin-bottom:14px">
+          <h2 class="sec-title">Activity list</h2>
+          <button class="btn btn-sm btn-p" onclick="openFridayActivityModal()">+ Add activity</button>
+        </div>
+        <div id="friday-activities-list"></div>
+      </div>
+    </div>
+
+    <!-- ============ FUTURE PLANS ============ -->
+    <div id="page-future-plans" class="page">
+      <h1>Future <em>plans</em></h1>
+      <p class="sub">Things you want to do, achieve or experience — not urgent, but worth keeping track of.</p>
+      <div class="sec-hdr" style="margin-bottom:1rem">
+        <div></div>
+        <button class="btn btn-sm btn-p" onclick="openPlanModal()">+ Add plan</button>
+      </div>
+      <div id="future-plans-list"><div class="empty">No plans yet — add something you're looking forward to.</div></div>
+    </div>
+
+    <div id="page-future-bucket" class="page">
+      <h1>Bucket <em>list</em></h1>
+      <p class="sub">Things to do before a certain age or date — experiences, achievements, places.</p>
+      <div class="sec-hdr" style="margin-bottom:1rem">
+        <div></div>
+        <button class="btn btn-sm btn-p" onclick="openBucketModal()">+ Add item</button>
+      </div>
+      <div id="bucket-list-content"><div class="empty">Start your bucket list.</div></div>
+    </div>
+
+    <div id="page-future-ideas" class="page">
+      <h1>Ideas <em>&amp; notes</em></h1>
+      <p class="sub">Loose thoughts, random ideas, things to research later — a scratchpad for the future.</p>
+      <div class="add-row">
+        <input type="text" id="idea-input" placeholder="Jot down an idea..." onkeydown="if(event.key==='Enter')addIdea()">
+        <button class="btn btn-p" onclick="addIdea()">Add</button>
+      </div>
+      <div id="ideas-list"><div class="empty">No ideas yet.</div></div>
+    </div>
+
+    <!-- ============ TRAVEL PLANNER ============ -->
+    <div id="page-travel-home" class="page">
+      <h1>Travel <em>planner</em></h1>
+      <p class="sub">Your trips, past and future. Coming soon — this section is ready to be built out.</p>
+      <div class="info-strip"><span class="isd"></span><span>Travel Planner is reserved for a future update. Add destinations, dates, packing lists and budgets per trip.</span></div>
+    </div>
+
     <!-- ============ MEALS: MEAL PLANNER ============ -->
     <div id="page-mealplan" class="page">
       <h1>Meal <em>planner</em></h1>
-      <p class="sub">Breakfast, lunch and dinner for each day — quick notes, not full recipes. For dinner ideas with ingredients and grocery lists, switch to the Dinner Planner tab.</p>
-      <div class="card"><div class="mp-grid" id="mealplan-grid"></div></div>
+      <p class="sub">Breakfast, lunch, snack and dinner for each day — quick notes. For dinner ideas with ingredients and grocery lists, switch to the Dinner Planner tab.</p>
+      <div class="card" style="overflow-x:auto"><div class="mp-grid" id="mealplan-grid" style="min-width:700px"></div></div>
     </div>
 
     <!-- ============ MEALS: DINNER PLANNER (full) ============ -->
@@ -429,22 +525,23 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 2.5rem;display:fle
     <!-- ============ FINANCE: BUDGET ============ -->
     <div id="page-budget" class="page">
       <h1>Monthly <em>budget</em></h1>
-      <p class="sub">Your income and recurring expenses. Balance updates automatically.</p>
+      <p class="sub">Set your monthly allocation for each pocket here. These values feed directly into the Pockets tab as the "Monthly top-up" — no double entry.</p>
       <div class="fin-grid">
         <div>
           <div class="card">
             <h2 class="sec-title" style="margin-bottom:14px">Income</h2>
             <div class="fin-row">
-              <div><div class="fname">Monthly income</div></div>
+              <div><div class="fname">Monthly income</div><div class="fcat">Net, after tax</div></div>
               <input type="number" class="fin-input" id="fin-income" placeholder="0" oninput="renderFinance()">
               <div></div>
             </div>
           </div>
           <div class="card">
-            <h2 class="sec-title" style="margin-bottom:14px">Recurring expenses</h2>
+            <h2 class="sec-title" style="margin-bottom:4px">Pocket allocations</h2>
+            <p style="font-size:12px;color:var(--text3);margin-bottom:14px;font-weight:300">Each amount here = monthly top-up on that pocket. Change it once and both places update.</p>
             <div id="fin-expense-rows"></div>
             <div class="add-row" style="margin-top:14px;margin-bottom:0">
-              <input type="text" id="fin-new-name" placeholder="Expense name..." onkeydown="if(event.key==='Enter')addExpenseRow()">
+              <input type="text" id="fin-new-name" placeholder="Pocket name..." onkeydown="if(event.key==='Enter')addExpenseRow()">
               <button class="btn btn-sm btn-p" onclick="addExpenseRow()">+ Add</button>
             </div>
           </div>
@@ -454,9 +551,9 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 2.5rem;display:fle
             <h2 class="sec-title" style="margin-bottom:14px">Summary</h2>
             <div style="font-size:12px;color:var(--text3);margin-bottom:2px">Income</div>
             <div class="ov-stat" id="fin-total-income" style="margin-bottom:14px">€0</div>
-            <div style="font-size:12px;color:var(--text3);margin-bottom:2px">Expenses</div>
+            <div style="font-size:12px;color:var(--text3);margin-bottom:2px">Total allocated</div>
             <div class="ov-stat" id="fin-total-expenses" style="margin-bottom:14px">€0</div>
-            <div class="fin-total"><span>Balance</span><span id="fin-balance">€0</span></div>
+            <div class="fin-total"><span>Unallocated</span><span id="fin-balance">€0</span></div>
             <div class="bar-track"><div class="bar-fill" id="fin-bar" style="width:0%"></div></div>
             <div style="font-size:11px;color:var(--text3);margin-top:6px" id="fin-bar-note"></div>
           </div>
@@ -468,12 +565,77 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 2.5rem;display:fle
       </div>
     </div>
 
+    <!-- ============ FINANCE: POCKETS ============ -->
+    <div id="page-pockets" class="page">
+      <h1>Revolut <em>pockets</em></h1>
+      <p class="sub">Every pocket earns 2.50% TANB, calculated daily from the date you set the balance. The site accumulates interest automatically — you just update the balance when you actually top up or withdraw.</p>
+
+      <!-- Leisure + Groceries live trackers -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:1.25rem">
+        <div class="ov-card" id="live-groceries-card">
+          <div class="ov-card-h" style="margin-bottom:10px"><span class="t">🛒 Groceries pocket</span></div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:2px">Current balance (with interest)</div>
+          <div class="ov-stat" id="live-groc-bal" style="margin-bottom:8px">€0</div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:4px">Spent this month</div>
+          <div style="font-size:20px;font-family:'Parkinsans',sans-serif;font-weight:600;color:var(--amber)" id="live-groc-spent">€0</div>
+          <div class="bar-track" style="margin-top:10px"><div class="bar-fill" id="live-groc-bar" style="width:0%;background:var(--sage)"></div></div>
+          <div style="font-size:11px;color:var(--text3);margin-top:5px" id="live-groc-note"></div>
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-sm" onclick="openSpendModal('groceries')">+ Log spend</button>
+            <button class="btn btn-sm" onclick="resetMonthlySpend('groceries')">Reset month</button>
+          </div>
+        </div>
+        <div class="ov-card" id="live-leisure-card">
+          <div class="ov-card-h" style="margin-bottom:10px"><span class="t">🎉 Leisure pocket</span></div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:2px">Current balance (with interest)</div>
+          <div class="ov-stat" id="live-leis-bal" style="margin-bottom:8px">€0</div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:4px">Spent this month</div>
+          <div style="font-size:20px;font-family:'Parkinsans',sans-serif;font-weight:600;color:var(--amber)" id="live-leis-spent">€0</div>
+          <div class="bar-track" style="margin-top:10px"><div class="bar-fill" id="live-leis-bar" style="width:0%;background:var(--plum)"></div></div>
+          <div style="font-size:11px;color:var(--text3);margin-top:5px" id="live-leis-note"></div>
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-sm" onclick="openSpendModal('leisure')">+ Log spend</button>
+            <button class="btn btn-sm" onclick="resetMonthlySpend('leisure')">Reset month</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- All pockets list -->
+      <div class="card">
+        <div class="sec-hdr" style="margin-bottom:4px">
+          <h2 class="sec-title">All pockets</h2>
+          <button class="btn btn-sm btn-p" onclick="openPocketModal()">+ Add pocket</button>
+        </div>
+        <p style="font-size:12px;color:var(--text3);margin-bottom:16px;font-weight:300">Update balance whenever you top up or withdraw. Interest accrues automatically at 2.50% TANB from the date of the last balance update.</p>
+        <div id="pockets-list"></div>
+      </div>
+
+      <!-- Current accounts -->
+      <div class="card">
+        <div class="sec-hdr" style="margin-bottom:4px">
+          <h2 class="sec-title">Current accounts</h2>
+        </div>
+        <p style="font-size:12px;color:var(--text3);margin-bottom:16px;font-weight:300">No interest — money here is in transit (received → immediately allocated to a pocket or spent).</p>
+        <div id="cc-list"></div>
+      </div>
+    </div>
+
     <!-- ============ FINANCE: BILLS TRACKER ============ -->
     <div id="page-bills" class="page">
       <h1>Bills <em>tracker</em></h1>
-      <p class="sub">Check off each bill as you pay it this month. Hit "Reset" at the start of a new month to start fresh.</p>
-      <div style="margin-bottom:1.25rem">
-        <button class="btn btn-sm" onclick="resetBills()">Reset all for new month</button>
+      <p class="sub">Recurring bills with their due day. Check each one off when paid — the linked pocket is automatically deducted. Resets on the 31st of each month.</p>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:13px;color:var(--text2)">Reference month:</span>
+          <select id="bills-month-sel" onchange="renderBillsTracker()" style="max-width:160px">
+            <option value="0">January</option><option value="1">February</option><option value="2">March</option>
+            <option value="3">April</option><option value="4">May</option><option value="5">June</option>
+            <option value="6">July</option><option value="7">August</option><option value="8">September</option>
+            <option value="9">October</option><option value="10">November</option><option value="11">December</option>
+          </select>
+        </div>
+        <button class="btn btn-sm" onclick="goNextMonth()">Next month →</button>
+        <button class="btn btn-sm btn-p" onclick="openBillModal()">+ Add bill</button>
       </div>
       <div class="card" id="bills-tracker-list"></div>
     </div>
@@ -481,7 +643,17 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 2.5rem;display:fle
     <!-- ============ FINANCE: GOALS ============ -->
     <div id="page-goals" class="page">
       <h1>Savings <em>goals</em></h1>
-      <p class="sub">One-off targets you're saving towards, separate from monthly expenses.</p>
+      <p class="sub">One-off targets you're saving towards. The €6 000 total savings goal is tracked automatically from your pockets.</p>
+      <div class="card" style="margin-bottom:1rem">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+          <span style="font-family:'Parkinsans',sans-serif;font-weight:600;font-size:16px">💰 Total savings goal</span>
+          <span class="badge b-blue">€6 000</span>
+        </div>
+        <div class="ov-stat" id="goals-total-saved" style="margin-bottom:4px">€0</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:10px">Across all pockets · incl. interest</div>
+        <div class="bar-track"><div class="bar-fill" id="goals-total-bar" style="width:0%;background:var(--sage)"></div></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px" id="goals-total-note"></div>
+      </div>
       <div class="card" style="margin-bottom:1rem">
         <div class="goal-row">
           <div class="goal-top"><span class="gname">🚗 Driving licence</span><span class="gnum" id="goal-lic-nums">€0 / €970</span></div>
@@ -540,7 +712,145 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 2.5rem;display:fle
       </div>
     </div>
 
+    <!-- POCKET modal -->
+    <div class="modal-overlay" id="pocket-modal" onclick="if(event.target===this)closeModal('pocket-modal')">
+      <div class="modal">
+        <button class="modal-x" onclick="closeModal('pocket-modal')">✕</button>
+        <div class="modal-title" id="pocket-modal-title">Add pocket</div>
+        <p style="font-size:13px;color:var(--text3);margin-bottom:1.25rem;font-weight:300">Interest calculated daily at 2.50% TANB. Monthly top-up is pulled from Monthly Budget automatically — just link it below.</p>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div><label>Pocket name</label><input type="text" id="pm-name" placeholder="e.g. Travel"></div>
+          <div><label>Current balance (€)</label><input type="number" id="pm-balance" placeholder="0.00" step="0.01"></div>
+          <div><label>Date of this balance (defaults to today)</label><input type="date" id="pm-date"></div>
+          <div><label>Link to budget line (optional — for auto top-up display)</label><input type="text" id="pm-budgetlink" placeholder="Must match the name in Monthly Budget exactly"></div>
+          <div><label>Category</label>
+            <select id="pm-cat">
+              <option value="Housing">Housing</option>
+              <option value="Utilities">Utilities</option>
+              <option value="Food">Food</option>
+              <option value="Savings">Savings</option>
+              <option value="Taxes">Taxes</option>
+              <option value="Lifestyle">Lifestyle</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div><label>Notes (optional)</label><input type="text" id="pm-notes" placeholder="e.g. Paid on 1st of each month"></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:1.5rem">
+          <button class="btn btn-p" id="pm-save-btn" onclick="savePocket()">Add pocket</button>
+          <button class="btn" onclick="closeModal('pocket-modal')">Cancel</button>
+        </div>
+      </div>
     </div>
+
+    <!-- SPEND modal -->
+    <div class="modal-overlay" id="spend-modal" onclick="if(event.target===this)closeModal('spend-modal')">
+      <div class="modal">
+        <button class="modal-x" onclick="closeModal('spend-modal')">✕</button>
+        <div class="modal-title" id="spend-modal-title">Log spend</div>
+        <p style="font-size:13px;color:var(--text3);margin-bottom:1.25rem;font-weight:300">This records how much you've taken out of this pocket this month.</p>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div><label>Amount spent (€)</label><input type="number" id="sm-amount" placeholder="0.00" step="0.01"></div>
+          <div><label>Note (optional)</label><input type="text" id="sm-note" placeholder="e.g. Supermarket run"></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:1.5rem">
+          <button class="btn btn-p" onclick="saveSpend()">Log it</button>
+          <button class="btn" onclick="closeModal('spend-modal')">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BILL modal -->
+    <div class="modal-overlay" id="bill-modal" onclick="if(event.target===this)closeModal('bill-modal')">
+      <div class="modal">
+        <button class="modal-x" onclick="closeModal('bill-modal')">✕</button>
+        <div class="modal-title" id="bill-modal-title">Add recurring bill</div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:1.25rem">
+          <div><label>Bill name</label><input type="text" id="bm-name" placeholder="e.g. Rent"></div>
+          <div><label>Amount (€)</label><input type="number" id="bm-amount" placeholder="0.00" step="0.01"></div>
+          <div><label>Due day of month (1–31)</label><input type="number" id="bm-day" min="1" max="31" placeholder="e.g. 1"></div>
+          <div><label>Linked pocket ID (for auto-deduct)</label><input type="text" id="bm-pocket" placeholder="e.g. housing, energy, uzo"></div>
+          <div><label>Notes (optional)</label><input type="text" id="bm-notes" placeholder="e.g. Paid to landlord"></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:1.5rem">
+          <button class="btn btn-p" id="bm-save-btn" onclick="saveBillModal()">Add bill</button>
+          <button class="btn" onclick="closeModal('bill-modal')">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRIDAY ACTIVITY modal -->
+    <div class="modal-overlay" id="friday-activity-modal" onclick="if(event.target===this)closeModal('friday-activity-modal')">
+      <div class="modal">
+        <button class="modal-x" onclick="closeModal('friday-activity-modal')">✕</button>
+        <div class="modal-title" id="fam-title">Add Friday activity</div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:1.25rem">
+          <div><label>Activity name</label><input type="text" id="fam-name" placeholder="e.g. Wine & Paint night"></div>
+          <div><label>Category</label>
+            <select id="fam-cat">
+              <option value="Creative">🎨 Creative</option>
+              <option value="Culinary">🍳 Culinary</option>
+              <option value="Nature">🌿 Nature & DIY</option>
+              <option value="Entertainment">🎬 Entertainment</option>
+              <option value="Experience">✨ Experience</option>
+              <option value="Cozy">🛋️ Cozy night in</option>
+            </select>
+          </div>
+          <div><label>Description (optional)</label><textarea id="fam-desc" rows="2" placeholder="What's the vibe? What do you need?"></textarea></div>
+          <div><label>Suggested food & drinks</label><input type="text" id="fam-food" placeholder="e.g. charcuterie board, wine, sparkling water"></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:1.5rem">
+          <button class="btn btn-p" id="fam-save-btn" onclick="saveFridayActivity()">Add activity</button>
+          <button class="btn" onclick="closeModal('friday-activity-modal')">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLAN modal -->
+    <div class="modal-overlay" id="plan-modal" onclick="if(event.target===this)closeModal('plan-modal')">
+      <div class="modal">
+        <button class="modal-x" onclick="closeModal('plan-modal')">✕</button>
+        <div class="modal-title">Add a plan</div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:1.25rem">
+          <div><label>What's the plan?</label><input type="text" id="pm2-name" placeholder="e.g. Weekend trip to Douro Valley"></div>
+          <div><label>Category</label>
+            <select id="pm2-cat">
+              <option value="Travel">✈️ Travel</option>
+              <option value="Home">🏠 Home</option>
+              <option value="Personal">🌱 Personal</option>
+              <option value="Together">💛 Together</option>
+              <option value="Career">💼 Career</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div><label>Rough timeframe (optional)</label><input type="text" id="pm2-when" placeholder="e.g. Summer 2026, within 1 year"></div>
+          <div><label>Notes</label><textarea id="pm2-notes" rows="2" placeholder="Any details, links, ideas..."></textarea></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:1.5rem">
+          <button class="btn btn-p" onclick="savePlan()">Add plan</button>
+          <button class="btn" onclick="closeModal('plan-modal')">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUCKET modal -->
+    <div class="modal-overlay" id="bucket-modal" onclick="if(event.target===this)closeModal('bucket-modal')">
+      <div class="modal">
+        <button class="modal-x" onclick="closeModal('bucket-modal')">✕</button>
+        <div class="modal-title">Add bucket list item</div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:1.25rem">
+          <div><label>What do you want to do?</label><input type="text" id="bk-name" placeholder="e.g. See the Northern Lights"></div>
+          <div><label>Deadline or age (optional)</label><input type="text" id="bk-deadline" placeholder="e.g. Before 35, 2028"></div>
+          <div><label>Notes</label><input type="text" id="bk-notes" placeholder="Any details..."></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:1.5rem">
+          <button class="btn btn-p" onclick="saveBucketItem()">Add item</button>
+          <button class="btn" onclick="closeModal('bucket-modal')">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    </div><!-- end pages-root -->
 
     <div class="toast" id="toast"></div>
 
@@ -568,7 +878,7 @@ function initTheme(){
 
 // ======== NAV ========
 let currentGroup='overview';
-const groupFirstPage={overview:'overview-home',daily:'weekly',meals:'mealplan',finance:'budget'};
+const groupFirstPage={overview:'overview-home',daily:'weekly',meals:'mealplan',finance:'pockets',futureplans:'future-plans',travel:'travel-home'};
 
 function showGroup(group,btn){
   currentGroup=group;
@@ -665,25 +975,40 @@ const PERIODS=['Morning','Afternoon','Evening'];
 function initWeeklyGrid(){
   const grid=document.getElementById('weekly-grid');if(!grid)return;
   const data=load('weekly_plan',{});
-  let html='';
   const today=new Date();
+  const dayAbbr=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const periodColors={Morning:'var(--accent)',Afternoon:'var(--amber)',Evening:'var(--plum)'};
+  let html=`<table style="width:100%;border-collapse:collapse;table-layout:fixed;background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden">`;
+  html+=`<thead><tr><th style="width:82px;padding:10px 12px;font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-weight:500;text-align:left;border-bottom:1px solid var(--border);background:var(--bg3)"></th>`;
   DAYS.forEach((day,i)=>{
     const d=getDateForDayIdx(i);
     const ds=d?d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'';
     const isToday=d&&d.toDateString()===today.toDateString();
-    html+=`<div class="wk-day" style="${isToday?'border-color:var(--accent)':''}">
-      <div class="wk-day-name" style="${isToday?'color:var(--accent)':''}">${day}</div>
-      <div class="wk-day-date">${ds}</div>`;
-    PERIODS.forEach(p=>{
-      const key=day+'_'+p;
-      const val=data[key]||'';
-      html+=`<div class="wk-block">
-        <div class="wk-block-lbl">${p}</div>
-        <textarea rows="2" placeholder="..." onchange="saveWeekly('${key}',this.value)">${val}</textarea>
-      </div>`;
-    });
-    html+='</div>';
+    html+=`<th style="padding:10px 6px;text-align:center;border-bottom:1px solid var(--border);border-left:1px solid var(--border);background:var(--bg3);${isToday?'background:var(--accent-light)':''}">
+      <div style="font-size:12px;font-weight:600;font-family:'Parkinsans',sans-serif;${isToday?'color:var(--accent)':'color:var(--text2)'}">${dayAbbr[i]}</div>
+      <div style="font-size:9px;font-weight:400;color:${isToday?'var(--accent)':'var(--text3)'};margin-top:1px">${ds}</div>
+    </th>`;
   });
+  html+=`</tr></thead><tbody>`;
+  PERIODS.forEach((period,pi)=>{
+    const col=periodColors[period];
+    const isLast=pi===PERIODS.length-1;
+    html+=`<tr>`;
+    html+=`<td style="padding:8px 12px;vertical-align:middle;border-right:1px solid var(--border);${!isLast?'border-bottom:1px solid var(--border)':''}">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:${col};font-weight:500;white-space:nowrap">${period}</div>
+    </td>`;
+    DAYS.forEach((day,di)=>{
+      const key=day+'_'+period;
+      const val=data[key]||'';
+      const d=getDateForDayIdx(di);
+      const isToday=d&&d.toDateString()===today.toDateString();
+      html+=`<td style="padding:4px;border-left:1px solid var(--border);${!isLast?'border-bottom:1px solid var(--border)':''}${isToday?';background:rgba(79,127,212,0.05)':''}">
+        <textarea rows="3" placeholder="—" style="width:100%;min-height:64px;font-size:12px;padding:6px 7px;background:transparent;border:none;color:var(--text);font-family:'Outfit',sans-serif;resize:none;outline:none;font-weight:300" onchange="saveWeekly('${key}',this.value)">${val}</textarea>
+      </td>`;
+    });
+    html+=`</tr>`;
+  });
+  html+=`</tbody></table>`;
   grid.innerHTML=html;
 }
 function saveWeekly(key,val){
@@ -748,7 +1073,7 @@ function toggleUrgent(i){urgents[i].done=!urgents[i].done;renderUrgents();}
 function deleteUrgent(i){urgents.splice(i,1);renderUrgents();}
 
 // ======== MEAL PLANNER (simple) ========
-const MEALS_OF_DAY=['Breakfast','Lunch','Dinner'];
+const MEALS_OF_DAY=['Breakfast','Lunch','Snack','Dinner'];
 function initMealplanGrid(){
   const grid=document.getElementById('mealplan-grid');if(!grid)return;
   const data=load('mealplan',{});
@@ -810,12 +1135,11 @@ function deleteGrocery(i){groceryItems.splice(i,1);renderGroceryList();}
 
 // ======== FINANCE ========
 const DEFAULT_EXPENSES=[
-  {name:'Rent',cat:'Housing',val:''},
-  {name:'Phone',cat:'Utilities',val:''},
-  {name:'Energy',cat:'Utilities',val:''},
+  {name:'Housing (Rent)',cat:'Housing',val:'600'},
+  {name:'Uzo (Phone plan)',cat:'Utilities',val:''},
+  {name:'Energy',cat:'Utilities',val:'100'},
   {name:'Groceries',cat:'Food',val:''},
-  {name:'Emergency fund / Savings',cat:'Savings',val:''},
-  {name:'House furniture & maintenance',cat:'Housing',val:''},
+  {name:'Emergency Fund / Savings',cat:'Savings',val:''},
   {name:'Portugal taxes',cat:'Taxes',val:''},
   {name:'Travel',cat:'Lifestyle',val:''},
   {name:'Clothes',cat:'Lifestyle',val:''},
@@ -885,37 +1209,167 @@ function initFinance(){
 }
 
 // ======== BILLS TRACKER ========
+const TODAY_STR=new Date().toISOString().split('T')[0];
+const DEFAULT_BILLS=[
+  {id:'housing',name:'Housing (Rent)',amount:600,day:1,pocketId:'housing',notes:'Pocket → landlord on the 1st'},
+  {id:'uzo',name:'Uzo (Phone plan)',amount:0,day:0,pocketId:'uzo',notes:'Monthly phone plan'},
+  {id:'energy',name:'Energy',amount:100,day:0,pocketId:'energy',notes:'Variable ~€80/mo avg'},
+];
+let bills=load('bills_list',DEFAULT_BILLS);
 let billsPaid=load('bills_paid',{});
+let billsLastReset=load('bills_last_reset','');
+let editBillId=null;
+
+function todayDay(){return new Date().getDate();}
+function todayMonth(){return new Date().getMonth();}
+function todayYear(){return new Date().getFullYear();}
+
+function checkBillsAutoReset(){
+  const now=new Date();
+  const key=now.getFullYear()+'-'+now.getMonth();
+  if(now.getDate()===31&&billsLastReset!==key){
+    billsPaid={};billsLastReset=key;
+    save('bills_paid',billsPaid);save('bills_last_reset',billsLastReset);
+    toast('Bills auto-reset for new month');
+  }
+}
+
+function daysUntilDue(day){
+  if(!day) return null;
+  const now=new Date();now.setHours(0,0,0,0);
+  let due=new Date(now.getFullYear(),now.getMonth(),day);
+  if(due<now) due=new Date(now.getFullYear(),now.getMonth()+1,day);
+  return Math.round((due-now)/(1000*60*60*24));
+}
+
+function goNextMonth(){
+  // Reset paid status
+  billsPaid={};save('bills_paid',billsPaid);
+  // Advance month selector
+  const sel=document.getElementById('bills-month-sel');
+  if(sel){
+    let m=parseInt(sel.value);
+    sel.value=(m+1)%12;
+  }
+  renderBillsTracker();toast('Advanced to next month — bills reset!');
+}
+
+function initBillsMonthSel(){
+  const sel=document.getElementById('bills-month-sel');
+  if(sel) sel.value=new Date().getMonth();
+}
+
 function renderBillsTracker(){
   const el=document.getElementById('bills-tracker-list');if(!el)return;
-  const bills=finExpenses.filter(e=>['Housing','Utilities','Taxes'].includes(e.cat)||e.name==='Phone'||e.name==='Energy'||e.name==='Rent');
-  const all=[...DEFAULT_EXPENSES.filter(e=>['Rent','Phone','Energy','Portugal taxes'].includes(e.name)),...finExpenses.filter(e=>e.cat==='Housing'||e.cat==='Utilities'||e.cat==='Taxes')].reduce((acc,e)=>{if(!acc.find(x=>x.name===e.name))acc.push(e);return acc;},[]);
-  if(!all.length){el.innerHTML='<div class="empty">No bills configured yet — add expenses in the Monthly Budget tab.</div>';return;}
-  let html='';
-  all.forEach(e=>{
-    const paid=!!billsPaid[e.name];
-    const val=parseFloat(e.val)||0;
-    html+=`<div class="task-row">
-      <input type="checkbox" ${paid?'checked':''} onchange="toggleBill('${e.name}',this.checked)">
-      <div style="flex:1"><div class="task-name" style="${paid?'text-decoration:line-through;color:var(--text3)':''}">${esc2(e.name)}</div>${val?`<div class="task-meta">€${val.toFixed(2)}</div>`:''}</div>
-      ${paid?'<span class="badge b-easy">Paid</span>':'<span class="badge b-grey">Pending</span>'}
+  if(!bills.length){el.innerHTML='<div class="empty">No bills yet — add one above.</div>';return;}
+  const sel=document.getElementById('bills-month-sel');
+  const refMonth=sel?parseInt(sel.value):new Date().getMonth();
+  const monthName=['January','February','March','April','May','June','July','August','September','October','November','December'][refMonth];
+  let html=`<div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);font-weight:500;margin-bottom:12px">Payments for ${monthName}</div>`;
+  const sorted=[...bills].sort((a,b)=>(a.day||99)-(b.day||99));
+  sorted.forEach(bill=>{
+    const paid=!!billsPaid[bill.id];
+    const dtu=bill.day?daysUntilDue(bill.day):null;
+    const isToday=dtu===0;
+    const isSoon=dtu!==null&&dtu>0&&dtu<=7;
+    let urgBadge='';
+    if(!paid&&isToday) urgBadge=`<span class="badge b-inv">Due today!</span>`;
+    else if(!paid&&isSoon) urgBadge=`<span class="badge b-med">${dtu}d left</span>`;
+    html+=`<div class="task-row" style="${isToday&&!paid?'border-left:3px solid var(--red-text);padding-left:12px':''}">
+      <input type="checkbox" ${paid?'checked':''} onchange="toggleBill('${bill.id}',this.checked)">
+      <div style="flex:1;min-width:0">
+        <div class="task-name" style="${paid?'text-decoration:line-through;color:var(--text3)':''}">${esc2(bill.name)}</div>
+        <div class="task-meta">
+          ${bill.amount?`<span>€${parseFloat(bill.amount).toFixed(2)}</span>`:'<span>Amount TBC</span>'}
+          ${bill.day?`<span>Due: ${bill.day}${ordinal(bill.day)} of the month</span>`:'<span>No due date set</span>'}
+          ${bill.pocketId?`<span style="color:var(--accent)">→ deducts from ${bill.pocketId}</span>`:''}
+          ${bill.notes?`<span style="font-style:italic">${esc2(bill.notes)}</span>`:''}
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+        ${urgBadge}
+        ${paid?'<span class="badge b-easy">Paid</span>':'<span class="badge b-grey">Pending</span>'}
+        <button class="btn btn-sm" onclick="openBillModal('${bill.id}')" style="padding:3px 8px;font-size:11px">Edit</button>
+        <button class="task-del" onclick="deleteBill('${bill.id}')">✕</button>
+      </div>
     </div>`;
   });
   el.innerHTML=html;
+  renderBillsOverviewAlerts();
 }
-function toggleBill(name,checked){billsPaid[name]=checked;save('bills_paid',billsPaid);renderBillsTracker();toast(checked?'Marked as paid!':'Marked as pending');}
-function resetBills(){billsPaid={};save('bills_paid',billsPaid);renderBillsTracker();toast('Bills reset for new month');}
+function ordinal(n){const s=['th','st','nd','rd'];const v=n%100;return n+(s[(v-20)%10]||s[v]||s[0]);}
+function toggleBill(id,checked){
+  billsPaid[id]=checked;save('bills_paid',billsPaid);
+  // Deduct from linked pocket when marking as paid
+  if(checked){
+    const bill=bills.find(b=>b.id===id);
+    if(bill&&bill.pocketId&&bill.amount){
+      const pocket=pockets.find(p=>p.id===bill.pocketId);
+      if(pocket){
+        const currentBal=calcPocketBalance(pocket);
+        pocket.balance=Math.max(0,currentBal-bill.amount);
+        pocket.balanceDate=new Date().toISOString().split('T')[0];
+        save('pockets',pockets);
+        toast(`Paid! Deducted €${bill.amount.toFixed(2)} from ${pocket.name}`);
+      } else { toast('Marked as paid!'); }
+    } else { toast('Marked as paid!'); }
+  } else { toast('Marked as pending'); }
+  renderBillsTracker();
+  if(document.getElementById('pockets-list')) renderPockets();
+  refreshOverview();
+}
+function resetBills(){billsPaid={};save('bills_paid',billsPaid);renderBillsTracker();toast('Bills reset');}
+
+function openBillModal(editId){
+  editBillId=editId||null;
+  const existing=editId?bills.find(b=>b.id===editId):null;
+  document.getElementById('bill-modal-title').textContent=existing?'Edit bill: '+existing.name:'Add recurring bill';
+  document.getElementById('bm-save-btn').textContent=existing?'Save changes':'Add bill';
+  document.getElementById('bm-name').value=existing?existing.name:'';
+  document.getElementById('bm-amount').value=existing?(existing.amount||''):'';
+  document.getElementById('bm-day').value=existing?(existing.day||''):'';
+  document.getElementById('bm-pocket').value=existing?(existing.pocketId||''):'';
+  document.getElementById('bm-notes').value=existing?(existing.notes||''):'';
+  openModal('bill-modal');
+}
+function saveBillModal(){
+  const name=document.getElementById('bm-name').value.trim();if(!name)return;
+  const data={
+    id:editBillId||(name.toLowerCase().replace(/\s+/g,'-')+'-'+Date.now()),
+    name,
+    amount:parseFloat(document.getElementById('bm-amount').value)||0,
+    day:parseInt(document.getElementById('bm-day').value)||0,
+    pocketId:document.getElementById('bm-pocket').value.trim(),
+    notes:document.getElementById('bm-notes').value.trim(),
+  };
+  if(editBillId){const idx=bills.findIndex(b=>b.id===editBillId);if(idx>-1)bills[idx]=data;}
+  else bills.push(data);
+  save('bills_list',bills);closeModal('bill-modal');renderBillsTracker();toast(editBillId?'Bill updated!':'Bill added!');editBillId=null;
+}
+function deleteBill(id){if(!confirm('Remove this bill?'))return;bills=bills.filter(b=>b.id!==id);save('bills_list',bills);renderBillsTracker();toast('Bill removed');}
+
+function renderBillsOverviewAlerts(){
+  const upcoming=bills.filter(b=>{
+    if(billsPaid[b.id]||!b.day) return false;
+    const dtu=daysUntilDue(b.day);
+    return dtu!==null&&dtu<=7;
+  }).sort((a,b)=>daysUntilDue(a.day)-daysUntilDue(b.day));
+  window._upcomingBills=upcoming;
+}
 
 // ======== SAVINGS GOALS ========
 let extraGoals=load('extra_goals',[]);
 function renderGoals(){
-  const amt=parseFloat(document.getElementById('goal-lic-input')?.value||0)||0;
+  const amt=parseFloat(document.getElementById('goal-lic-input')?.value||load('goal_lic_saved','0')||0)||0;
   const pct=Math.min((amt/970)*100,100);
   if(document.getElementById('goal-lic-nums')) document.getElementById('goal-lic-nums').textContent='€'+amt.toFixed(2)+' / €970';
   if(document.getElementById('goal-lic-bar')) document.getElementById('goal-lic-bar').style.width=pct+'%';
-  // overview
-  if(document.getElementById('ov-goal-amt')) document.getElementById('ov-goal-amt').textContent='€'+amt.toFixed(2);
-  if(document.getElementById('ov-goal-bar')) document.getElementById('ov-goal-bar').style.width=pct+'%';
+  // total savings from pockets
+  const totalSavings=pockets.reduce((s,p)=>s+calcPocketBalance(p),0);
+  const savPct=Math.min((totalSavings/6000)*100,100);
+  if(document.getElementById('goals-total-saved')) document.getElementById('goals-total-saved').textContent='€'+totalSavings.toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});
+  if(document.getElementById('goals-total-bar')) document.getElementById('goals-total-bar').style.width=savPct+'%';
+  if(document.getElementById('goals-total-note')) document.getElementById('goals-total-note').textContent=Math.round(savPct)+'% of €6 000 goal'+(totalSavings>=6000?' — 🎉 goal reached!':'');
   // extra goals
   const el=document.getElementById('goals-extra-list');if(!el)return;
   if(!extraGoals.length){el.innerHTML='<div class="empty" style="padding:.5rem 0">No extra goals yet.</div>';return;}
@@ -934,6 +1388,7 @@ function renderGoals(){
   el.innerHTML=html;
   save('goal_lic_saved',document.getElementById('goal-lic-input')?.value||'0');
   save('extra_goals',extraGoals);
+  refreshOverview();
 }
 function addExtraGoal(){
   const name=document.getElementById('goal-new-name').value.trim();
@@ -951,6 +1406,223 @@ function initGoals(){
   renderGoals();
 }
 
+// ======== POCKETS SYSTEM ========
+const TANB_ANNUAL=0.025;
+const _today=new Date().toISOString().split('T')[0];
+const DEFAULT_POCKETS=[
+  {id:'housing',name:'Housing (Rent)',cat:'Housing',balance:600.67,balanceDate:_today,budgetLink:'Housing (Rent)',notes:'Paid to landlord on 1st each month'},
+  {id:'clothes',name:'Clothes',cat:'Lifestyle',balance:79.82,balanceDate:_today,budgetLink:'Clothes',notes:''},
+  {id:'home-decor',name:'Home Decor',cat:'Housing',balance:37.86,balanceDate:_today,budgetLink:'',notes:''},
+  {id:'uzo',name:'Uzo (Phone plan)',cat:'Utilities',balance:22.00,balanceDate:_today,budgetLink:'Uzo (Phone plan)',notes:'Monthly phone plan'},
+  {id:'groceries',name:'Groceries',cat:'Food',balance:193.81,balanceDate:_today,budgetLink:'Groceries',notes:'Live tracker'},
+  {id:'energy',name:'Energy',cat:'Utilities',balance:147.49,balanceDate:_today,budgetLink:'Energy',notes:'Variable ~€80/mo avg'},
+  {id:'tax-deductions',name:'Tax Deductions',cat:'Taxes',balance:8.59,balanceDate:_today,budgetLink:'Portugal taxes',notes:''},
+  {id:'license',name:'License 🚗',cat:'Other',balance:1.27,balanceDate:_today,budgetLink:'',notes:'Driving licence savings'},
+  {id:'travel',name:'Travel',cat:'Lifestyle',balance:61.25,balanceDate:_today,budgetLink:'Travel',notes:''},
+  {id:'emergency-fund',name:'Emergency Fund',cat:'Savings',balance:1001.08,balanceDate:_today,budgetLink:'Emergency Fund / Savings',notes:''},
+  {id:'leisure',name:'Leisure',cat:'Lifestyle',balance:71.20,balanceDate:_today,budgetLink:'Leisure',notes:'Currently in joint CC'},
+];
+let pockets=load('pockets',DEFAULT_POCKETS);
+let currentAccounts=load('current_accounts',[
+  {id:'personal',name:'Personal CC',balance:153.05,notes:'Euro account — transit only'},
+  {id:'joint',name:'Joint CC',balance:0,notes:'Shared account — transit only'},
+]);
+let monthlySpend=load('monthly_spend',{groceries:0,leisure:0});
+let spendTarget='groceries';
+let editPocketId=null;
+
+function getPocketTopup(pocket){
+  if(!pocket.budgetLink) return 0;
+  const exp=finExpenses.find(e=>e.name===pocket.budgetLink);
+  return exp?parseFloat(exp.val)||0:0;
+}
+function calcPocketBalance(pocket){
+  if(!pocket.balance||!pocket.balanceDate) return pocket.balance||0;
+  const start=new Date(pocket.balanceDate);
+  const now=new Date();
+  const days=Math.max(0,(now-start)/(1000*60*60*24));
+  const dailyRate=TANB_ANNUAL/365;
+  return pocket.balance*Math.pow(1+dailyRate,days);
+}
+function calcInterestEarned(pocket){
+  return calcPocketBalance(pocket)-(pocket.balance||0);
+}
+function fmtEur(v){return '€'+v.toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});}
+
+function renderPockets(){
+  const el=document.getElementById('pockets-list');if(!el)return;
+  if(!pockets.length){el.innerHTML='<div class="empty">No pockets yet. Add one above.</div>';return;}
+  const catColors={Housing:'var(--accent)',Utilities:'var(--plum)',Food:'var(--sage)',Savings:'var(--amber)',Taxes:'var(--red-text)',Lifestyle:'#6BAEC4',Other:'var(--text3)'};
+  let html='';
+  pockets.forEach((p,i)=>{
+    const bal=calcPocketBalance(p);
+    const interest=calcInterestEarned(p);
+    const topup=getPocketTopup(p);
+    const col=catColors[p.cat]||'var(--text3)';
+    const hasDate=!!p.balanceDate;
+    html+=`<div style="padding:13px 0;border-bottom:1px solid var(--border)">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;flex-wrap:wrap">
+            <span style="font-family:'Parkinsans',sans-serif;font-weight:600;font-size:14px">${esc2(p.name)}</span>
+            <span style="font-size:10px;color:${col};background:${col}22;border:1px solid ${col}44;padding:1px 7px;border-radius:99px;font-weight:500">${p.cat}</span>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:4px;flex-wrap:wrap">
+            <span style="font-family:'Parkinsans',sans-serif;font-size:20px;font-weight:600">${fmtEur(bal)}</span>
+            ${hasDate&&interest>0.005?`<span style="font-size:11px;color:var(--sage)">+${fmtEur(interest)} interest</span>`:''}
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <div style="font-size:11px;color:var(--text3)">Base: ${fmtEur(p.balance||0)}</div>
+            ${topup?`<div style="font-size:11px;color:var(--accent)">+${fmtEur(topup)}/mo ← from budget</div>`:''}
+            ${hasDate?`<div style="font-size:11px;color:var(--text3)">Since ${new Date(p.balanceDate).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</div>`:''}
+            ${p.notes?`<div style="font-size:11px;color:var(--text3);font-style:italic">${esc2(p.notes)}</div>`:''}
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0">
+          <button class="btn btn-sm" onclick="editPocket('${p.id}')">Edit</button>
+          <button class="btn btn-sm btn-del" onclick="deletePocket('${p.id}')">Remove</button>
+        </div>
+      </div>
+    </div>`;
+  });
+  el.innerHTML=html;
+  renderCurrentAccounts();
+  renderLivePocketCards();
+  updatePocketsGoal();
+}
+
+function renderCurrentAccounts(){
+  const el=document.getElementById('cc-list');if(!el)return;
+  let html='';
+  currentAccounts.forEach((acc,i)=>{
+    html+=`<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);gap:12px">
+      <div style="flex:1">
+        <div style="font-family:'Parkinsans',sans-serif;font-weight:600;font-size:14px;margin-bottom:6px">${esc2(acc.name)}</div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <input type="number" value="${acc.balance||''}" placeholder="Current balance €" style="max-width:160px" oninput="updateCCBalance(${i},this.value)">
+          ${acc.notes?`<span style="font-size:11px;color:var(--text3);font-style:italic">${esc2(acc.notes)}</span>`:''}
+        </div>
+      </div>
+      <div style="font-family:'Parkinsans',sans-serif;font-size:22px;font-weight:600">${fmtEur(acc.balance||0)}</div>
+    </div>`;
+  });
+  el.innerHTML=html;
+}
+function updateCCBalance(i,v){currentAccounts[i].balance=parseFloat(v)||0;save('current_accounts',currentAccounts);}
+
+function renderLivePocketCards(){
+  const grocPocket=pockets.find(p=>p.id==='groceries');
+  const leisPocket=pockets.find(p=>p.id==='leisure');
+  const budget_groc=finExpenses.find(e=>e.name==='Groceries');
+  const budget_leis=finExpenses.find(e=>e.name==='Leisure');
+  // Groceries
+  if(grocPocket){
+    const bal=calcPocketBalance(grocPocket);
+    const spent=monthlySpend.groceries||0;
+    const budg=parseFloat(budget_groc?.val||0)||0;
+    const pct=budg>0?Math.min((spent/budg)*100,100):0;
+    if(document.getElementById('live-groc-bal')) document.getElementById('live-groc-bal').textContent=fmtEur(bal);
+    if(document.getElementById('live-groc-spent')) document.getElementById('live-groc-spent').textContent=fmtEur(spent);
+    if(document.getElementById('live-groc-bar')) document.getElementById('live-groc-bar').style.width=pct+'%';
+    const gnEl=document.getElementById('live-groc-note');
+    if(gnEl) gnEl.textContent=budg?Math.round(pct)+'% of '+fmtEur(budg)+' budget used':'Set a budget in Monthly Budget to track usage.';
+  }
+  // Leisure
+  if(leisPocket){
+    const bal=calcPocketBalance(leisPocket);
+    const spent=monthlySpend.leisure||0;
+    const budg=parseFloat(budget_leis?.val||0)||0;
+    const pct=budg>0?Math.min((spent/budg)*100,100):0;
+    if(document.getElementById('live-leis-bal')) document.getElementById('live-leis-bal').textContent=fmtEur(bal);
+    if(document.getElementById('live-leis-spent')) document.getElementById('live-leis-spent').textContent=fmtEur(spent);
+    if(document.getElementById('live-leis-bar')) document.getElementById('live-leis-bar').style.width=pct+'%';
+    const lnEl=document.getElementById('live-leis-note');
+    if(lnEl) lnEl.textContent=budg?Math.round(pct)+'% of '+fmtEur(budg)+' budget used':'Set a budget in Monthly Budget to track usage.';
+  }
+}
+
+function updatePocketsGoal(){
+  const total=pockets.reduce((s,p)=>s+calcPocketBalance(p),0);
+  const pct=Math.min((total/6000)*100,100);
+  if(document.getElementById('ov-savings-total')) document.getElementById('ov-savings-total').textContent=fmtEur(total);
+  if(document.getElementById('ov-savings-bar')) document.getElementById('ov-savings-bar').style.width=pct+'%';
+  if(document.getElementById('goals-total-saved')) document.getElementById('goals-total-saved').textContent=fmtEur(total);
+  if(document.getElementById('goals-total-bar')) document.getElementById('goals-total-bar').style.width=pct+'%';
+  if(document.getElementById('goals-total-note')) document.getElementById('goals-total-note').textContent=Math.round(pct)+'% of €6 000 goal'+(total>=6000?' — 🎉 goal reached!':'');
+}
+
+function openPocketModal(editId){
+  editPocketId=editId||null;
+  const existing=editId?pockets.find(p=>p.id===editId):null;
+  document.getElementById('pocket-modal-title').textContent=existing?'Edit pocket: '+existing.name:'Add pocket';
+  document.getElementById('pm-save-btn').textContent=existing?'Save changes':'Add pocket';
+  document.getElementById('pm-name').value=existing?existing.name:'';
+  document.getElementById('pm-balance').value=existing?(existing.balance||''):'';
+  document.getElementById('pm-date').value=existing?(existing.balanceDate||_today):_today;
+  document.getElementById('pm-budgetlink').value=existing?(existing.budgetLink||''):'';
+  document.getElementById('pm-cat').value=existing?(existing.cat||'Other'):'Other';
+  document.getElementById('pm-notes').value=existing?(existing.notes||''):'';
+  openModal('pocket-modal');
+}
+function editPocket(id){openPocketModal(id);}
+function savePocket(){
+  const name=document.getElementById('pm-name').value.trim();
+  if(!name)return;
+  const data={
+    id:editPocketId||(name.toLowerCase().replace(/\s+/g,'-')+'-'+Date.now()),
+    name,
+    balance:parseFloat(document.getElementById('pm-balance').value)||0,
+    balanceDate:document.getElementById('pm-date').value||_today,
+    budgetLink:document.getElementById('pm-budgetlink').value.trim(),
+    cat:document.getElementById('pm-cat').value,
+    notes:document.getElementById('pm-notes').value.trim(),
+  };
+  if(editPocketId){
+    const idx=pockets.findIndex(p=>p.id===editPocketId);
+    if(idx>-1) pockets[idx]=data;
+  } else {
+    pockets.push(data);
+  }
+  save('pockets',pockets);closeModal('pocket-modal');renderPockets();renderFinance();refreshOverview();toast(editPocketId?'Pocket updated!':'Pocket added!');
+  editPocketId=null;
+}
+function deletePocket(id){
+  if(!confirm('Remove this pocket?'))return;
+  pockets=pockets.filter(p=>p.id!==id);
+  save('pockets',pockets);renderPockets();refreshOverview();toast('Pocket removed');
+}
+function openSpendModal(target){
+  spendTarget=target;
+  document.getElementById('spend-modal-title').textContent='Log spend — '+(target==='groceries'?'Groceries':'Leisure');
+  document.getElementById('sm-amount').value='';
+  document.getElementById('sm-note').value='';
+  openModal('spend-modal');
+}
+function saveSpend(){
+  const amt=parseFloat(document.getElementById('sm-amount').value)||0;
+  if(!amt)return;
+  monthlySpend[spendTarget]=(monthlySpend[spendTarget]||0)+amt;
+  save('monthly_spend',monthlySpend);
+  closeModal('spend-modal');
+  // also reduce pocket balance
+  const pid=spendTarget;
+  const pocket=pockets.find(p=>p.id===pid);
+  if(pocket){
+    pocket.balance=Math.max(0,calcPocketBalance(pocket)-amt);
+    pocket.balanceDate=new Date().toISOString().split('T')[0];
+    save('pockets',pockets);
+  }
+  renderPockets();renderFinance();toast('Spend logged!');
+}
+function resetMonthlySpend(target){
+  if(!confirm('Reset '+target+' monthly spend to €0?'))return;
+  monthlySpend[target]=0;save('monthly_spend',monthlySpend);renderLivePocketCards();toast('Monthly spend reset');
+}
+function initPockets(){renderPockets();}
+
+// Interest auto-refresh every 60s
+setInterval(()=>{if(pockets.length){renderLivePocketCards();updatePocketsGoal();}},60000);
+
 // ======== OVERVIEW REFRESH ========
 function refreshOverview(){
   // urgent
@@ -958,35 +1630,96 @@ function refreshOverview(){
   const ucEl=document.getElementById('ov-urgent-count');if(ucEl) ucEl.textContent=urgPending.length;
   const ulEl=document.getElementById('ov-urgent-list');
   if(ulEl){
-    if(!urgPending.length){ulEl.innerHTML='<div class="empty" style="padding:.5rem 0">Nothing urgent — nice.</div>';}
-    else{ulEl.innerHTML=urgPending.slice(0,4).map(t=>`<div class="ov-row"><div class="ov-dot" style="background:var(--red-text)"></div>${esc2(t.text)}</div>`).join('')+(urgPending.length>4?`<div style="font-size:11px;color:var(--text3);padding:6px 0">+${urgPending.length-4} more</div>`:'')}
+    if(!urgPending.length) ulEl.innerHTML='<div class="empty" style="padding:.5rem 0">Nothing urgent — nice.</div>';
+    else ulEl.innerHTML=urgPending.slice(0,3).map(t=>`<div class="ov-row"><div class="ov-dot" style="background:var(--red-text)"></div><span style="font-size:13px">${esc2(t.text)}</span></div>`).join('')+(urgPending.length>3?`<div style="font-size:11px;color:var(--text3);padding:5px 0">+${urgPending.length-3} more</div>`:'');
   }
   // todo
   const todoPending=todos.filter(t=>!t.done);
   const tcEl=document.getElementById('ov-todo-count');if(tcEl) tcEl.textContent=todoPending.length;
   const tlEl=document.getElementById('ov-todo-list');
   if(tlEl){
-    if(!todoPending.length){tlEl.innerHTML='<div class="empty" style="padding:.5rem 0">All clear.</div>';}
-    else{tlEl.innerHTML=todoPending.slice(0,4).map(t=>`<div class="ov-row"><div class="ov-dot" style="background:var(--accent)"></div>${esc2(t.text)}</div>`).join('')+(todoPending.length>4?`<div style="font-size:11px;color:var(--text3);padding:6px 0">+${todoPending.length-4} more</div>`:'')}
+    if(!todoPending.length) tlEl.innerHTML='<div class="empty" style="padding:.5rem 0">All clear.</div>';
+    else tlEl.innerHTML=todoPending.slice(0,3).map(t=>`<div class="ov-row"><div class="ov-dot" style="background:var(--accent)"></div><span style="font-size:13px">${esc2(t.text)}</span></div>`).join('')+(todoPending.length>3?`<div style="font-size:11px;color:var(--text3);padding:5px 0">+${todoPending.length-3} more</div>`:'');
   }
-  // dinner tonight
+  // meals today
   const today=new Date();
   const todayName=DAYS[today.getDay()===0?6:today.getDay()-1];
-  const todayDinner=weekPlan.find(p=>p.day===todayName);
-  const dinEl=document.getElementById('ov-dinner');
-  if(dinEl){
-    if(todayDinner){dinEl.innerHTML=`<div style="font-family:'Parkinsans',sans-serif;font-weight:600;font-size:16px;margin-bottom:6px">${todayDinner.meal.name}</div><div>${badge(todayDinner.meal.diff)} ${todayDinner.meal.thaw?'<span class="badge b-thaw">🧊 thaw tonight</span>':''}</div>`;}
-    else{dinEl.innerHTML='<div class="empty" style="padding:.5rem 0">No plan yet.</div>';}
+  const mealData=load('mealplan',{});
+  const mealsEl=document.getElementById('ov-meals-today');
+  if(mealsEl){
+    const mealIcons={Breakfast:'🌅',Lunch:'☀️',Snack:'🍎',Dinner:'🌙'};
+    let hasAny=false;
+    let html='';
+    MEALS_OF_DAY.forEach(m=>{
+      const val=mealData[todayName+'_'+m]||'';
+      if(val){hasAny=true;}
+      html+=`<div style="display:flex;align-items:flex-start;gap:10px;padding:5px 0;border-bottom:1px solid var(--border)">
+        <span style="font-size:14px;width:22px;text-align:center;flex-shrink:0;margin-top:1px">${mealIcons[m]}</span>
+        <div><div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-weight:500">${m}</div>
+        <div style="font-size:13px;${val?'':'color:var(--text3);font-weight:300'}">${val||'—'}</div></div>
+      </div>`;
+    });
+    // also show tonight's dinner from dinner planner if meal planner is empty
+    const todayDinner=weekPlan.find(p=>p.day===todayName);
+    if(!mealData[todayName+'_Dinner'] && todayDinner){
+      html=html.replace(/<div style="font-size:13px;color:var\(--text3\);font-weight:300">—<\/div>(\s*<\/div>\s*<\/div>)$/,`<div style="font-size:13px">${esc2(todayDinner.meal.name)} <span class="badge b-${todayDinner.meal.diff==='easy'?'easy':todayDinner.meal.diff==='medium'?'med':'inv'}" style="font-size:10px">${todayDinner.meal.diff}</span></div>$1`);
+      hasAny=true;
+    }
+    if(!hasAny) mealsEl.innerHTML='<div class="empty" style="padding:.5rem 0">Set up your meal plan to see today\'s meals.</div>';
+    else mealsEl.innerHTML=`<div style="font-size:11px;color:var(--accent);margin-bottom:6px;font-weight:500">${todayName}</div>`+html;
   }
   // balance
-  const income=parseFloat(document.getElementById('fin-income')?.value||load('fin_income','')||0)||0;
+  const income=parseFloat(load('fin_income','')||0)||0;
   const total=finExpenses.reduce((s,e)=>s+(parseFloat(e.val)||0),0);
   const bal=income-total;
+  const fmt=v=>'€'+Math.abs(v).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});
   const balEl=document.getElementById('ov-balance');
-  if(balEl){balEl.textContent='€'+bal.toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});balEl.style.color=bal>=0?'var(--sage)':'var(--red-text)';}
+  if(balEl){balEl.textContent=(bal<0?'-':'')+fmt(bal);balEl.style.color=bal>=0?'var(--sage)':'var(--red-text)';}
   const pct=income>0?Math.min((total/income)*100,100):0;
   const barEl=document.getElementById('ov-bal-bar');
   if(barEl){barEl.style.width=(100-pct)+'%';barEl.style.background=bal>=0?'var(--sage)':'var(--red-text)';}
+  // savings total from pockets (with interest)
+  const totalSavings=pockets.reduce((s,p)=>s+calcPocketBalance(p),0);
+  const savingsEl=document.getElementById('ov-savings-total');
+  if(savingsEl) savingsEl.textContent='€'+totalSavings.toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const savPct=Math.min((totalSavings/6000)*100,100);
+  const savBar=document.getElementById('ov-savings-bar');if(savBar) savBar.style.width=savPct+'%';
+  // driving licence goal
+  const licAmt=parseFloat(load('goal_lic_saved','0')||0)||0;
+  const licPct=Math.min((licAmt/970)*100,100);
+  const gnEl=document.getElementById('ov-goal-nums');if(gnEl) gnEl.textContent='€'+licAmt.toFixed(2)+' / €970';
+  const gbEl=document.getElementById('ov-goal-bar');if(gbEl) gbEl.style.width=licPct+'%';
+  // Friday special — show on Fridays in meals section
+  const isFriday=new Date().getDay()===5;
+  if(isFriday&&fridayThisWeek){
+    const act=fridayActivities.find(a=>a.id===fridayThisWeek);
+    if(act&&mealsEl){
+      const icon=FRIDAY_CAT_ICONS[act.cat]||'✦';
+      // Replace or append evening slot with Friday activity
+      const fridayNote=`<div style="margin-top:8px;padding:10px 12px;background:var(--plum-light);border:1px solid var(--plum-border);border-radius:8px">
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--plum);font-weight:500;margin-bottom:4px">${icon} Tonight — Special Friday</div>
+        <div style="font-size:13px;font-weight:500">${esc2(act.name)}</div>
+        ${act.food?`<div style="font-size:11px;color:var(--text3);margin-top:3px">${esc2(act.food)}</div>`:''}
+      </div>`;
+      if(mealsEl.innerHTML.includes('Set up your meal plan')){
+        mealsEl.innerHTML=fridayNote;
+      } else {
+        mealsEl.innerHTML+=fridayNote;
+      }
+    }
+  }
+  const upcoming=window._upcomingBills||[];
+  let billsAlertHtml='';
+  upcoming.forEach(b=>{
+    const dtu=daysUntilDue(b.day);
+    const isToday=dtu===0;
+    billsAlertHtml+=`<div class="${isToday?'warn-strip':'info-strip'}" style="margin-bottom:8px;${isToday?'border-color:var(--red-border);background:var(--red-light);color:var(--red-text)':''}">
+      <span style="font-size:14px">${isToday?'🔴':'🔔'}</span>
+      <span><strong>${esc2(b.name)}</strong> — ${isToday?'due today!':dtu+' day'+(dtu>1?'s':'')+' until payment'}${b.amount?' · '+fmtEur(b.amount):''}</span>
+    </div>`;
+  });
+  const billsAlertEl=document.getElementById('ov-bills-alerts');
+  if(billsAlertEl) billsAlertEl.innerHTML=billsAlertHtml;
 }
 
 // ======== MODALS ========
@@ -1250,15 +1983,226 @@ const meals=[
   {id:35,name:'Fish & chips',diff:'medium',thaw:true,ingredients:['white fish fillets','potatoes','all-purpose flour','baking powder','beer or sparkling water','vegetable oil','salt','pepper','malt vinegar','tartar sauce']},
 ];
 
-// ======== INIT ========
+// ======== OUR FRIDAYS ========
+const FRIDAY_ACTIVITIES_DEFAULT=[
+  {id:'wine-paint',name:'Wine & Paint',cat:'Creative',desc:'Set up canvases, put on some music, open a bottle of wine and paint together — no skills needed.',food:'Wine, cheese board, crackers, grapes, olives'},
+  {id:'clay',name:'Clay & Create',cat:'Creative',desc:'Buy air-dry clay and sculpt something together — small figures, bowls, whatever feels fun.',food:'Sparkling water, snacks, fruit platter'},
+  {id:'special-film',name:'Movie & Special Dinner',cat:'Entertainment',desc:'Pick a film you\'ve both been meaning to watch. Cook something special or order from a favourite place.',food:'Popcorn, drinks, something indulgent for dinner'},
+  {id:'natural-diy',name:'Natural DIY Workshop',cat:'Nature',desc:'Make something natural together — DIY shampoo bar, body scrub, candles or skincare. Look up a simple recipe beforehand.',food:'Herbal tea, light snacks'},
+  {id:'cooking-challenge',name:'Cooking Challenge',cat:'Culinary',desc:'Pick a cuisine you\'ve never cooked before or a dish that feels ambitious. Cook it together from scratch.',food:'Whatever you\'re cooking + a good drink'},
+  {id:'kitchen-staples',name:'Kitchen Staples Day',cat:'Culinary',desc:'Spend the evening making things that make everyday cooking easier — fresh pasta, sauces, pickles, granola, nut butter.',food:'Taste everything as you go, wine or juice'},
+  {id:'picnic-indoor',name:'Indoor Picnic Night',cat:'Cozy',desc:'Spread a blanket on the floor, put on soft lighting, and have a spread of finger foods, dips and drinks. No plates required.',food:'Mezze spread — hummus, pita, veggies, charcuterie, sparkling drinks'},
+  {id:'cocktail-night',name:'Cocktail & Mocktail Night',cat:'Experience',desc:'Pick 2–3 drinks to make from scratch. Buy the ingredients, watch a tutorial together and experiment.',food:'Cocktail snacks — nuts, chips, something salty'},
+  {id:'flower-arrangement',name:'Flower Arranging',cat:'Creative',desc:'Buy a mix of flowers and greenery from a market and arrange them together in different vases around the home.',food:'Afternoon tea vibes — sandwiches, pastries, tea or prosecco'},
+  {id:'stargazing',name:'Stargazing Night',cat:'Experience',desc:'Find a clear spot away from lights, bring blankets, download a star map app, and spend the evening looking up.',food:'Thermos of hot chocolate or tea, biscuits, warm snacks'},
+  {id:'board-games',name:'Games Night',cat:'Entertainment',desc:'Pull out board games, card games or get a new one. Keep score, get competitive, have fun.',food:'Pizza or comfort food, drinks, sweet treats'},
+  {id:'spa-night',name:'Home Spa Night',cat:'Cozy',desc:'Face masks, foot soaks, candles, calm music. Take turns with a shoulder massage. Total wind-down.',food:'Cucumber water, herbal tea, light fruit'},
+];
+let fridayActivities=load('friday_activities',FRIDAY_ACTIVITIES_DEFAULT);
+let fridayThisWeek=load('friday_this_week',null);
+let fridayItems=load('friday_items',[]);
+let editFridayId=null;
+
+const FRIDAY_CAT_COLORS={Creative:'var(--plum)',Culinary:'var(--amber)',Nature:'var(--sage)',Entertainment:'var(--accent)',Experience:'#6BAEC4',Cozy:'var(--text2)'};
+const FRIDAY_CAT_ICONS={Creative:'🎨',Culinary:'🍳',Nature:'🌿',Entertainment:'🎬',Experience:'✨',Cozy:'🛋️'};
+
+function renderFridays(){
+  renderFridayThisWeek();
+  renderFridayItems();
+  renderFridayActivitiesList();
+}
+function renderFridayThisWeek(){
+  const el=document.getElementById('friday-this-week');if(!el)return;
+  const act=fridayThisWeek?fridayActivities.find(a=>a.id===fridayThisWeek):null;
+  if(!act){el.innerHTML=`<div class="empty" style="padding:.5rem 0">No activity selected.</div><button class="btn btn-sm btn-p" style="margin-top:10px" onclick="pickFridayActivity()">Pick random</button>`;return;}
+  const col=FRIDAY_CAT_COLORS[act.cat]||'var(--text3)';
+  const icon=FRIDAY_CAT_ICONS[act.cat]||'✦';
+  el.innerHTML=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <span style="font-size:22px">${icon}</span>
+    <div><div style="font-family:'Parkinsans',sans-serif;font-weight:600;font-size:17px">${esc2(act.name)}</div>
+    <span style="font-size:10px;color:${col};font-weight:500">${act.cat}</span></div>
+  </div>
+  ${act.desc?`<div style="font-size:13px;color:var(--text2);margin-bottom:10px;font-weight:300;line-height:1.6">${esc2(act.desc)}</div>`:''}
+  ${act.food?`<div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--text2)"><span style="color:var(--amber);font-weight:500">🍽 Food & drinks: </span>${esc2(act.food)}</div>`:''}
+  <div style="margin-top:12px;display:flex;gap:8px">
+    <button class="btn btn-sm" onclick="pickFridayActivity()">↻ Pick another</button>
+    <button class="btn btn-sm" onclick="clearFridayActivity()">Clear</button>
+  </div>`;
+}
+function pickFridayActivity(){
+  if(!fridayActivities.length) return;
+  const idx=Math.floor(Math.random()*fridayActivities.length);
+  fridayThisWeek=fridayActivities[idx].id;
+  save('friday_this_week',fridayThisWeek);
+  renderFridayThisWeek();
+  toast('Friday activity picked!');
+  refreshOverview();
+}
+function clearFridayActivity(){fridayThisWeek=null;save('friday_this_week',fridayThisWeek);renderFridayThisWeek();refreshOverview();}
+function renderFridayItems(){
+  const el=document.getElementById('friday-items-list');if(!el)return;
+  if(!fridayItems.length){el.innerHTML='<div style="font-size:13px;color:var(--text3);padding:.25rem 0">No items yet.</div>';return;}
+  el.innerHTML=fridayItems.map((item,i)=>`<div class="task-row${item.done?' done':''}">
+    <input type="checkbox" ${item.done?'checked':''} onchange="toggleFridayItem(${i})">
+    <div class="task-name" style="flex:1">${esc2(item.name)}</div>
+    <button class="task-del" onclick="deleteFridayItem(${i})">✕</button>
+  </div>`).join('');
+  save('friday_items',fridayItems);
+}
+function addFridayItem(){
+  const inp=document.getElementById('friday-item-input');
+  const v=inp.value.trim();if(!v)return;
+  fridayItems.push({name:v,done:false});inp.value='';renderFridayItems();
+}
+function toggleFridayItem(i){fridayItems[i].done=!fridayItems[i].done;renderFridayItems();}
+function deleteFridayItem(i){fridayItems.splice(i,1);renderFridayItems();}
+function renderFridayActivitiesList(){
+  const el=document.getElementById('friday-activities-list');if(!el)return;
+  if(!fridayActivities.length){el.innerHTML='<div class="empty">No activities yet.</div>';return;}
+  const grouped={};
+  fridayActivities.forEach(a=>{if(!grouped[a.cat])grouped[a.cat]=[];grouped[a.cat].push(a);});
+  let html='';
+  Object.entries(grouped).forEach(([cat,acts])=>{
+    const col=FRIDAY_CAT_COLORS[cat]||'var(--text3)';
+    const icon=FRIDAY_CAT_ICONS[cat]||'✦';
+    html+=`<div style="margin-bottom:1rem"><div style="font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:${col};font-weight:500;margin-bottom:8px">${icon} ${cat}</div>`;
+    acts.forEach(act=>{
+      const isCurrent=fridayThisWeek===act.id;
+      html+=`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)">
+        <div style="flex:1">
+          <div style="font-size:13.5px;font-weight:${isCurrent?600:400};${isCurrent?'color:var(--accent)':''}">${esc2(act.name)}${isCurrent?' <span style="font-size:10px">← this Friday</span>':''}</div>
+          ${act.food?`<div style="font-size:11px;color:var(--text3);margin-top:2px">${esc2(act.food)}</div>`:''}
+        </div>
+        <button class="btn btn-sm" onclick="selectFridayActivity('${act.id}')">Pick</button>
+        <button class="btn btn-sm" onclick="openFridayActivityModal('${act.id}')">Edit</button>
+        <button class="task-del" onclick="deleteFridayActivity('${act.id}')">✕</button>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  el.innerHTML=html;
+}
+function selectFridayActivity(id){fridayThisWeek=id;save('friday_this_week',fridayThisWeek);renderFridays();refreshOverview();toast('Activity selected for this Friday!');}
+function openFridayActivityModal(editId){
+  editFridayId=editId||null;
+  const existing=editId?fridayActivities.find(a=>a.id===editId):null;
+  document.getElementById('fam-title').textContent=existing?'Edit activity':'Add Friday activity';
+  document.getElementById('fam-save-btn').textContent=existing?'Save changes':'Add activity';
+  document.getElementById('fam-name').value=existing?existing.name:'';
+  document.getElementById('fam-cat').value=existing?(existing.cat||'Creative'):'Creative';
+  document.getElementById('fam-desc').value=existing?(existing.desc||''):'';
+  document.getElementById('fam-food').value=existing?(existing.food||''):'';
+  openModal('friday-activity-modal');
+}
+function saveFridayActivity(){
+  const name=document.getElementById('fam-name').value.trim();if(!name)return;
+  const data={
+    id:editFridayId||(name.toLowerCase().replace(/\s+/g,'-')+'-'+Date.now()),
+    name,cat:document.getElementById('fam-cat').value,
+    desc:document.getElementById('fam-desc').value.trim(),
+    food:document.getElementById('fam-food').value.trim(),
+  };
+  if(editFridayId){const idx=fridayActivities.findIndex(a=>a.id===editFridayId);if(idx>-1)fridayActivities[idx]=data;}
+  else fridayActivities.push(data);
+  save('friday_activities',fridayActivities);closeModal('friday-activity-modal');renderFridayActivitiesList();toast(editFridayId?'Activity updated!':'Activity added!');editFridayId=null;
+}
+function deleteFridayActivity(id){
+  if(!confirm('Remove this activity?'))return;
+  fridayActivities=fridayActivities.filter(a=>a.id!==id);
+  if(fridayThisWeek===id){fridayThisWeek=null;save('friday_this_week',null);}
+  save('friday_activities',fridayActivities);renderFridays();toast('Activity removed');
+}
+function initFridays(){renderFridays();}
+
+// ======== FUTURE PLANS ========
+let futurePlans=load('future_plans',[]);
+let bucketList=load('bucket_list',[]);
+let ideas=load('ideas',[]);
+const PLAN_CAT_ICONS={'Travel':'✈️','Home':'🏠','Personal':'🌱','Together':'💛','Career':'💼','Other':'•'};
+
+function renderFuturePlans(){
+  const el=document.getElementById('future-plans-list');if(!el)return;
+  if(!futurePlans.length){el.innerHTML='<div class="empty">No plans yet — add something you\'re looking forward to.</div>';return;}
+  const cats={};
+  futurePlans.forEach((p,i)=>{if(!cats[p.cat])cats[p.cat]=[];cats[p.cat].push({...p,i});});
+  let html='';
+  Object.entries(cats).forEach(([cat,plans])=>{
+    const icon=PLAN_CAT_ICONS[cat]||'•';
+    html+=`<div style="margin-bottom:1.25rem"><div style="font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-weight:500;margin-bottom:8px">${icon} ${cat}</div>`;
+    plans.forEach(p=>{
+      html+=`<div class="dcard" style="margin-bottom:8px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+          <div style="flex:1">
+            <div style="font-family:'Parkinsans',sans-serif;font-weight:600;font-size:14px;margin-bottom:3px">${esc2(p.name)}</div>
+            ${p.when?`<div style="font-size:11px;color:var(--accent);margin-bottom:4px">⏱ ${esc2(p.when)}</div>`:''}
+            ${p.notes?`<div style="font-size:12px;color:var(--text3);font-weight:300">${esc2(p.notes)}</div>`:''}
+          </div>
+          <button class="task-del" onclick="deletePlanItem(${p.i})">✕</button>
+        </div>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  el.innerHTML=html;
+}
+function openPlanModal(){openModal('plan-modal');document.getElementById('pm2-name').value='';document.getElementById('pm2-when').value='';document.getElementById('pm2-notes').value='';}
+function savePlan(){
+  const name=document.getElementById('pm2-name').value.trim();if(!name)return;
+  futurePlans.push({name,cat:document.getElementById('pm2-cat').value,when:document.getElementById('pm2-when').value.trim(),notes:document.getElementById('pm2-notes').value.trim()});
+  save('future_plans',futurePlans);closeModal('plan-modal');renderFuturePlans();toast('Plan added!');
+}
+function deletePlanItem(i){futurePlans.splice(i,1);save('future_plans',futurePlans);renderFuturePlans();}
+
+function renderBucketList(){
+  const el=document.getElementById('bucket-list-content');if(!el)return;
+  if(!bucketList.length){el.innerHTML='<div class="empty">Start your bucket list.</div>';return;}
+  el.innerHTML=bucketList.map((item,i)=>`<div class="task-row${item.done?' done':''}">
+    <input type="checkbox" ${item.done?'checked':''} onchange="toggleBucket(${i})">
+    <div style="flex:1">
+      <div class="task-name">${esc2(item.name)}</div>
+      ${item.deadline||item.notes?`<div class="task-meta">${item.deadline?`<span>🗓 ${esc2(item.deadline)}</span>`:''}${item.notes?`<span>${esc2(item.notes)}</span>`:''}</div>`:''}
+    </div>
+    <button class="task-del" onclick="deleteBucket(${i})">✕</button>
+  </div>`).join('');
+  save('bucket_list',bucketList);
+}
+function openBucketModal(){openModal('bucket-modal');document.getElementById('bk-name').value='';document.getElementById('bk-deadline').value='';document.getElementById('bk-notes').value='';}
+function saveBucketItem(){
+  const name=document.getElementById('bk-name').value.trim();if(!name)return;
+  bucketList.push({name,deadline:document.getElementById('bk-deadline').value.trim(),notes:document.getElementById('bk-notes').value.trim(),done:false});
+  save('bucket_list',bucketList);closeModal('bucket-modal');renderBucketList();toast('Added to bucket list!');
+}
+function toggleBucket(i){bucketList[i].done=!bucketList[i].done;renderBucketList();}
+function deleteBucket(i){bucketList.splice(i,1);renderBucketList();}
+
+function renderIdeas(){
+  const el=document.getElementById('ideas-list');if(!el)return;
+  if(!ideas.length){el.innerHTML='<div class="empty">No ideas yet.</div>';return;}
+  el.innerHTML=ideas.map((idea,i)=>`<div class="task-row">
+    <div style="flex:1"><div class="task-name">${esc2(idea.text)}</div><div class="task-meta"><span>${idea.date||''}</span></div></div>
+    <button class="task-del" onclick="deleteIdea(${i})">✕</button>
+  </div>`).join('');
+  save('ideas',ideas);
+}
+function addIdea(){
+  const inp=document.getElementById('idea-input');const v=inp.value.trim();if(!v)return;
+  ideas.unshift({text:v,date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})});
+  inp.value='';renderIdeas();toast('Idea saved!');
+}
+function deleteIdea(i){ideas.splice(i,1);renderIdeas();}
+function initFuturePlans(){renderFuturePlans();renderBucketList();renderIdeas();}
 (function init(){
   initTheme();
+  checkBillsAutoReset();
   initDayGrid();
   initWeeklyGrid();
   initMealplanGrid();
   initMealsTabs();
   initFinance();
   initGoals();
+  initPockets();
+  initFridays();
+  initFuturePlans();
   renderTodos();
   renderUrgents();
   renderMealsList();
@@ -1266,6 +2210,7 @@ const meals=[
   renderDpGrocery();
   renderThaw();
   renderGroceryList();
+  initBillsMonthSel();
   renderBillsTracker();
   refreshOverview();
 })();
