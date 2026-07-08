@@ -1,0 +1,2653 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Me & You — Life Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Parkinsans:wght@300;400;500;600&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme="dark"]{
+  --bg:#141418;--bg2:#1C1C22;--bg3:#242430;--bg4:#2E2E3C;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --text:#EEF0F8;--text2:#9FA4BC;--text3:#5C6180;
+  --accent:#4F7FD4;--accent-light:rgba(79,127,212,0.13);--accent-border:rgba(79,127,212,0.28);--accent-hover:#3A6AC4;
+  --sage:#5E9E7E;--sage-light:rgba(94,158,126,0.13);--sage-border:rgba(94,158,126,0.28);
+  --amber:#C4973A;--amber-light:rgba(196,151,58,0.13);--amber-border:rgba(196,151,58,0.28);
+  --plum:#8B6BAE;--plum-light:rgba(139,107,174,0.13);--plum-border:rgba(139,107,174,0.28);
+  --red-light:rgba(196,58,58,0.13);--red-border:rgba(196,58,58,0.26);--red-text:#E07878;
+  --nav-bg:rgba(20,20,24,0.92);--side-bg:rgba(20,20,24,0.97);
+}
+[data-theme="light"]{
+  --bg:#F4F6FB;--bg2:#FFFFFF;--bg3:#EDF0F7;--bg4:#E2E6F0;
+  --border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.12);
+  --text:#1A1D2E;--text2:#4A4F6A;--text3:#8A90AA;
+  --accent:#2D62C0;--accent-light:rgba(45,98,192,0.09);--accent-border:rgba(45,98,192,0.22);--accent-hover:#1F50A8;
+  --sage:#3A7A5A;--sage-light:rgba(58,122,90,0.09);--sage-border:rgba(58,122,90,0.22);
+  --amber:#9A6C10;--amber-light:rgba(154,108,16,0.09);--amber-border:rgba(154,108,16,0.22);
+  --plum:#6B4A9A;--plum-light:rgba(107,74,154,0.09);--plum-border:rgba(107,74,154,0.22);
+  --red-light:rgba(180,40,40,0.08);--red-border:rgba(180,40,40,0.2);--red-text:#B42828;
+  --nav-bg:rgba(244,246,251,0.94);--side-bg:rgba(244,246,251,0.97);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;min-height:100vh;font-weight:300;transition:background 0.2s,color 0.2s}
+
+/* ===== Layout shell ===== */
+.shell{display:flex;min-height:100vh}
+
+.sidebar{width:208px;flex-shrink:0;background:var(--side-bg);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;z-index:50}
+.side-brand{font-family:'Parkinsans',sans-serif;font-weight:600;font-size:17px;padding:22px 20px 18px;border-bottom:1px solid var(--border);letter-spacing:-0.01em}
+.side-brand em{color:var(--accent);font-style:normal;font-weight:600}
+.side-groups{flex:1;overflow-y:auto;padding:14px 10px}
+.side-group{display:flex;align-items:center;gap:11px;width:100%;padding:11px 12px;font-family:'Outfit',sans-serif;font-size:13.5px;font-weight:400;color:var(--text3);background:none;border:none;border-radius:9px;cursor:pointer;text-align:left;transition:all 0.15s;margin-bottom:2px}
+.side-group .sg-icon{font-size:15px;width:18px;text-align:center;flex-shrink:0;opacity:0.85}
+.side-group:hover{background:var(--bg3);color:var(--text2)}
+.side-group.active{background:var(--accent-light);color:var(--accent);font-weight:500}
+.side-foot{padding:14px 20px 18px;border-top:1px solid var(--border)}
+
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+
+nav{position:sticky;top:0;z-index:40;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 1.75rem;gap:0}
+.nav-tabs{display:flex;overflow-x:auto;flex:1;scrollbar-width:none}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{padding:18px 14px;font-size:13px;font-weight:400;color:var(--text3);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.2s;font-family:'Outfit',sans-serif}
+.nav-tab:hover{color:var(--text2)}
+.nav-tab.active{color:var(--accent);border-bottom:2px solid var(--accent);font-weight:500}
+.nav-right{margin-left:auto;padding-left:1rem;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.pill-btn{display:flex;align-items:center;gap:6px;font-size:12px;font-family:'Outfit',sans-serif;color:var(--text3);background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:6px 13px;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+.pill-btn:hover{border-color:var(--accent);color:var(--text2)}
+
+/* mobile sidebar toggle */
+.menu-btn{display:none;background:none;border:1px solid var(--border2);border-radius:8px;color:var(--text2);font-size:14px;padding:7px 10px;cursor:pointer;margin-right:10px}
+
+.page{display:none;max-width:920px;margin:0 auto;padding:2.5rem 2rem 2rem;width:100%}
+.page.active{display:block;animation:fadeUp 0.22s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+h1{font-family:'Parkinsans',sans-serif;font-size:30px;font-weight:600;margin-bottom:6px;line-height:1.2;letter-spacing:-0.01em}
+h1 em{color:var(--accent);font-style:normal}
+.sub{font-size:13px;color:var(--text3);margin-bottom:2rem;font-weight:300;line-height:1.6;max-width:580px}
+
+h2.sec-title{font-family:'Parkinsans',sans-serif;font-size:17px;font-weight:600;margin-bottom:2px}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1rem}
+.card-sm{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem}
+
+.badge{display:inline-flex;align-items:center;font-size:11px;font-weight:500;padding:3px 9px;border-radius:999px;letter-spacing:0.03em}
+.b-easy{background:var(--sage-light);color:var(--sage);border:1px solid var(--sage-border)}
+.b-med{background:var(--amber-light);color:var(--amber);border:1px solid var(--amber-border)}
+.b-inv{background:var(--red-light);color:var(--red-text);border:1px solid var(--red-border)}
+.b-thaw{background:var(--plum-light);color:var(--plum);border:1px solid var(--plum-border)}
+.b-nothaw{background:var(--sage-light);color:var(--sage);border:1px solid var(--sage-border)}
+.b-blue{background:var(--accent-light);color:var(--accent);border:1px solid var(--accent-border)}
+.b-grey{background:var(--bg3);color:var(--text3);border:1px solid var(--border2)}
+
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;border-radius:10px;cursor:pointer;transition:all 0.18s;border:1px solid var(--border2);background:var(--bg3);color:var(--text)}
+.btn:hover{background:var(--bg4)}
+.btn-p{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-p:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+.btn-sm{padding:5px 12px;font-size:12px;border-radius:7px}
+.btn-del{color:var(--red-text);border-color:var(--red-border);background:var(--red-light)}
+.btn-del:hover{background:rgba(196,58,58,0.2)}
+
+select,input[type=text],input[type=number],input[type=date],input[type=time]{font-family:'Outfit',sans-serif;font-size:13px;font-weight:300;padding:8px 11px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);width:100%;transition:border 0.2s}
+select:focus,input:focus{outline:none;border-color:var(--accent)}
+select option{background:var(--bg3)}
+textarea{font-family:'Outfit',sans-serif;font-size:13px;font-weight:300;padding:9px 11px;border:1px solid var(--border2);border-radius:8px;background:var(--bg3);color:var(--text);width:100%;resize:vertical}
+textarea:focus{outline:none;border-color:var(--accent)}
+label{font-size:12px;font-weight:500;color:var(--text2);letter-spacing:0.03em;display:block;margin-bottom:5px}
+input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
+
+.day-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:10px;margin-bottom:1.5rem}
+.day-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem}
+.day-lbl{font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:3px;font-weight:500}
+.day-name{font-family:'Parkinsans',sans-serif;font-weight:600;font-size:16px;margin-bottom:10px}
+
+.info-strip{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:11px 15px;font-size:12px;color:var(--text3);font-weight:300}
+.isd{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
+
+.plan-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:1rem}
+.plan-row{display:grid;grid-template-columns:110px 1fr 48px;border-bottom:1px solid var(--border);transition:background 0.15s}
+.plan-row:last-child{border-bottom:none}
+.plan-row:hover{background:var(--bg3)}
+.pcell{padding:14px 16px;display:flex;flex-direction:column;justify-content:center}
+.pday{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);font-weight:500;margin-bottom:2px}
+.pdate{font-size:12px;color:var(--text3)}
+.pmeal{font-family:'Parkinsans',sans-serif;font-weight:500;font-size:15px;margin-bottom:6px;cursor:pointer;display:flex;align-items:center;gap:7px;transition:color 0.15s}
+.pmeal:hover{color:var(--accent)}
+.chev{font-size:11px;color:var(--text3);transition:transform 0.2s;display:inline-block}
+.chev.open{transform:rotate(180deg)}
+.pbadges{display:flex;gap:5px;flex-wrap:wrap}
+.pexpand{overflow:hidden;max-height:0;transition:max-height 0.3s ease}
+.pexpand.open{max-height:320px;border-top:1px solid var(--border)}
+.pexpand-inner{padding:14px 16px;background:var(--bg)}
+.ing-grid{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.ing-pill{font-size:11px;padding:3px 9px;border-radius:999px;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);font-weight:300}
+.paction{display:flex;align-items:center;justify-content:center;padding:12px 8px;border-left:1px solid var(--border)}
+.rspin{background:none;border:1px solid var(--border2);border-radius:8px;padding:6px 9px;cursor:pointer;font-size:15px;color:var(--text3);transition:all 0.18s;line-height:1}
+.rspin:hover{background:var(--accent-light);color:var(--accent);border-color:var(--accent-border)}
+
+.gsplit{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem}
+@media(max-width:600px){.gsplit{grid-template-columns:1fr}}
+.gcol-title{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;padding:5px 11px;border-radius:999px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;transition:all 0.15s;user-select:none;font-weight:300}
+.chip:hover{border-color:var(--accent);color:var(--text)}
+.chip.done{text-decoration:line-through;opacity:0.3}
+
+.trow{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--border)}
+.trow:last-child{border-bottom:none}
+.tname{font-family:'Parkinsans',sans-serif;font-weight:500;font-size:14px;margin-bottom:4px}
+.twhen{font-size:12px;color:var(--text3);font-weight:300}
+
+.ing-tag{font-size:11px;padding:3px 9px;border-radius:999px;background:var(--bg3);border:1px solid var(--border2);display:inline-flex;align-items:center;gap:5px;color:var(--text2)}
+.ing-x{cursor:pointer;color:var(--text3);font-size:12px;line-height:1;transition:color 0.15s}
+.ing-x:hover{color:var(--accent)}
+
+.dcard{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1.25rem;margin-bottom:10px}
+.dcard-h{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.dcard-b{font-size:13px;color:var(--text3);font-weight:300;line-height:1.65}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex;animation:fadeIn 0.18s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:2rem;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
+.modal-title{font-family:'Parkinsans',sans-serif;font-weight:600;font-size:19px;margin-bottom:4px}
+.modal-x{position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;font-size:18px;cursor:pointer;color:var(--text3);transition:color 0.15s}
+.modal-x:hover{color:var(--text)}
+
+.sec-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:10px}
+.empty{color:var(--text3);font-size:14px;padding:3rem 0;text-align:center;font-weight:300}
+.green-strip{display:flex;align-items:center;gap:10px;padding:11px 15px;background:var(--sage-light);border:1px solid var(--sage-border);border-radius:10px;font-size:13px;color:var(--sage);margin-top:1rem;font-weight:300}
+.warn-strip{display:flex;align-items:center;gap:10px;padding:11px 15px;background:var(--amber-light);border:1px solid var(--amber-border);border-radius:10px;font-size:13px;color:var(--amber);margin-top:1rem;font-weight:300}
+footer{border-top:1px solid var(--border);padding:1.5rem 2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;max-width:920px;margin:0 auto}
+.foot-l{font-family:'Parkinsans',sans-serif;font-size:13px;color:var(--text3);font-weight:400}
+.foot-l span{color:var(--accent)}
+.foot-r{font-size:11px;color:var(--text3);font-weight:300;letter-spacing:0.04em;text-transform:uppercase}
+
+.toast{position:fixed;bottom:1.75rem;right:1.75rem;background:var(--bg4);color:var(--text);border:1px solid var(--border2);padding:11px 20px;border-radius:10px;font-size:13px;z-index:999;opacity:0;transition:opacity 0.2s;pointer-events:none;font-weight:300}
+.toast.show{opacity:1;pointer-events:auto}
+
+/* ===== Overview dashboard ===== */
+.ov-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:1.5rem}
+@media(max-width:760px){.ov-grid{grid-template-columns:1fr}}
+.ov-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.4rem}
+.ov-card-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.ov-card-h .t{font-family:'Parkinsans',sans-serif;font-weight:600;font-size:14px}
+.ov-stat{font-family:'Parkinsans',sans-serif;font-weight:600;font-size:28px;line-height:1}
+.ov-stat-lbl{font-size:11px;color:var(--text3);margin-top:4px}
+.ov-row{display:flex;align-items:center;gap:9px;padding:7px 0;font-size:13px;border-bottom:1px solid var(--border)}
+.ov-row:last-child{border-bottom:none}
+.ov-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* ===== Finance ===== */
+.fin-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:1.5rem;align-items:start}
+@media(max-width:800px){.fin-grid{grid-template-columns:1fr}}
+.fin-row{display:grid;grid-template-columns:1fr 110px 36px;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.fin-row:last-child{border-bottom:none}
+.fin-row .fname{font-size:13.5px;font-weight:400}
+.fin-row .fcat{font-size:11px;color:var(--text3);font-weight:300}
+.fin-input{text-align:right;padding:7px 9px!important}
+.fin-x{background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;transition:color 0.15s}
+.fin-x:hover{color:var(--red-text)}
+.fin-total{display:flex;justify-content:space-between;align-items:center;padding:14px 0 4px;font-family:'Parkinsans',sans-serif;font-weight:600;font-size:15px}
+.bal-pos{color:var(--sage)}
+.bal-neg{color:var(--red-text)}
+.bar-track{height:8px;border-radius:99px;background:var(--bg3);overflow:hidden;margin-top:8px}
+.bar-fill{height:100%;border-radius:99px;transition:width 0.4s ease}
+.goal-row{margin-bottom:1.1rem}
+.goal-top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px}
+.goal-top .gname{font-weight:500}
+.goal-top .gnum{color:var(--text3);font-weight:300}
+
+/* ===== Lists (todo/urgent/grocery) ===== */
+.task-row{display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-bottom:1px solid var(--border)}
+.task-row:last-child{border-bottom:none}
+.task-row.done .task-name{text-decoration:line-through;color:var(--text3)}
+.task-name{font-size:13.5px;font-weight:400;line-height:1.45}
+.task-meta{font-size:11px;color:var(--text3);margin-top:2px;display:flex;gap:8px;flex-wrap:wrap}
+.task-del{margin-left:auto;background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:2px;flex-shrink:0;transition:color 0.15s}
+.task-del:hover{color:var(--red-text)}
+.add-row{display:flex;gap:8px;margin-bottom:1.25rem}
+.add-row input{flex:1}
+
+/* ===== Weekly planner grid ===== */
+.wk-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+@media(max-width:900px){.wk-grid{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}}
+.wk-day{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:.9rem;display:flex;flex-direction:column;gap:7px;min-height:230px}
+.wk-day-name{font-family:'Parkinsans',sans-serif;font-weight:600;font-size:13.5px;margin-bottom:2px}
+.wk-day-date{font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.07em}
+.wk-block-lbl{font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);font-weight:500;margin-top:2px}
+.wk-block textarea{min-height:46px;font-size:12px;padding:6px 8px}
+
+/* ===== Meal planner (simple) ===== */
+.mp-grid{display:grid;grid-template-columns:90px repeat(7,1fr);gap:6px;align-items:stretch}
+.mp-grid input{font-size:12px;padding:7px 8px}
+.mp-hdr{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);font-weight:500;padding:6px 4px;text-align:center}
+.mp-lbl{font-size:11px;color:var(--text2);font-weight:500;display:flex;align-items:center;padding:0 4px}
+@media(max-width:900px){.mp-grid{grid-template-columns:1fr;gap:14px}.mp-hdr{display:none}.mp-lbl{padding-top:6px}}
+
+/* ===== Avatar menu ===== */
+.am-item{display:flex;align-items:center;gap:9px;width:100%;padding:9px 12px;background:none;border:none;border-radius:8px;font-size:13px;font-family:'Outfit',sans-serif;font-weight:400;color:var(--text);cursor:pointer;text-align:left;transition:background .15s}
+.am-item:hover{background:var(--bg3)}
+
+/* ===== Login screen ===== */
+.login-screen-wrap{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;transition:background .2s}
+.login-top-bar{position:absolute;top:1.25rem;right:1.5rem}
+.login-theme-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:999px;padding:8px 16px;font-size:12px;font-family:'Outfit',sans-serif;color:var(--text2);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
+.login-theme-btn:hover{border-color:var(--accent);color:var(--text)}
+.login-box{background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:2.5rem 2rem;max-width:410px;width:100%;text-align:center;animation:fadeUp .3s ease}
+.login-logo{font-family:'Parkinsans',sans-serif;font-size:26px;font-weight:600;margin-bottom:4px;letter-spacing:-.01em}
+.login-logo em{color:var(--accent);font-style:normal}
+.login-tagline{font-size:12px;color:var(--text3);margin-bottom:1.75rem;font-weight:300}
+.login-mode-toggle{display:flex;background:var(--bg3);border-radius:10px;padding:3px;margin-bottom:1.5rem;gap:2px}
+.lmt-btn{flex:1;padding:8px 10px;border:none;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;cursor:pointer;transition:all .2s;background:transparent;color:var(--text3);font-weight:400}
+.lmt-btn.active{background:var(--bg2);color:var(--text);font-weight:500;box-shadow:0 1px 4px rgba(0,0,0,.18)}
+.login-panel{animation:fadeUp .2s ease}
+.login-panel-title{font-family:'Parkinsans',sans-serif;font-size:18px;font-weight:600;margin-bottom:6px}
+.login-panel-sub{font-size:12.5px;color:var(--text3);margin-bottom:1.5rem;font-weight:300;line-height:1.65}
+.login-google-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px 20px;background:var(--bg3);border:1px solid var(--border2);border-radius:12px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:500;color:var(--text);cursor:pointer;transition:all .2s;margin-bottom:10px}
+.login-google-btn:hover{border-color:var(--accent);background:var(--accent-light)}
+.login-features{display:flex;flex-direction:column;gap:8px;margin-bottom:1.5rem;text-align:left}
+.login-feature{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--text2);font-weight:300}
+.login-switch{font-size:12px;color:var(--text3);margin-top:14px}
+.login-switch a{color:var(--accent);cursor:pointer;font-weight:500}
+.login-switch a:hover{text-decoration:underline}
+.login-error{font-size:12px;color:var(--red-text);margin-top:10px;display:none;padding:8px 12px;background:var(--red-light);border:1px solid var(--red-border);border-radius:8px}
+/* mobile: move theme btn below box */
+@media(max-width:500px){
+  .login-top-bar{position:static;margin-top:16px;order:2}
+  .login-screen-wrap{justify-content:flex-start;padding-top:8vh;gap:0}
+}
+
+/* ===== Onboarding overlay ===== */
+#onboarding-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);z-index:8888;display:none;align-items:center;justify-content:center;padding:1.5rem}
+#onboarding-overlay.open{display:flex;animation:fadeIn .25s ease}
+.onboard-box{background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:2.5rem 2rem;max-width:420px;width:100%;text-align:center}
+.onboard-emoji{font-size:40px;margin-bottom:14px}
+.onboard-title{font-family:'Parkinsans',sans-serif;font-size:22px;font-weight:600;margin-bottom:8px}
+.onboard-sub{font-size:13px;color:var(--text3);margin-bottom:1.75rem;font-weight:300;line-height:1.65}
+.onboard-input{width:100%;padding:13px 16px;font-size:16px;font-family:'Parkinsans',sans-serif;font-weight:500;text-align:center;border:2px solid var(--border2);border-radius:12px;background:var(--bg3);color:var(--text);transition:border .2s;margin-bottom:1rem}
+.onboard-input:focus{outline:none;border-color:var(--accent)}
+.onboard-hint{font-size:11px;color:var(--text3);margin-bottom:1.5rem}
+
+/* ===== Invite banner ===== */
+#invite-banner{display:none;position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--accent-border);border-radius:12px;padding:14px 18px;font-size:13px;z-index:500;box-shadow:0 4px 20px rgba(0,0,0,.3);max-width:440px;width:90%;text-align:center}
+
+/* responsive sidebar */
+@media(max-width:880px){
+  .sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform 0.22s ease;box-shadow:0 0 30px rgba(0,0,0,0.3)}
+  .sidebar.open{transform:translateX(0)}
+  .menu-btn{display:inline-flex;align-items:center}
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:45}
+  .overlay.show{display:block}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN SCREEN ===== -->
+<div class="login-screen-wrap" id="login-screen">
+  <div class="login-top-bar">
+    <button class="login-theme-btn" id="login-theme-btn" onclick="loginToggleTheme()">
+      <span id="login-theme-icon">☀</span>
+      <span id="login-theme-lbl">Light</span>
+    </button>
+  </div>
+
+  <div class="login-box">
+    <div class="login-logo">Me & <em>You</em></div>
+    <div class="login-tagline">Your shared life planner</div>
+
+    <div class="login-mode-toggle">
+      <button class="lmt-btn active" id="lmt-register" onclick="setLoginMode('register')">Create account</button>
+      <button class="lmt-btn" id="lmt-signin" onclick="setLoginMode('signin')">Sign in</button>
+    </div>
+
+    <!-- Register panel -->
+    <div id="login-panel-register" class="login-panel">
+      <div class="login-panel-title">Get started for free</div>
+      <p class="login-panel-sub">Create your household and start planning together.</p>
+      <div class="login-features">
+        <div class="login-feature"><span>🏠</span><span>Shared household — sync with your partner</span></div>
+        <div class="login-feature"><span>💰</span><span>Pockets, finance &amp; savings tracking</span></div>
+        <div class="login-feature"><span>🍽</span><span>Meal planner &amp; dinner rotation</span></div>
+        <div class="login-feature"><span>📋</span><span>Weekly planner, to-dos &amp; future goals</span></div>
+      </div>
+      <button class="login-google-btn" id="login-btn-register">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/></svg>
+        Sign up with Google
+      </button>
+      <div class="login-switch">Already have an account? <a onclick="setLoginMode('signin')">Sign in</a></div>
+    </div>
+
+    <!-- Sign in panel -->
+    <div id="login-panel-signin" class="login-panel" style="display:none">
+      <div class="login-panel-title">Welcome back</div>
+      <p class="login-panel-sub">Sign in to pick up where you left off.</p>
+      <button class="login-google-btn" id="login-btn-signin">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/></svg>
+        Sign in with Google
+      </button>
+      <div class="login-switch">New here? <a onclick="setLoginMode('register')">Create an account</a></div>
+    </div>
+
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- ===== ONBOARDING ===== -->
+<div id="onboarding-overlay">
+  <div class="onboard-box">
+    <div class="onboard-emoji">🏠</div>
+    <div class="onboard-title">Welcome to Me & You</div>
+    <p class="onboard-sub">What's your couple name or surname?<br>It'll appear on your Overview and personalise the app.</p>
+    <input class="onboard-input" id="onboard-name-input" type="text" placeholder="e.g. Stalets, Silva, The Costas..." maxlength="24" onkeydown="if(event.key==='Enter')finishOnboarding()">
+    <div class="onboard-hint">You can always change this later.</div>
+    <button class="btn btn-p" style="width:100%;padding:13px;font-size:14px" onclick="finishOnboarding()">Let's go →</button>
+  </div>
+</div>
+
+<!-- ===== INVITE BANNER ===== -->
+<div id="invite-banner">
+  <div style="font-weight:500;margin-bottom:6px">🔗 Partner invite link</div>
+  <div id="invite-link-text" style="font-size:11px;color:var(--text3);word-break:break-all;margin-bottom:10px"></div>
+  <div style="display:flex;gap:8px;justify-content:center">
+    <button class="btn btn-sm btn-p" onclick="copyInviteLink()">Copy link</button>
+    <button class="btn btn-sm" onclick="document.getElementById('invite-banner').style.display='none'">Close</button>
+  </div>
+</div>
+
+<div class="shell" id="app-shell" style="display:none">
+  <div class="overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="side-brand">Me & <em>You</em></div>
+    <div class="side-groups">
+      <button class="side-group active" data-group="overview" onclick="showGroup('overview',this)"><span class="sg-icon">✻</span>Overview</button>
+      <button class="side-group" data-group="daily" onclick="showGroup('daily',this)"><span class="sg-icon">☰</span>Daily</button>
+      <button class="side-group" data-group="meals" onclick="showGroup('meals',this)"><span class="sg-icon">◍</span>Meals</button>
+      <button class="side-group" data-group="finance" onclick="showGroup('finance',this)"><span class="sg-icon">$</span>Finance</button>
+      <button class="side-group" data-group="futureplans" onclick="showGroup('futureplans',this)"><span class="sg-icon">✦</span>Future Plans</button>
+      <button class="side-group" data-group="travel" onclick="showGroup('travel',this)"><span class="sg-icon">✈</span>Travel Planner</button>
+    </div>
+    <div class="side-foot">
+      <button class="pill-btn" onclick="toggleTheme()" id="theme-btn" style="width:100%;justify-content:center">☀ Light</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <nav>
+      <button class="menu-btn" onclick="openSidebar()">☰</button>
+      <div class="nav-tabs" id="nav-tabs-overview">
+        <button class="nav-tab active" onclick="showPage('overview-home',this)">Overview</button>
+      </div>
+      <div class="nav-tabs" id="nav-tabs-daily" style="display:none">
+        <button class="nav-tab" onclick="showPage('weekly',this)">Weekly Planner</button>
+        <button class="nav-tab" onclick="showPage('todo',this)">To-Do List</button>
+        <button class="nav-tab" onclick="showPage('urgent',this)">Urgent</button>
+        <button class="nav-tab" onclick="showPage('fridays',this)">Our Fridays</button>
+      </div>
+      <div class="nav-tabs" id="nav-tabs-futureplans" style="display:none">
+        <button class="nav-tab" onclick="showPage('future-plans',this)">Plans</button>
+        <button class="nav-tab" onclick="showPage('future-bucket',this)">Bucket List</button>
+        <button class="nav-tab" onclick="showPage('future-ideas',this)">Ideas</button>
+      </div>
+      <div class="nav-tabs" id="nav-tabs-travel" style="display:none">
+        <button class="nav-tab" onclick="showPage('travel-home',this)">My Trips</button>
+      </div>
+      <div class="nav-tabs" id="nav-tabs-meals" style="display:none">
+        <button class="nav-tab" onclick="showPage('mealplan',this)">Meal Planner</button>
+        <button class="nav-tab" onclick="showPage('dp-setup',this)">Dinner Planner</button>
+        <button class="nav-tab" onclick="showPage('grocery',this)">Grocery List</button>
+      </div>
+      <div class="nav-tabs" id="nav-tabs-finance" style="display:none">
+        <button class="nav-tab" onclick="showPage('pockets',this)">Pockets</button>
+        <button class="nav-tab" onclick="showPage('bills',this)">Bills Tracker</button>
+        <button class="nav-tab" onclick="showPage('goals',this)">Savings Goals</button>
+        <button class="nav-tab" onclick="showPage('budget',this)">Monthly Budget</button>
+      </div>
+      <div class="nav-right">
+        <span id="nav-clock" style="font-size:12px;color:var(--text3);margin-right:6px"></span>
+        <div id="nav-avatar-wrap" style="display:none;position:relative">
+          <button id="nav-avatar-btn" onclick="toggleAvatarMenu()" style="background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:7px;padding:4px 8px 4px 4px;border-radius:999px;border:1px solid var(--border2);transition:border-color .2s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border2)'">
+            <img id="nav-avatar-img" src="" alt="" style="width:28px;height:28px;border-radius:50%;object-fit:cover;display:none">
+            <div id="nav-avatar-initials" style="width:28px;height:28px;border-radius:50%;background:var(--accent-light);border:1px solid var(--accent-border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--accent)"></div>
+            <span id="nav-avatar-name" style="font-size:12px;color:var(--text2);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+            <span style="font-size:9px;color:var(--text3)">▾</span>
+          </button>
+          <div id="avatar-menu" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:var(--bg2);border:1px solid var(--border2);border-radius:12px;min-width:210px;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:200;overflow:hidden">
+            <div style="padding:14px 16px;border-bottom:1px solid var(--border)">
+              <div id="am-name" style="font-family:'Parkinsans',sans-serif;font-weight:600;font-size:14px;margin-bottom:2px"></div>
+              <div id="am-email" style="font-size:11px;color:var(--text3)"></div>
+              <div id="am-household" style="font-size:11px;color:var(--accent);margin-top:4px"></div>
+            </div>
+            <div style="padding:6px">
+              <button onclick="showInvitePartner()" class="am-item">💌 Invite partner</button>
+              <button onclick="toggleTheme();syncAvatarTheme()" class="am-item"><span id="am-theme-icon">☀</span> <span id="am-theme-lbl">Light mode</span></button>
+              <button onclick="handleSignOut()" class="am-item" style="color:var(--red-text)">⎋ Sign out</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- PAGES WILL BE INSERTED HERE -->
+    <div id="pages-root">
+
+    <!-- ============ OVERVIEW ============ -->
+    <div id="page-overview-home" class="page active">
+      <h1 id="ov-greeting">Good to see you, <em id="ov-family-name">there</em> 👋</h1>
+      <p class="sub" id="ov-date-sub">Here's where things stand today.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="ov-card">
+            <div class="ov-card-h"><span class="t">Urgent</span><span class="badge b-inv" id="ov-urgent-count">0</span></div>
+            <div id="ov-urgent-list"><div class="empty" style="padding:.5rem 0">Nothing urgent — nice.</div></div>
+          </div>
+          <div class="ov-card">
+            <div class="ov-card-h"><span class="t">To-Do today</span><span class="badge b-blue" id="ov-todo-count">0</span></div>
+            <div id="ov-todo-list"><div class="empty" style="padding:.5rem 0">No tasks yet.</div></div>
+          </div>
+        </div>
+        <div class="ov-card">
+          <div class="ov-card-h" style="margin-bottom:12px"><span class="t">Today's meals</span></div>
+          <div id="ov-meals-today"><div class="empty" style="padding:.5rem 0">Set up your meal plan to see today's meals.</div></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:10px">
+        <div class="ov-card">
+          <div class="ov-card-h"><span class="t">Monthly balance</span></div>
+          <div class="ov-stat" id="ov-balance" style="margin:6px 0 2px">€0</div>
+          <div class="ov-stat-lbl" id="ov-bal-lbl">Income minus budgeted expenses</div>
+          <div class="bar-track" style="margin-top:10px"><div class="bar-fill" id="ov-bal-bar" style="width:0%;background:var(--accent)"></div></div>
+        </div>
+        <div class="ov-card">
+          <div class="ov-card-h"><span class="t">Total savings</span><span class="badge b-blue">Goal €6 000</span></div>
+          <div class="ov-stat" id="ov-savings-total" style="margin:6px 0 2px">€0</div>
+          <div class="ov-stat-lbl">Across all pockets · incl. interest</div>
+          <div class="bar-track" style="margin-top:10px"><div class="bar-fill" id="ov-savings-bar" style="width:0%;background:var(--sage)"></div></div>
+        </div>
+      </div>
+      <div class="ov-card" style="padding:.85rem 1.25rem">
+        <div style="display:flex;align-items:center;gap:14px">
+          <span style="font-size:13px;font-weight:500;white-space:nowrap">🚗 Driving licence</span>
+          <div class="bar-track" style="flex:1;margin:0"><div class="bar-fill" id="ov-goal-bar" style="width:0%;background:var(--accent)"></div></div>
+          <span style="font-size:12px;color:var(--text3);white-space:nowrap" id="ov-goal-nums">€0 / €970</span>
+        </div>
+      </div>
+      <div id="ov-bills-alerts" style="margin-top:10px"></div>
+    </div>
+
+    <!-- ============ DAILY: WEEKLY PLANNER ============ -->
+    <div id="page-weekly" class="page">
+      <h1>Weekly <em>planner</em></h1>
+      <p class="sub">Click any cell to add notes for that period. Today is highlighted in blue.</p>
+      <div style="overflow-x:auto">
+        <div id="weekly-grid" style="min-width:680px"></div>
+      </div>
+    </div>
+
+    <!-- ============ DAILY: TO-DO ============ -->
+    <div id="page-todo" class="page">
+      <h1>To-Do <em>list</em></h1>
+      <p class="sub">Everything that needs doing, but nothing on fire. Check items off as you go.</p>
+      <div class="add-row">
+        <input type="text" id="todo-input" placeholder="Add a task..." onkeydown="if(event.key==='Enter')addTodo()">
+        <button class="btn btn-p" onclick="addTodo()">Add</button>
+      </div>
+      <div class="card" id="todo-list"><div class="empty">No tasks yet. Add one above.</div></div>
+    </div>
+
+    <!-- ============ DAILY: URGENT ============ -->
+    <div id="page-urgent" class="page">
+      <h1><em>Urgent</em></h1>
+      <p class="sub">Time-sensitive items that need attention first. Keep this list short on purpose — if everything is urgent, nothing is.</p>
+      <div class="add-row">
+        <input type="text" id="urgent-input" placeholder="Add an urgent item..." onkeydown="if(event.key==='Enter')addUrgent()">
+        <button class="btn btn-p" onclick="addUrgent()">Add</button>
+      </div>
+      <div class="card" id="urgent-list"><div class="empty">All clear.</div></div>
+    </div>
+
+    <!-- ============ DAILY: OUR FRIDAYS ============ -->
+    <div id="page-fridays" class="page">
+      <h1>Our <em>Fridays</em></h1>
+      <p class="sub">Special Friday evenings together — one activity per week, with food, drinks and everything you need. Appears on the Overview every Friday.</p>
+
+      <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:1.25rem;margin-bottom:1.25rem">
+        <div class="card">
+          <div class="sec-hdr" style="margin-bottom:12px">
+            <h2 class="sec-title">This Friday</h2>
+            <button class="btn btn-sm btn-p" onclick="pickFridayActivity()">Pick random</button>
+          </div>
+          <div id="friday-this-week">
+            <div class="empty">No activity selected for this Friday.</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ov-card-h" style="margin-bottom:10px"><span class="t" style="font-weight:600;font-family:'Parkinsans',sans-serif">Items needed</span></div>
+          <p style="font-size:12px;color:var(--text3);margin-bottom:10px;font-weight:300">Things to buy or prepare for this Friday's activity.</p>
+          <div id="friday-items-list"></div>
+          <div class="add-row" style="margin-top:10px;margin-bottom:0">
+            <input type="text" id="friday-item-input" placeholder="Add item or ingredient..." onkeydown="if(event.key==='Enter')addFridayItem()">
+            <button class="btn btn-sm btn-p" onclick="addFridayItem()">Add</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sec-hdr" style="margin-bottom:14px">
+          <h2 class="sec-title">Activity list</h2>
+          <button class="btn btn-sm btn-p" onclick="openFridayActivityModal()">+ Add activity</button>
+        </div>
+        <div id="friday-activities-list"></div>
+      </div>
+    </div>
+
+    <!-- ============ FUTURE PLANS ============ -->
+    <div id="page-future-plans" class="page">
+      <h1>Future <em>plans</em></h1>
+      <p class="sub">Things you want to do, achieve or experience — not urgent, but worth keeping track of.</p>
+      <div class="sec-hdr" style="margin-bottom:1rem">
+        <div></div>
+        <button class="btn btn-sm btn-p" onclick="openPlanModal()">+ Add plan</button>
+      </div>
+      <div id="future-plans-list"><div class="empty">No plans yet — add something you're looking forward to.</div></div>
+    </div>
+
+    <div id="page-future-bucket" class="page">
+      <h1>Bucket <em>list</em></h1>
+      <p class="sub">Things to do before a certain age or date — experiences, achievements, places.</p>
+      <div class="sec-hdr" style="margin-bottom:1rem">
+        <div></div>
+        <button class="btn btn-sm btn-p" onclick="openBucketModal()">+ Add item</button>
+      </div>
+      <div id="bucket-list-content"><div class="empty">Start your bucket list.</div></div>
+    </div>
+
+    <div id="page-future-ideas" class="page">
+      <h1>Ideas <em>&amp; notes</em></h1>
+      <p class="sub">Loose thoughts, random ideas, things to research later — a scratchpad for the future.</p>
+      <div class="add-row">
+        <input type="text" id="idea-input" placeholder="Jot down an idea..." onkeydown="if(event.key==='Enter')addIdea()">
+        <button class="btn btn-p" onclick="addIdea()">Add</button>
+      </div>
+      <div id="ideas-list"><div class="empty">No ideas yet.</div></div>
+    </div>
+
+    <!-- ============ TRAVEL PLANNER ============ -->
+    <div id="page-travel-home" class="page">
+      <h1>Travel <em>planner</em></h1>
+      <p class="sub">Your trips, past and future. Coming soon — this section is ready to be built out.</p>
+      <div class="info-strip"><span class="isd"></span><span>Travel Planner is reserved for a future update. Add destinations, dates, packing lists and budgets per trip.</span></div>
+    </div>
+
+    <!-- ============ MEALS: MEAL PLANNER ============ -->
+    <div id="page-mealplan" class="page">
+      <h1>Meal <em>planner</em></h1>
+      <p class="sub">Breakfast, lunch, snack and dinner for each day — quick notes. For dinner ideas with ingredients and grocery lists, switch to the Dinner Planner tab.</p>
+      <div class="card" style="overflow-x:auto"><div class="mp-grid" id="mealplan-grid" style="min-width:700px"></div></div>
+    </div>
+
+    <!-- ============ MEALS: DINNER PLANNER (full) ============ -->
+    <div id="page-dp-setup" class="page">
+      <h1>Week <em>setup</em></h1>
+      <p class="sub">Set each day's difficulty based on how busy the week looks, then generate your plan. Easy days get quick meals, involved days leave room for something more ambitious.</p>
+      <div id="day-grid" class="day-grid"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+        <button class="btn btn-p" onclick="generatePlan()">↻ Generate week</button>
+        <button class="btn" onclick="resetDiffs()">Reset to medium</button>
+      </div>
+      <div class="info-strip"><span class="isd"></span><span>Best done on Sundays — set difficulty for the week ahead, generate, then head to Grocery List in the Dinner Planner tab.</span></div>
+    </div>
+    <div id="page-dp-plan" class="page">
+      <h1>This <em>week</em></h1>
+      <p class="sub">Tap any meal to see what's in it. If it doesn't feel right for the day, hit ↻ to swap it out.</p>
+      <div id="plan-content"><div class="empty">No plan yet — head to Week setup to generate one.</div></div>
+    </div>
+    <div id="page-dp-grocery" class="page">
+      <h1>Dinner <em>grocery list</em></h1>
+      <p class="sub">Everything needed for the week's dinners. Check off what you already have, use the rest as your shopping list.</p>
+      <div id="dp-grocery-content"><div class="empty">Generate a plan first to see the grocery list.</div></div>
+    </div>
+    <div id="page-dp-thaw" class="page">
+      <h1>Thaw <em>reminders</em></h1>
+      <p class="sub">Download a calendar reminder for each meal that needs thawing. One tap adds it to your calendar.</p>
+      <div class="card" style="margin-bottom:1.25rem">
+        <div style="font-size:12px;text-transform:uppercase;letter-spacing:0.07em;color:var(--text3);font-weight:500;margin-bottom:12px">How to add to your calendar</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:12px;align-items:flex-start"><div style="width:22px;height:22px;border-radius:50%;background:var(--accent-light);border:1px solid var(--accent-border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--accent);flex-shrink:0">1</div><div style="font-size:13px;color:var(--text2);font-weight:300">Tap <strong style="font-weight:500;color:var(--text)">⬇ .ics</strong> next to the meal below.</div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start"><div style="width:22px;height:22px;border-radius:50%;background:var(--accent-light);border:1px solid var(--accent-border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--accent);flex-shrink:0">2</div><div style="font-size:13px;color:var(--text2);font-weight:300"><strong style="font-weight:500;color:var(--text)">iPhone / Mac:</strong> tap or double-click the .ics file — Calendar opens and asks to add it.</div></div>
+          <div style="display:flex;gap:12px;align-items:flex-start"><div style="width:22px;height:22px;border-radius:50%;background:var(--accent-light);border:1px solid var(--accent-border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--accent);flex-shrink:0">3</div><div style="font-size:13px;color:var(--text2);font-weight:300"><strong style="font-weight:500;color:var(--text)">Google Calendar:</strong> Settings → Import → select the file.</div></div>
+        </div>
+      </div>
+      <div id="thaw-content"><div class="empty">Generate a plan first to see thaw reminders.</div></div>
+    </div>
+    <div id="page-dp-meals" class="page">
+      <div class="sec-hdr">
+        <div><h1>All <em>meals</em></h1><p class="sub">The full rotation — every meal with ingredients and difficulty.</p></div>
+        <button class="btn btn-p" onclick="openAddMeal()" style="flex-shrink:0;margin-top:6px">+ Add meal</button>
+      </div>
+      <div style="display:flex;gap:7px;margin-bottom:1.25rem;flex-wrap:wrap">
+        <button class="btn btn-sm" onclick="filterMeals('all')" id="fb-all">All</button>
+        <button class="btn btn-sm" onclick="filterMeals('easy')" id="fb-easy">Easy</button>
+        <button class="btn btn-sm" onclick="filterMeals('medium')" id="fb-medium">Medium</button>
+        <button class="btn btn-sm" onclick="filterMeals('involved')" id="fb-involved">Involved</button>
+        <button class="btn btn-sm" onclick="filterMeals('nothaw')" id="fb-nothaw">No thaw</button>
+      </div>
+      <div id="meals-list"></div>
+    </div>
+    <div id="page-dp-guide" class="page">
+      <h1>Difficulty <em>guide</em></h1>
+      <p class="sub">How each level is defined. Adjust individual meal difficulties in All Meals.</p>
+      <div class="dcard"><div class="dcard-h"><span class="badge b-easy" style="font-size:12px;padding:4px 12px">Easy</span><span style="font-size:13px;color:var(--text3)">≤ 30 min · minimal technique</span></div><div class="dcard-b">Simple prep, mostly shelf-stable or fresh ingredients. Good for tired weeknights.</div></div>
+      <div class="dcard"><div class="dcard-h"><span class="badge b-med" style="font-size:12px;padding:4px 12px">Medium</span><span style="font-size:13px;color:var(--text3)">30–60 min · some multitasking</span></div><div class="dcard-b">Multiple components at once — protein, sauce, side. Some technique involved. Usually needs thawing.</div></div>
+      <div class="dcard"><div class="dcard-h"><span class="badge b-inv" style="font-size:12px;padding:4px 12px">Involved</span><span style="font-size:13px;color:var(--text3)">60+ min · plan ahead</span></div><div class="dcard-b">Long cook times, complex prep, or precise multi-dish timing. Best for relaxed evenings or weekends.</div></div>
+      <div class="warn-strip" style="margin-top:4px"><span>⚠</span><span><strong>Thaw flag:</strong> marked when the main protein needs to come out of the freezer the night before.</span></div>
+    </div>
+
+    <!-- ============ MEALS: GROCERY LIST (custom) ============ -->
+    <div id="page-grocery" class="page">
+      <h1>Grocery <em>list</em></h1>
+      <p class="sub">Your running shopping list, organised by category. Add items as you think of them, check them off at the store.</p>
+      <div class="add-row">
+        <input type="text" id="grocery-item-input" placeholder="Add an item..." onkeydown="if(event.key==='Enter')addGroceryItem()">
+        <select id="grocery-cat-input" style="max-width:148px">
+          <option>Produce</option><option>Dairy</option><option>Meat &amp; fish</option>
+          <option>Pantry</option><option>Frozen</option><option>Household</option><option>Other</option>
+        </select>
+        <button class="btn btn-p" onclick="addGroceryItem()">Add</button>
+      </div>
+      <div id="grocery-list-content"></div>
+    </div>
+
+    <!-- ============ FINANCE: BUDGET ============ -->
+    <div id="page-budget" class="page">
+      <h1>Monthly <em>budget</em></h1>
+      <p class="sub">Set your monthly allocation for each pocket here. These values feed directly into the Pockets tab as the "Monthly top-up" — no double entry.</p>
+      <div class="fin-grid">
+        <div>
+          <div class="card">
+            <h2 class="sec-title" style="margin-bottom:14px">Income</h2>
+            <div class="fin-row">
+              <div><div class="fname">Monthly income</div><div class="fcat">Net, after tax</div></div>
+              <input type="number" class="fin-input" id="fin-income" placeholder="0" oninput="renderFinance()">
+              <div></div>
+            </div>
+          </div>
+          <div class="card">
+            <h2 class="sec-title" style="margin-bottom:4px">Pocket allocations</h2>
+            <p style="font-size:12px;color:var(--text3);margin-bottom:14px;font-weight:300">Each amount here = monthly top-up on that pocket. Change it once and both places update.</p>
+            <div id="fin-expense-rows"></div>
+            <div class="add-row" style="margin-top:14px;margin-bottom:0">
+              <input type="text" id="fin-new-name" placeholder="Pocket name..." onkeydown="if(event.key==='Enter')addExpenseRow()">
+              <button class="btn btn-sm btn-p" onclick="addExpenseRow()">+ Add</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <h2 class="sec-title" style="margin-bottom:14px">Summary</h2>
+            <div style="font-size:12px;color:var(--text3);margin-bottom:2px">Income</div>
+            <div class="ov-stat" id="fin-total-income" style="margin-bottom:14px">€0</div>
+            <div style="font-size:12px;color:var(--text3);margin-bottom:2px">Total allocated</div>
+            <div class="ov-stat" id="fin-total-expenses" style="margin-bottom:14px">€0</div>
+            <div class="fin-total"><span>Unallocated</span><span id="fin-balance">€0</span></div>
+            <div class="bar-track"><div class="bar-fill" id="fin-bar" style="width:0%"></div></div>
+            <div style="font-size:11px;color:var(--text3);margin-top:6px" id="fin-bar-note"></div>
+          </div>
+          <div class="card">
+            <h2 class="sec-title" style="margin-bottom:12px">Breakdown</h2>
+            <div id="fin-breakdown"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ FINANCE: POCKETS ============ -->
+    <div id="page-pockets" class="page">
+      <h1>Revolut <em>pockets</em></h1>
+      <p class="sub">Every pocket earns 2.50% TANB, calculated daily from the date you set the balance. The site accumulates interest automatically — you just update the balance when you actually top up or withdraw.</p>
+
+      <!-- Leisure + Groceries live trackers -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:1.25rem">
+        <div class="ov-card" id="live-groceries-card">
+          <div class="ov-card-h" style="margin-bottom:10px"><span class="t">🛒 Groceries pocket</span></div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:2px">Current balance (with interest)</div>
+          <div class="ov-stat" id="live-groc-bal" style="margin-bottom:8px">€0</div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:4px">Spent this month</div>
+          <div style="font-size:20px;font-family:'Parkinsans',sans-serif;font-weight:600;color:var(--amber)" id="live-groc-spent">€0</div>
+          <div class="bar-track" style="margin-top:10px"><div class="bar-fill" id="live-groc-bar" style="width:0%;background:var(--sage)"></div></div>
+          <div style="font-size:11px;color:var(--text3);margin-top:5px" id="live-groc-note"></div>
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-sm" onclick="openSpendModal('groceries')">+ Log spend</button>
+            <button class="btn btn-sm" onclick="resetMonthlySpend('groceries')">Reset month</button>
+          </div>
+        </div>
+        <div class="ov-card" id="live-leisure-card">
+          <div class="ov-card-h" style="margin-bottom:10px"><span class="t">🎉 Leisure pocket</span></div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:2px">Current balance (with interest)</div>
+          <div class="ov-stat" id="live-leis-bal" style="margin-bottom:8px">€0</div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:4px">Spent this month</div>
+          <div style="font-size:20px;font-family:'Parkinsans',sans-serif;font-weight:600;color:var(--amber)" id="live-leis-spent">€0</div>
+          <div class="bar-track" style="margin-top:10px"><div class="bar-fill" id="live-leis-bar" style="width:0%;background:var(--plum)"></div></div>
+          <div style="font-size:11px;color:var(--text3);margin-top:5px" id="live-leis-note"></div>
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-sm" onclick="openSpendModal('leisure')">+ Log spend</button>
+            <button class="btn btn-sm" onclick="resetMonthlySpend('leisure')">Reset month</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- All pockets list -->
+      <div class="card">
+        <div class="sec-hdr" style="margin-bottom:4px">
+          <h2 class="sec-title">All pockets</h2>
+          <button class="btn btn-sm btn-p" onclick="openPocketModal()">+ Add pocket</button>
+        </div>
+        <p style="font-size:12px;color:var(--text3);margin-bottom:16px;font-weight:300">Update balance whenever you top up or withdraw. Interest accrues automatically at 2.50% TANB from the date of the last balance update.</p>
+        <div id="pockets-list"></div>
+      </div>
+
+      <!-- Current accounts -->
+      <div class="card">
+        <div class="sec-hdr" style="margin-bottom:4px">
+          <h2 class="sec-title">Current accounts</h2>
+        </div>
+        <p style="font-size:12px;color:var(--text3);margin-bottom:16px;font-weight:300">No interest — money here is in transit (received → immediately allocated to a pocket or spent).</p>
+        <div id="cc-list"></div>
+      </div>
+    </div>
+
+    <!-- ============ FINANCE: BILLS TRACKER ============ -->
+    <div id="page-bills" class="page">
+      <h1>Bills <em>tracker</em></h1>
+      <p class="sub">Recurring bills with their due day. Check each one off when paid — the linked pocket is automatically deducted. Resets on the 31st of each month.</p>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:13px;color:var(--text2)">Reference month:</span>
+          <select id="bills-month-sel" onchange="renderBillsTracker()" style="max-width:160px">
+            <option value="0">January</option><option value="1">February</option><option value="2">March</option>
+            <option value="3">April</option><option value="4">May</option><option value="5">June</option>
+            <option value="6">July</option><option value="7">August</option><option value="8">September</option>
+            <option value="9">October</option><option value="10">November</option><option value="11">December</option>
+          </select>
+        </div>
+        <button class="btn btn-sm" onclick="goNextMonth()">Next month →</button>
+        <button class="btn btn-sm btn-p" onclick="openBillModal()">+ Add bill</button>
+      </div>
+      <div class="card" id="bills-tracker-list"></div>
+    </div>
+
+    <!-- ============ FINANCE: GOALS ============ -->
+    <div id="page-goals" class="page">
+      <h1>Savings <em>goals</em></h1>
+      <p class="sub">One-off targets you're saving towards. The €6 000 total savings goal is tracked automatically from your pockets.</p>
+      <div class="card" style="margin-bottom:1rem">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
+          <span style="font-family:'Parkinsans',sans-serif;font-weight:600;font-size:16px">💰 Total savings goal</span>
+          <span class="badge b-blue">€6 000</span>
+        </div>
+        <div class="ov-stat" id="goals-total-saved" style="margin-bottom:4px">€0</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:10px">Across all pockets · incl. interest</div>
+        <div class="bar-track"><div class="bar-fill" id="goals-total-bar" style="width:0%;background:var(--sage)"></div></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px" id="goals-total-note"></div>
+      </div>
+      <div class="card" style="margin-bottom:1rem">
+        <div class="goal-row">
+          <div class="goal-top"><span class="gname">🚗 Driving licence</span><span class="gnum" id="goal-lic-nums">€0 / €970</span></div>
+          <div class="bar-track"><div class="bar-fill" id="goal-lic-bar" style="width:0%;background:var(--accent)"></div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-end;margin-top:14px">
+          <div style="flex:1"><label>Saved so far (€)</label><input type="number" id="goal-lic-input" placeholder="0" oninput="renderGoals()"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="sec-hdr" style="margin-bottom:12px"><h2 class="sec-title">Other goals</h2></div>
+        <div id="goals-extra-list"></div>
+        <div class="add-row" style="margin-top:14px;margin-bottom:0">
+          <input type="text" id="goal-new-name" placeholder="Goal name...">
+          <input type="number" id="goal-new-target" placeholder="Target €" style="max-width:110px">
+          <button class="btn btn-sm btn-p" onclick="addExtraGoal()">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- modals -->
+    <div class="modal-overlay" id="add-modal" onclick="if(event.target===this)closeModal('add-modal')">
+      <div class="modal">
+        <button class="modal-x" onclick="closeModal('add-modal')">✕</button>
+        <div class="modal-title">Add a meal</div>
+        <p style="font-size:13px;color:var(--text3);margin-bottom:1.25rem;font-weight:300">New meals are immediately available for planning.</p>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div><label>Meal name</label><input type="text" id="new-name" placeholder="e.g. Chicken tikka masala"></div>
+          <div><label>Difficulty</label><select id="new-diff"><option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="involved">Involved</option></select></div>
+          <div><label>Needs thawing?</label><select id="new-thaw"><option value="false">No — buy fresh or from fridge</option><option value="true">Yes — needs overnight thaw</option></select></div>
+          <div><label>Ingredients (comma-separated)</label><input type="text" id="new-ings" placeholder="chicken, garlic, cream, rice..."></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:1.5rem">
+          <button class="btn btn-p" onclick="addNewMeal()">Add meal</button>
+          <button class="btn" onclick="closeModal('add-modal')">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-overlay" id="edit-modal" onclick="if(event.target===this)closeModal('edit-modal')">
+      <div class="modal">
+        <button class="modal-x" onclick="closeModal('edit-modal')">✕</button>
+        <div class="modal-title" id="edit-modal-title"></div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:1.25rem">
+          <div><label>Difficulty</label><select id="edit-diff"></select></div>
+          <div><label>Needs thawing?</label><select id="edit-thaw"><option value="false">No</option><option value="true">Yes</option></select></div>
+          <div>
+            <label>Ingredients</label>
+            <div id="edit-ing-tags" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px"></div>
+            <div style="display:flex;gap:8px"><input type="text" id="edit-ing-input" placeholder="Add ingredient..." onkeydown="if(event.key==='Enter')addIngToEdit()"><button class="btn btn-sm" onclick="addIngToEdit()">Add</button></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:1.5rem">
+          <button class="btn btn-p" onclick="saveEdit()">Save</button>
+          <button class="btn" onclick="closeModal('edit-modal')">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- POCKET modal -->
+    <div class="modal-overlay" id="pocket-modal" onclick="if(event.target===this)closeModal('pocket-modal')">
+      <div class="modal">
+        <button class="modal-x" onclick="closeModal('pocket-modal')">✕</button>
+        <div class="modal-title" id="pocket-modal-title">Add pocket</div>
+        <p style="font-size:13px;color:var(--text3);margin-bottom:1.25rem;font-weight:300">Interest calculated daily at 2.50% TANB. Monthly top-up is pulled from Monthly Budget automatically — just link it below.</p>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div><label>Pocket name</label><input type="text" id="pm-name" placeholder="e.g. Travel"></div>
+          <div><label>Current balance (€)</label><input type="number" id="pm-balance" placeholder="0.00" step="0.01"></div>
+          <div><label>Date of this balance (defaults to today)</label><input type="date" id="pm-date"></div>
+          <div><label>Link to budget line (optional — for auto top-up display)</label><input type="text" id="pm-budgetlink" placeholder="Must match the name in Monthly Budget exactly"></div>
+          <div><label>Category</label>
+            <select id="pm-cat">
+              <option value="Housing">Housing</option>
+              <option value="Utilities">Utilities</option>
+              <option value="Food">Food</option>
+              <option value="Savings">Savings</option>
+              <option value="Taxes">Taxes</option>
+              <option value="Lifestyle">Lifestyle</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div><label>Notes (optional)</label><input type="text" id="pm-notes" placeholder="e.g. Paid on 1st of each month"></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:1.5rem">
+          <button class="btn btn-p" id="pm-save-btn" onclick="savePocket()">Add pocket</button>
+          <button class="btn" onclick="closeModal('pocket-modal')">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPEND modal -->
+    <div class="modal-overlay" id="spend-modal" onclick="if(event.target===this)closeModal('spend-modal')">
+      <div class="modal">
+        <button class="modal-x" onclick="closeModal('spend-modal')">✕</button>
+        <div class="modal-title" id="spend-modal-title">Log spend</div>
+        <p style="font-size:13px;color:var(--text3);margin-bottom:1.25rem;font-weight:300">This records how much you've taken out of this pocket this month.</p>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div><label>Amount spent (€)</label><input type="number" id="sm-amount" placeholder="0.00" step="0.01"></div>
+          <div><label>Note (optional)</label><input type="text" id="sm-note" placeholder="e.g. Supermarket run"></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:1.5rem">
+          <button class="btn btn-p" onclick="saveSpend()">Log it</button>
+          <button class="btn" onclick="closeModal('spend-modal')">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BILL modal -->
+    <div class="modal-overlay" id="bill-modal" onclick="if(event.target===this)closeModal('bill-modal')">
+      <div class="modal">
+        <button class="modal-x" onclick="closeModal('bill-modal')">✕</button>
+        <div class="modal-title" id="bill-modal-title">Add recurring bill</div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:1.25rem">
+          <div><label>Bill name</label><input type="text" id="bm-name" placeholder="e.g. Rent"></div>
+          <div><label>Amount (€)</label><input type="number" id="bm-amount" placeholder="0.00" step="0.01"></div>
+          <div><label>Due day of month (1–31)</label><input type="number" id="bm-day" min="1" max="31" placeholder="e.g. 1"></div>
+          <div><label>Linked pocket ID (for auto-deduct)</label><input type="text" id="bm-pocket" placeholder="e.g. housing, energy, uzo"></div>
+          <div><label>Notes (optional)</label><input type="text" id="bm-notes" placeholder="e.g. Paid to landlord"></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:1.5rem">
+          <button class="btn btn-p" id="bm-save-btn" onclick="saveBillModal()">Add bill</button>
+          <button class="btn" onclick="closeModal('bill-modal')">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRIDAY ACTIVITY modal -->
+    <div class="modal-overlay" id="friday-activity-modal" onclick="if(event.target===this)closeModal('friday-activity-modal')">
+      <div class="modal">
+        <button class="modal-x" onclick="closeModal('friday-activity-modal')">✕</button>
+        <div class="modal-title" id="fam-title">Add Friday activity</div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:1.25rem">
+          <div><label>Activity name</label><input type="text" id="fam-name" placeholder="e.g. Wine & Paint night"></div>
+          <div><label>Category</label>
+            <select id="fam-cat">
+              <option value="Creative">🎨 Creative</option>
+              <option value="Culinary">🍳 Culinary</option>
+              <option value="Nature">🌿 Nature & DIY</option>
+              <option value="Entertainment">🎬 Entertainment</option>
+              <option value="Experience">✨ Experience</option>
+              <option value="Cozy">🛋️ Cozy night in</option>
+            </select>
+          </div>
+          <div><label>Description (optional)</label><textarea id="fam-desc" rows="2" placeholder="What's the vibe? What do you need?"></textarea></div>
+          <div><label>Suggested food & drinks</label><input type="text" id="fam-food" placeholder="e.g. charcuterie board, wine, sparkling water"></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:1.5rem">
+          <button class="btn btn-p" id="fam-save-btn" onclick="saveFridayActivity()">Add activity</button>
+          <button class="btn" onclick="closeModal('friday-activity-modal')">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLAN modal -->
+    <div class="modal-overlay" id="plan-modal" onclick="if(event.target===this)closeModal('plan-modal')">
+      <div class="modal">
+        <button class="modal-x" onclick="closeModal('plan-modal')">✕</button>
+        <div class="modal-title">Add a plan</div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:1.25rem">
+          <div><label>What's the plan?</label><input type="text" id="pm2-name" placeholder="e.g. Weekend trip to Douro Valley"></div>
+          <div><label>Category</label>
+            <select id="pm2-cat">
+              <option value="Travel">✈️ Travel</option>
+              <option value="Home">🏠 Home</option>
+              <option value="Personal">🌱 Personal</option>
+              <option value="Together">💛 Together</option>
+              <option value="Career">💼 Career</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div><label>Rough timeframe (optional)</label><input type="text" id="pm2-when" placeholder="e.g. Summer 2026, within 1 year"></div>
+          <div><label>Notes</label><textarea id="pm2-notes" rows="2" placeholder="Any details, links, ideas..."></textarea></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:1.5rem">
+          <button class="btn btn-p" onclick="savePlan()">Add plan</button>
+          <button class="btn" onclick="closeModal('plan-modal')">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUCKET modal -->
+    <div class="modal-overlay" id="bucket-modal" onclick="if(event.target===this)closeModal('bucket-modal')">
+      <div class="modal">
+        <button class="modal-x" onclick="closeModal('bucket-modal')">✕</button>
+        <div class="modal-title">Add bucket list item</div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:1.25rem">
+          <div><label>What do you want to do?</label><input type="text" id="bk-name" placeholder="e.g. See the Northern Lights"></div>
+          <div><label>Deadline or age (optional)</label><input type="text" id="bk-deadline" placeholder="e.g. Before 35, 2028"></div>
+          <div><label>Notes</label><input type="text" id="bk-notes" placeholder="Any details..."></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:1.5rem">
+          <button class="btn btn-p" onclick="saveBucketItem()">Add item</button>
+          <button class="btn" onclick="closeModal('bucket-modal')">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    </div><!-- end pages-root -->
+
+    <div class="toast" id="toast"></div>
+
+    <footer>
+      <div class="foot-l">by <span>Vic & Clara</span></div>
+      <div class="foot-r" id="foot-date"></div>
+    </footer>
+  </div>
+</div>
+
+<script>
+// ======== THEME ========
+function toggleTheme(){
+  const d=document.documentElement;
+  const isDark=d.getAttribute('data-theme')==='dark';
+  d.setAttribute('data-theme',isDark?'light':'dark');
+  document.getElementById('theme-btn').textContent=isDark?'☽ Dark':'☀ Light';
+  save('theme',isDark?'light':'dark');
+}
+function initTheme(){
+  const t=load('theme','dark');
+  document.documentElement.setAttribute('data-theme',t);
+  const btn=document.getElementById('theme-btn');
+  if(btn) btn.textContent=t==='dark'?'☀ Light':'☽ Dark';
+}
+
+// ======== LOGIN UI (called before Firebase loads) ========
+function loginToggleTheme(){
+  const d=document.documentElement;
+  const isDark=d.getAttribute('data-theme')==='dark';
+  d.setAttribute('data-theme',isDark?'light':'dark');
+  const icon=document.getElementById('login-theme-icon');
+  const lbl=document.getElementById('login-theme-lbl');
+  if(icon) icon.textContent=isDark?'☽':'☀';
+  if(lbl) lbl.textContent=isDark?'Dark':'Light';
+  save('theme',isDark?'light':'dark');
+}
+function setLoginMode(mode){
+  const regPanel=document.getElementById('login-panel-register');
+  const siPanel=document.getElementById('login-panel-signin');
+  const regBtn=document.getElementById('lmt-register');
+  const siBtn=document.getElementById('lmt-signin');
+  const errEl=document.getElementById('login-error');
+  if(errEl) errEl.style.display='none';
+  if(mode==='register'){
+    if(regPanel) regPanel.style.display='block';
+    if(siPanel)  siPanel.style.display='none';
+    if(regBtn)   regBtn.classList.add('active');
+    if(siBtn)    siBtn.classList.remove('active');
+  } else {
+    if(regPanel) regPanel.style.display='none';
+    if(siPanel)  siPanel.style.display='block';
+    if(regBtn)   regBtn.classList.remove('active');
+    if(siBtn)    siBtn.classList.add('active');
+  }
+}
+
+// ======== AVATAR MENU (available globally before module loads) ========
+function toggleAvatarMenu(){
+  const m=document.getElementById('avatar-menu');
+  if(m) m.style.display=m.style.display==='none'?'block':'none';
+}
+function syncAvatarTheme(){
+  const isDark=document.documentElement.getAttribute('data-theme')==='dark';
+  const icon=document.getElementById('am-theme-icon');
+  const lbl=document.getElementById('am-theme-lbl');
+  if(icon) icon.textContent=isDark?'☀':'☽';
+  if(lbl) lbl.textContent=isDark?'Light mode':'Dark mode';
+}
+// Stub — gets replaced when Firebase module loads
+window.handleSignOut=function(){console.warn('Firebase not loaded yet');};
+window.showInvitePartner=function(){console.warn('Firebase not loaded yet');};
+
+// ======== NAV ========
+let currentGroup='overview';
+const groupFirstPage={overview:'overview-home',daily:'weekly',meals:'mealplan',finance:'pockets',futureplans:'future-plans',travel:'travel-home'};
+
+function showGroup(group,btn){
+  currentGroup=group;
+  document.querySelectorAll('.side-group').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.nav-tabs[id^="nav-tabs-"]').forEach(el=>el.style.display='none');
+  const tabsEl=document.getElementById('nav-tabs-'+group);
+  if(tabsEl) tabsEl.style.display='flex';
+  const firstTab=tabsEl?tabsEl.querySelector('.nav-tab'):null;
+  if(firstTab){
+    tabsEl.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+    firstTab.classList.add('active');
+  }
+  const firstPage=groupFirstPage[group]||'overview-home';
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const pg=document.getElementById('page-'+firstPage);
+  if(pg) pg.classList.add('active');
+  closeSidebar();
+  refreshOverview();
+}
+
+function showPage(pageId,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const pg=document.getElementById('page-'+pageId);
+  if(pg) pg.classList.add('active');
+  const tabs=document.getElementById('nav-tabs-'+currentGroup);
+  if(tabs) tabs.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+// Meals sub-tabs wired to dinner planner pages
+function initMealsTabs(){
+  const tabsEl=document.getElementById('nav-tabs-meals');
+  if(!tabsEl) return;
+  tabsEl.innerHTML=`
+    <button class="nav-tab active" onclick="showPage('mealplan',this)">Meal Planner</button>
+    <button class="nav-tab" onclick="showMealsSub('dp-setup',this)">Dinner Planner</button>
+    <button class="nav-tab" onclick="showPage('grocery',this)">Grocery List</button>`;
+}
+function showMealsSub(sub,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+sub).classList.add('active');
+  const tabs=document.getElementById('nav-tabs-meals');
+  if(tabs) tabs.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  // inject sub-tabs for dinner planner
+  if(sub.startsWith('dp-')){
+    injectDpSubnav(sub,btn);
+  }
+}
+let dpSubnavInjected=false;
+function injectDpSubnav(active,callerBtn){
+  const tabsEl=document.getElementById('nav-tabs-meals');
+  if(!tabsEl) return;
+  tabsEl.innerHTML=`
+    <button class="nav-tab" onclick="showPage('mealplan',this);dpSubnavInjected=false;initMealsTabs();">Meal Planner</button>
+    <button class="nav-tab active" onclick="void 0">Dinner Planner ▾</button>
+    <button class="nav-tab" onclick="showPage('dp-setup',this)" style="font-size:12px;padding-left:6px">Setup</button>
+    <button class="nav-tab" onclick="showPage('dp-plan',this)" style="font-size:12px">This week</button>
+    <button class="nav-tab" onclick="showPage('dp-grocery',this)" style="font-size:12px">Groceries</button>
+    <button class="nav-tab" onclick="showPage('dp-thaw',this)" style="font-size:12px">Thaw</button>
+    <button class="nav-tab" onclick="showPage('dp-meals',this)" style="font-size:12px">All meals</button>
+    <button class="nav-tab" onclick="showPage('dp-guide',this)" style="font-size:12px">Guide</button>
+    <button class="nav-tab" onclick="showPage('grocery',this);initMealsTabs()">Grocery List</button>`;
+  document.getElementById('page-'+active).classList.add('active');
+}
+
+function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('sidebar-overlay').classList.add('show');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebar-overlay').classList.remove('show');}
+
+// ======== CLOCK / DATES ========
+function updateClock(){
+  const now=new Date();
+  document.getElementById('nav-clock').textContent=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('foot-date').textContent=now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('ov-date-sub').textContent='Here\'s what\'s on for '+now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})+'.';
+}
+setInterval(updateClock,1000);updateClock();
+
+// ======== STORAGE (Firestore-backed, localStorage fallback) ========
+let _db=null; // set by Firebase module
+let _householdId=null; // set after auth
+let _pendingSaves={};
+let _saveDebounceTimers={};
+
+function save(k,v){
+  // Always write to memory immediately
+  try{localStorage.setItem('hb_'+k,JSON.stringify(v));}catch(e){}
+  // Debounce Firestore write (300ms)
+  if(_db&&_householdId){
+    clearTimeout(_saveDebounceTimers[k]);
+    _saveDebounceTimers[k]=setTimeout(()=>{
+      import("https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js").then(({doc,setDoc})=>{
+        setDoc(doc(_db,'households',_householdId,'data',k),{v:JSON.stringify(v)},{merge:true}).catch(()=>{});
+      });
+    },300);
+  }
+}
+function load(k,def){
+  try{const r=localStorage.getItem('hb_'+k);return r!==null?JSON.parse(r):def;}catch(e){return def;}
+}
+// Load all keys from Firestore into localStorage, then re-init UI
+async function syncFromFirestore(){
+  if(!_db||!_householdId) return;
+  const {collection,getDocs}=await import("https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js");
+  try{
+    const snap=await getDocs(collection(_db,'households',_householdId,'data'));
+    snap.forEach(d=>{try{localStorage.setItem('hb_'+d.id,d.data().v);}catch(e){}});
+    // Re-init all reactive state from fresh localStorage
+    reloadAllState();
+  }catch(e){console.warn('Firestore sync failed',e);}
+}
+function reloadAllState(){
+  finExpenses=load('fin_expenses',DEFAULT_EXPENSES);
+  pockets=load('pockets',DEFAULT_POCKETS);
+  currentAccounts=load('current_accounts',[{id:'personal',name:'Personal CC',balance:0,notes:'Transit only'},{id:'joint',name:'Joint CC',balance:0,notes:'Shared account'}]);
+  monthlySpend=load('monthly_spend',{groceries:0,leisure:0});
+  todos=load('todos',[]);
+  urgents=load('urgents',[]);
+  groceryItems=load('grocery_custom',[]);
+  bills=load('bills_list',DEFAULT_BILLS);
+  billsPaid=load('bills_paid',{});
+  extraGoals=load('extra_goals',[]);
+  fridayActivities=load('friday_activities',FRIDAY_ACTIVITIES_DEFAULT);
+  fridayThisWeek=load('friday_this_week',null);
+  fridayItems=load('friday_items',[]);
+  futurePlans=load('future_plans',[]);
+  bucketList=load('bucket_list',[]);
+  ideas=load('ideas',[]);
+  // Re-render everything
+  renderFinanceRows();renderFinance();
+  renderPockets();
+  renderTodos();renderUrgents();
+  renderGroceryList();
+  renderBillsTracker();
+  renderGoals();
+  renderFridays();
+  renderFuturePlans();renderBucketList();renderIdeas();
+  renderMealsList();renderPlan();renderDpGrocery();renderThaw();
+  initWeeklyGrid();initMealplanGrid();initDayGrid();
+  const inp=document.getElementById('goal-lic-input');if(inp)inp.value=load('goal_lic_saved','0');
+  refreshOverview();
+  // Apply household name
+  const hn=load('household_name','');
+  if(hn) applyHouseholdName(hn);
+}
+
+// ======== TOAST ========
+let toastTimer;
+function toast(msg){
+  const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2200);
+}
+
+// ======== WEEKLY PLANNER ========
+const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const PERIODS=['Morning','Afternoon','Evening'];
+function initWeeklyGrid(){
+  const grid=document.getElementById('weekly-grid');if(!grid)return;
+  const data=load('weekly_plan',{});
+  const today=new Date();
+  const dayAbbr=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const periodColors={Morning:'var(--accent)',Afternoon:'var(--amber)',Evening:'var(--plum)'};
+  let html=`<table style="width:100%;border-collapse:collapse;table-layout:fixed;background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden">`;
+  html+=`<thead><tr><th style="width:82px;padding:10px 12px;font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-weight:500;text-align:left;border-bottom:1px solid var(--border);background:var(--bg3)"></th>`;
+  DAYS.forEach((day,i)=>{
+    const d=getDateForDayIdx(i);
+    const ds=d?d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'';
+    const isToday=d&&d.toDateString()===today.toDateString();
+    html+=`<th style="padding:10px 6px;text-align:center;border-bottom:1px solid var(--border);border-left:1px solid var(--border);background:var(--bg3);${isToday?'background:var(--accent-light)':''}">
+      <div style="font-size:12px;font-weight:600;font-family:'Parkinsans',sans-serif;${isToday?'color:var(--accent)':'color:var(--text2)'}">${dayAbbr[i]}</div>
+      <div style="font-size:9px;font-weight:400;color:${isToday?'var(--accent)':'var(--text3)'};margin-top:1px">${ds}</div>
+    </th>`;
+  });
+  html+=`</tr></thead><tbody>`;
+  PERIODS.forEach((period,pi)=>{
+    const col=periodColors[period];
+    const isLast=pi===PERIODS.length-1;
+    html+=`<tr>`;
+    html+=`<td style="padding:8px 12px;vertical-align:middle;border-right:1px solid var(--border);${!isLast?'border-bottom:1px solid var(--border)':''}">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:${col};font-weight:500;white-space:nowrap">${period}</div>
+    </td>`;
+    DAYS.forEach((day,di)=>{
+      const key=day+'_'+period;
+      const val=data[key]||'';
+      const d=getDateForDayIdx(di);
+      const isToday=d&&d.toDateString()===today.toDateString();
+      html+=`<td style="padding:4px;border-left:1px solid var(--border);${!isLast?'border-bottom:1px solid var(--border)':''}${isToday?';background:rgba(79,127,212,0.05)':''}">
+        <textarea rows="3" placeholder="—" style="width:100%;min-height:64px;font-size:12px;padding:6px 7px;background:transparent;border:none;color:var(--text);font-family:'Outfit',sans-serif;resize:none;outline:none;font-weight:300" onchange="saveWeekly('${key}',this.value)">${val}</textarea>
+      </td>`;
+    });
+    html+=`</tr>`;
+  });
+  html+=`</tbody></table>`;
+  grid.innerHTML=html;
+}
+function saveWeekly(key,val){
+  const d=load('weekly_plan',{});d[key]=val;save('weekly_plan',d);
+}
+function getDateForDayIdx(idx){
+  const today=new Date();today.setHours(0,0,0,0);
+  const dow=today.getDay();
+  const diff=dow===0?-6:1-dow;
+  const mon=new Date(today);mon.setDate(today.getDate()+diff);
+  const t=new Date(mon);t.setDate(mon.getDate()+idx);return t;
+}
+
+// ======== TO-DO ========
+let todos=load('todos',[]);
+function renderTodos(){
+  const el=document.getElementById('todo-list');if(!el)return;
+  if(!todos.length){el.innerHTML='<div class="empty">No tasks yet. Add one above.</div>';return;}
+  let html='';
+  todos.forEach((t,i)=>{
+    html+=`<div class="task-row${t.done?' done':''}">
+      <input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo(${i})">
+      <div style="flex:1"><div class="task-name">${esc2(t.text)}</div></div>
+      <button class="task-del" onclick="deleteTodo(${i})">✕</button>
+    </div>`;
+  });
+  el.innerHTML=html;
+  save('todos',todos);
+  refreshOverview();
+}
+function addTodo(){
+  const inp=document.getElementById('todo-input');
+  const v=inp.value.trim();if(!v)return;
+  todos.push({text:v,done:false});inp.value='';renderTodos();toast('Task added!');
+}
+function toggleTodo(i){todos[i].done=!todos[i].done;renderTodos();}
+function deleteTodo(i){todos.splice(i,1);renderTodos();}
+
+// ======== URGENT ========
+let urgents=load('urgents',[]);
+function renderUrgents(){
+  const el=document.getElementById('urgent-list');if(!el)return;
+  if(!urgents.length){el.innerHTML='<div class="empty">All clear.</div>';return;}
+  let html='';
+  urgents.forEach((t,i)=>{
+    html+=`<div class="task-row${t.done?' done':''}" style="${!t.done?'border-left:3px solid var(--red-text);padding-left:12px':''}">
+      <input type="checkbox" ${t.done?'checked':''} onchange="toggleUrgent(${i})">
+      <div style="flex:1"><div class="task-name">${esc2(t.text)}</div></div>
+      <button class="task-del" onclick="deleteUrgent(${i})">✕</button>
+    </div>`;
+  });
+  el.innerHTML=html;
+  save('urgents',urgents);
+  refreshOverview();
+}
+function addUrgent(){
+  const inp=document.getElementById('urgent-input');
+  const v=inp.value.trim();if(!v)return;
+  urgents.push({text:v,done:false});inp.value='';renderUrgents();toast('Added to urgent!');
+}
+function toggleUrgent(i){urgents[i].done=!urgents[i].done;renderUrgents();}
+function deleteUrgent(i){urgents.splice(i,1);renderUrgents();}
+
+// ======== MEAL PLANNER (simple) ========
+const MEALS_OF_DAY=['Breakfast','Lunch','Snack','Dinner'];
+function initMealplanGrid(){
+  const grid=document.getElementById('mealplan-grid');if(!grid)return;
+  const data=load('mealplan',{});
+  const today=new Date();
+  let html=`<div class="mp-hdr"></div>`;
+  DAYS.forEach((d,i)=>{
+    const dt=getDateForDayIdx(i);
+    const ds=dt?dt.toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'';
+    const isToday=dt&&dt.toDateString()===today.toDateString();
+    html+=`<div class="mp-hdr" style="${isToday?'color:var(--accent)':''}"><div>${d.slice(0,3)}</div><div style="font-size:9px;margin-top:2px;opacity:.7">${ds}</div></div>`;
+  });
+  MEALS_OF_DAY.forEach(meal=>{
+    html+=`<div class="mp-lbl">${meal}</div>`;
+    DAYS.forEach(day=>{
+      const key=day+'_'+meal;
+      const val=data[key]||'';
+      html+=`<input type="text" placeholder="—" value="${esc2(val)}" onchange="saveMealplan('${key}',this.value)">`;
+    });
+  });
+  grid.innerHTML=html;
+}
+function saveMealplan(key,val){
+  const d=load('mealplan',{});d[key]=val;save('mealplan',d);
+}
+
+// ======== GROCERY LIST (custom) ========
+let groceryItems=load('grocery_custom',[]);
+const GCAT_COLORS={Produce:'var(--sage)',Dairy:'var(--accent)',Pantry:'var(--amber)','Meat & fish':'var(--plum)',Frozen:'#6BAEC4',Household:'var(--text3)',Other:'var(--text3)'};
+function renderGroceryList(){
+  const el=document.getElementById('grocery-list-content');if(!el)return;
+  if(!groceryItems.length){el.innerHTML='<div class="card"><div class="empty">Your list is empty — add items above.</div></div>';return;}
+  const cats={};
+  groceryItems.forEach((item,i)=>{const c=item.cat||'Other';if(!cats[c])cats[c]=[];cats[c].push({...item,i});});
+  let html='';
+  Object.keys(cats).forEach(cat=>{
+    const col=GCAT_COLORS[cat]||'var(--text3)';
+    html+=`<div class="card" style="margin-bottom:.75rem">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:${col};font-weight:500;margin-bottom:10px">${cat}</div>`;
+    cats[cat].forEach(item=>{
+      html+=`<div class="task-row${item.done?' done':''}">
+        <input type="checkbox" ${item.done?'checked':''} onchange="toggleGrocery(${item.i})">
+        <div class="task-name" style="flex:1">${esc2(item.name)}</div>
+        <button class="task-del" onclick="deleteGrocery(${item.i})">✕</button>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  el.innerHTML=html;
+  save('grocery_custom',groceryItems);
+}
+function addGroceryItem(){
+  const inp=document.getElementById('grocery-item-input');
+  const cat=document.getElementById('grocery-cat-input').value;
+  const v=inp.value.trim();if(!v)return;
+  groceryItems.push({name:v,cat,done:false});inp.value='';renderGroceryList();toast('Added to list!');
+}
+function toggleGrocery(i){groceryItems[i].done=!groceryItems[i].done;renderGroceryList();}
+function deleteGrocery(i){groceryItems.splice(i,1);renderGroceryList();}
+
+// ======== FINANCE ========
+const DEFAULT_EXPENSES=[
+  {name:'Housing (Rent)',cat:'Housing',val:''},
+  {name:'Phone plan',cat:'Utilities',val:''},
+  {name:'Energy',cat:'Utilities',val:''},
+  {name:'Groceries',cat:'Food',val:''},
+  {name:'Emergency Fund / Savings',cat:'Savings',val:''},
+  {name:'Portugal taxes',cat:'Taxes',val:''},
+  {name:'Travel',cat:'Lifestyle',val:''},
+  {name:'Clothes',cat:'Lifestyle',val:''},
+  {name:'Leisure',cat:'Lifestyle',val:''},
+  {name:'Subscriptions',cat:'Other',val:''},
+];
+let finExpenses=load('fin_expenses',DEFAULT_EXPENSES);
+function renderFinanceRows(){
+  const el=document.getElementById('fin-expense-rows');if(!el)return;
+  let html='';
+  finExpenses.forEach((exp,i)=>{
+    html+=`<div class="fin-row">
+      <div><div class="fname">${esc2(exp.name)}</div><div class="fcat">${exp.cat}</div></div>
+      <input type="number" class="fin-input" value="${exp.val}" placeholder="0" oninput="updateExpense(${i},this.value)">
+      <button class="fin-x" onclick="removeExpense(${i})" title="Remove">✕</button>
+    </div>`;
+  });
+  el.innerHTML=html;
+}
+function updateExpense(i,v){finExpenses[i].val=v;save('fin_expenses',finExpenses);renderFinance();}
+function removeExpense(i){finExpenses.splice(i,1);save('fin_expenses',finExpenses);renderFinanceRows();renderFinance();}
+function addExpenseRow(){
+  const inp=document.getElementById('fin-new-name');
+  const n=inp.value.trim();if(!n)return;
+  finExpenses.push({name:n,cat:'Other',val:''});
+  save('fin_expenses',finExpenses);inp.value='';renderFinanceRows();renderFinance();toast('Expense added!');
+}
+function renderFinance(){
+  const income=parseFloat(document.getElementById('fin-income')?.value||0)||0;
+  const total=finExpenses.reduce((s,e)=>s+(parseFloat(e.val)||0),0);
+  const bal=income-total;
+  const fmt=v=>'€'+v.toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});
+  if(document.getElementById('fin-total-income')) document.getElementById('fin-total-income').textContent=fmt(income);
+  if(document.getElementById('fin-total-expenses')) document.getElementById('fin-total-expenses').textContent=fmt(total);
+  const balEl=document.getElementById('fin-balance');
+  if(balEl){balEl.textContent=fmt(bal);balEl.className=bal>=0?'bal-pos':'bal-neg';}
+  const pct=income>0?Math.min((total/income)*100,100):0;
+  const barEl=document.getElementById('fin-bar');
+  if(barEl){barEl.style.width=pct+'%';barEl.style.background=pct>90?'var(--red-text)':pct>75?'var(--amber)':'var(--sage)';}
+  const noteEl=document.getElementById('fin-bar-note');
+  if(noteEl) noteEl.textContent=income>0?Math.round(pct)+'% of income spent':'Enter income to see percentage';
+  // breakdown
+  const bd=document.getElementById('fin-breakdown');
+  if(bd && income>0){
+    const cats={};
+    finExpenses.forEach(e=>{const v=parseFloat(e.val)||0;if(!v)return;if(!cats[e.cat])cats[e.cat]=0;cats[e.cat]+=v;});
+    const catColors={Housing:'var(--accent)',Utilities:'var(--plum)',Food:'var(--sage)',Savings:'var(--amber)',Taxes:'var(--red-text)',Lifestyle:'#6BAEC4',Other:'var(--text3)'};
+    let html='';
+    Object.entries(cats).sort((a,b)=>b[1]-a[1]).forEach(([cat,v])=>{
+      const p=income>0?Math.min((v/income)*100,100):0;
+      const col=catColors[cat]||'var(--text3)';
+      html+=`<div style="margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span style="color:${col};font-weight:500">${cat}</span><span style="color:var(--text3)">${fmt(v)}</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${col}"></div></div>
+      </div>`;
+    });
+    bd.innerHTML=html||'<div style="font-size:13px;color:var(--text3)">Enter expense values to see breakdown.</div>';
+  } else if(bd) bd.innerHTML='<div style="font-size:13px;color:var(--text3)">Enter income and expenses to see breakdown.</div>';
+  // save income
+  save('fin_income',document.getElementById('fin-income')?.value||'');
+  refreshOverview();
+}
+function initFinance(){
+  const incEl=document.getElementById('fin-income');
+  if(incEl) incEl.value=load('fin_income','');
+  renderFinanceRows();renderFinance();
+}
+
+// ======== BILLS TRACKER ========
+const TODAY_STR=new Date().toISOString().split('T')[0];
+const DEFAULT_BILLS=[
+  {id:'housing',name:'Housing (Rent)',amount:0,day:1,pocketId:'housing',notes:''},
+  {id:'phone',name:'Phone plan',amount:0,day:0,pocketId:'phone',notes:''},
+  {id:'energy',name:'Energy',amount:0,day:0,pocketId:'energy',notes:'Variable each month'},
+];
+let bills=load('bills_list',DEFAULT_BILLS);
+let billsPaid=load('bills_paid',{});
+let billsLastReset=load('bills_last_reset','');
+let editBillId=null;
+
+function todayDay(){return new Date().getDate();}
+function todayMonth(){return new Date().getMonth();}
+function todayYear(){return new Date().getFullYear();}
+
+function checkBillsAutoReset(){
+  const now=new Date();
+  const key=now.getFullYear()+'-'+now.getMonth();
+  if(now.getDate()===31&&billsLastReset!==key){
+    billsPaid={};billsLastReset=key;
+    save('bills_paid',billsPaid);save('bills_last_reset',billsLastReset);
+    toast('Bills auto-reset for new month');
+  }
+}
+
+function daysUntilDue(day){
+  if(!day) return null;
+  const now=new Date();now.setHours(0,0,0,0);
+  let due=new Date(now.getFullYear(),now.getMonth(),day);
+  if(due<now) due=new Date(now.getFullYear(),now.getMonth()+1,day);
+  return Math.round((due-now)/(1000*60*60*24));
+}
+
+function goNextMonth(){
+  // Reset paid status
+  billsPaid={};save('bills_paid',billsPaid);
+  // Advance month selector
+  const sel=document.getElementById('bills-month-sel');
+  if(sel){
+    let m=parseInt(sel.value);
+    sel.value=(m+1)%12;
+  }
+  renderBillsTracker();toast('Advanced to next month — bills reset!');
+}
+
+function initBillsMonthSel(){
+  const sel=document.getElementById('bills-month-sel');
+  if(sel) sel.value=new Date().getMonth();
+}
+
+function renderBillsTracker(){
+  const el=document.getElementById('bills-tracker-list');if(!el)return;
+  if(!bills.length){el.innerHTML='<div class="empty">No bills yet — add one above.</div>';return;}
+  const sel=document.getElementById('bills-month-sel');
+  const refMonth=sel?parseInt(sel.value):new Date().getMonth();
+  const monthName=['January','February','March','April','May','June','July','August','September','October','November','December'][refMonth];
+  let html=`<div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);font-weight:500;margin-bottom:12px">Payments for ${monthName}</div>`;
+  const sorted=[...bills].sort((a,b)=>(a.day||99)-(b.day||99));
+  sorted.forEach(bill=>{
+    const paid=!!billsPaid[bill.id];
+    const dtu=bill.day?daysUntilDue(bill.day):null;
+    const isToday=dtu===0;
+    const isSoon=dtu!==null&&dtu>0&&dtu<=7;
+    let urgBadge='';
+    if(!paid&&isToday) urgBadge=`<span class="badge b-inv">Due today!</span>`;
+    else if(!paid&&isSoon) urgBadge=`<span class="badge b-med">${dtu}d left</span>`;
+    html+=`<div class="task-row" style="${isToday&&!paid?'border-left:3px solid var(--red-text);padding-left:12px':''}">
+      <input type="checkbox" ${paid?'checked':''} onchange="toggleBill('${bill.id}',this.checked)">
+      <div style="flex:1;min-width:0">
+        <div class="task-name" style="${paid?'text-decoration:line-through;color:var(--text3)':''}">${esc2(bill.name)}</div>
+        <div class="task-meta">
+          ${bill.amount?`<span>€${parseFloat(bill.amount).toFixed(2)}</span>`:'<span>Amount TBC</span>'}
+          ${bill.day?`<span>Due: ${bill.day}${ordinal(bill.day)} of the month</span>`:'<span>No due date set</span>'}
+          ${bill.pocketId?`<span style="color:var(--accent)">→ deducts from ${bill.pocketId}</span>`:''}
+          ${bill.notes?`<span style="font-style:italic">${esc2(bill.notes)}</span>`:''}
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+        ${urgBadge}
+        ${paid?'<span class="badge b-easy">Paid</span>':'<span class="badge b-grey">Pending</span>'}
+        <button class="btn btn-sm" onclick="openBillModal('${bill.id}')" style="padding:3px 8px;font-size:11px">Edit</button>
+        <button class="task-del" onclick="deleteBill('${bill.id}')">✕</button>
+      </div>
+    </div>`;
+  });
+  el.innerHTML=html;
+  renderBillsOverviewAlerts();
+}
+function ordinal(n){const s=['th','st','nd','rd'];const v=n%100;return n+(s[(v-20)%10]||s[v]||s[0]);}
+function toggleBill(id,checked){
+  billsPaid[id]=checked;save('bills_paid',billsPaid);
+  // Deduct from linked pocket when marking as paid
+  if(checked){
+    const bill=bills.find(b=>b.id===id);
+    if(bill&&bill.pocketId&&bill.amount){
+      const pocket=pockets.find(p=>p.id===bill.pocketId);
+      if(pocket){
+        const currentBal=calcPocketBalance(pocket);
+        pocket.balance=Math.max(0,currentBal-bill.amount);
+        pocket.balanceDate=new Date().toISOString().split('T')[0];
+        save('pockets',pockets);
+        toast(`Paid! Deducted €${bill.amount.toFixed(2)} from ${pocket.name}`);
+      } else { toast('Marked as paid!'); }
+    } else { toast('Marked as paid!'); }
+  } else { toast('Marked as pending'); }
+  renderBillsTracker();
+  if(document.getElementById('pockets-list')) renderPockets();
+  refreshOverview();
+}
+function resetBills(){billsPaid={};save('bills_paid',billsPaid);renderBillsTracker();toast('Bills reset');}
+
+function openBillModal(editId){
+  editBillId=editId||null;
+  const existing=editId?bills.find(b=>b.id===editId):null;
+  document.getElementById('bill-modal-title').textContent=existing?'Edit bill: '+existing.name:'Add recurring bill';
+  document.getElementById('bm-save-btn').textContent=existing?'Save changes':'Add bill';
+  document.getElementById('bm-name').value=existing?existing.name:'';
+  document.getElementById('bm-amount').value=existing?(existing.amount||''):'';
+  document.getElementById('bm-day').value=existing?(existing.day||''):'';
+  document.getElementById('bm-pocket').value=existing?(existing.pocketId||''):'';
+  document.getElementById('bm-notes').value=existing?(existing.notes||''):'';
+  openModal('bill-modal');
+}
+function saveBillModal(){
+  const name=document.getElementById('bm-name').value.trim();if(!name)return;
+  const data={
+    id:editBillId||(name.toLowerCase().replace(/\s+/g,'-')+'-'+Date.now()),
+    name,
+    amount:parseFloat(document.getElementById('bm-amount').value)||0,
+    day:parseInt(document.getElementById('bm-day').value)||0,
+    pocketId:document.getElementById('bm-pocket').value.trim(),
+    notes:document.getElementById('bm-notes').value.trim(),
+  };
+  if(editBillId){const idx=bills.findIndex(b=>b.id===editBillId);if(idx>-1)bills[idx]=data;}
+  else bills.push(data);
+  save('bills_list',bills);closeModal('bill-modal');renderBillsTracker();toast(editBillId?'Bill updated!':'Bill added!');editBillId=null;
+}
+function deleteBill(id){if(!confirm('Remove this bill?'))return;bills=bills.filter(b=>b.id!==id);save('bills_list',bills);renderBillsTracker();toast('Bill removed');}
+
+function renderBillsOverviewAlerts(){
+  const upcoming=bills.filter(b=>{
+    if(billsPaid[b.id]||!b.day) return false;
+    const dtu=daysUntilDue(b.day);
+    return dtu!==null&&dtu<=7;
+  }).sort((a,b)=>daysUntilDue(a.day)-daysUntilDue(b.day));
+  window._upcomingBills=upcoming;
+}
+
+// ======== SAVINGS GOALS ========
+let extraGoals=load('extra_goals',[]);
+function renderGoals(){
+  const amt=parseFloat(document.getElementById('goal-lic-input')?.value||load('goal_lic_saved','0')||0)||0;
+  const pct=Math.min((amt/970)*100,100);
+  if(document.getElementById('goal-lic-nums')) document.getElementById('goal-lic-nums').textContent='€'+amt.toFixed(2)+' / €970';
+  if(document.getElementById('goal-lic-bar')) document.getElementById('goal-lic-bar').style.width=pct+'%';
+  // total savings from pockets
+  const totalSavings=pockets.reduce((s,p)=>s+calcPocketBalance(p),0);
+  const savPct=Math.min((totalSavings/6000)*100,100);
+  if(document.getElementById('goals-total-saved')) document.getElementById('goals-total-saved').textContent='€'+totalSavings.toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});
+  if(document.getElementById('goals-total-bar')) document.getElementById('goals-total-bar').style.width=savPct+'%';
+  if(document.getElementById('goals-total-note')) document.getElementById('goals-total-note').textContent=Math.round(savPct)+'% of €6 000 goal'+(totalSavings>=6000?' — 🎉 goal reached!':'');
+  // extra goals
+  const el=document.getElementById('goals-extra-list');if(!el)return;
+  if(!extraGoals.length){el.innerHTML='<div class="empty" style="padding:.5rem 0">No extra goals yet.</div>';return;}
+  let html='';
+  extraGoals.forEach((g,i)=>{
+    const p=g.target>0?Math.min((g.saved/g.target)*100,100):0;
+    html+=`<div style="margin-bottom:1.1rem">
+      <div class="goal-top"><span class="gname">${esc2(g.name)}</span><span class="gnum">€${g.saved.toFixed(2)} / €${g.target.toFixed(2)}</span></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${p}%;background:var(--plum)"></div></div>
+      <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+        <input type="number" value="${g.saved}" placeholder="0" style="max-width:110px" oninput="updateExtraGoal(${i},this.value)">
+        <button class="btn btn-sm btn-del" onclick="deleteExtraGoal(${i})">Remove</button>
+      </div>
+    </div>`;
+  });
+  el.innerHTML=html;
+  save('goal_lic_saved',document.getElementById('goal-lic-input')?.value||'0');
+  save('extra_goals',extraGoals);
+  refreshOverview();
+}
+function addExtraGoal(){
+  const name=document.getElementById('goal-new-name').value.trim();
+  const target=parseFloat(document.getElementById('goal-new-target').value)||0;
+  if(!name||!target)return;
+  extraGoals.push({name,target,saved:0});
+  document.getElementById('goal-new-name').value='';document.getElementById('goal-new-target').value='';
+  renderGoals();toast('Goal added!');
+}
+function updateExtraGoal(i,v){extraGoals[i].saved=parseFloat(v)||0;renderGoals();}
+function deleteExtraGoal(i){extraGoals.splice(i,1);renderGoals();}
+function initGoals(){
+  const inp=document.getElementById('goal-lic-input');
+  if(inp) inp.value=load('goal_lic_saved','0');
+  renderGoals();
+}
+
+// ======== POCKETS SYSTEM ========
+const TANB_ANNUAL=0.025;
+const _today=new Date().toISOString().split('T')[0];
+const DEFAULT_POCKETS=[
+  {id:'housing',name:'Housing (Rent)',cat:'Housing',balance:0,balanceDate:'',budgetLink:'Housing (Rent)',notes:''},
+  {id:'phone',name:'Phone plan',cat:'Utilities',balance:0,balanceDate:'',budgetLink:'Phone plan',notes:''},
+  {id:'energy',name:'Energy',cat:'Utilities',balance:0,balanceDate:'',budgetLink:'Energy',notes:''},
+  {id:'groceries',name:'Groceries',cat:'Food',balance:0,balanceDate:'',budgetLink:'Groceries',notes:'Live tracker'},
+  {id:'emergency-fund',name:'Emergency Fund',cat:'Savings',balance:0,balanceDate:'',budgetLink:'Emergency Fund / Savings',notes:''},
+  {id:'tax-deductions',name:'Portugal taxes',cat:'Taxes',balance:0,balanceDate:'',budgetLink:'Portugal taxes',notes:''},
+  {id:'travel',name:'Travel',cat:'Lifestyle',balance:0,balanceDate:'',budgetLink:'Travel',notes:''},
+  {id:'clothes',name:'Clothes',cat:'Lifestyle',balance:0,balanceDate:'',budgetLink:'Clothes',notes:''},
+  {id:'leisure',name:'Leisure',cat:'Lifestyle',balance:0,balanceDate:'',budgetLink:'Leisure',notes:'Live tracker'},
+  {id:'subscriptions',name:'Subscriptions',cat:'Other',balance:0,balanceDate:'',budgetLink:'Subscriptions',notes:''},
+];
+let pockets=load('pockets',DEFAULT_POCKETS);
+let currentAccounts=load('current_accounts',[
+  {id:'personal',name:'Personal CC',balance:0,notes:'Transit only — no interest'},
+  {id:'joint',name:'Joint CC',balance:0,notes:'Shared account — transit only'},
+]);
+let monthlySpend=load('monthly_spend',{groceries:0,leisure:0});
+let spendTarget='groceries';
+let editPocketId=null;
+
+function getPocketTopup(pocket){
+  if(!pocket.budgetLink) return 0;
+  const exp=finExpenses.find(e=>e.name===pocket.budgetLink);
+  return exp?parseFloat(exp.val)||0:0;
+}
+function calcPocketBalance(pocket){
+  if(!pocket.balance||!pocket.balanceDate) return pocket.balance||0;
+  const start=new Date(pocket.balanceDate);
+  const now=new Date();
+  const days=Math.max(0,(now-start)/(1000*60*60*24));
+  const dailyRate=TANB_ANNUAL/365;
+  return pocket.balance*Math.pow(1+dailyRate,days);
+}
+function calcInterestEarned(pocket){
+  return calcPocketBalance(pocket)-(pocket.balance||0);
+}
+function fmtEur(v){return '€'+v.toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});}
+
+function renderPockets(){
+  const el=document.getElementById('pockets-list');if(!el)return;
+  if(!pockets.length){el.innerHTML='<div class="empty">No pockets yet. Add one above.</div>';return;}
+  const catColors={Housing:'var(--accent)',Utilities:'var(--plum)',Food:'var(--sage)',Savings:'var(--amber)',Taxes:'var(--red-text)',Lifestyle:'#6BAEC4',Other:'var(--text3)'};
+  let html='';
+  pockets.forEach((p,i)=>{
+    const bal=calcPocketBalance(p);
+    const interest=calcInterestEarned(p);
+    const topup=getPocketTopup(p);
+    const col=catColors[p.cat]||'var(--text3)';
+    const hasDate=!!p.balanceDate;
+    html+=`<div style="padding:13px 0;border-bottom:1px solid var(--border)">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;flex-wrap:wrap">
+            <span style="font-family:'Parkinsans',sans-serif;font-weight:600;font-size:14px">${esc2(p.name)}</span>
+            <span style="font-size:10px;color:${col};background:${col}22;border:1px solid ${col}44;padding:1px 7px;border-radius:99px;font-weight:500">${p.cat}</span>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:4px;flex-wrap:wrap">
+            <span style="font-family:'Parkinsans',sans-serif;font-size:20px;font-weight:600">${fmtEur(bal)}</span>
+            ${hasDate&&interest>0.005?`<span style="font-size:11px;color:var(--sage)">+${fmtEur(interest)} interest</span>`:''}
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <div style="font-size:11px;color:var(--text3)">Base: ${fmtEur(p.balance||0)}</div>
+            ${topup?`<div style="font-size:11px;color:var(--accent)">+${fmtEur(topup)}/mo ← from budget</div>`:''}
+            ${hasDate?`<div style="font-size:11px;color:var(--text3)">Since ${new Date(p.balanceDate).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</div>`:''}
+            ${p.notes?`<div style="font-size:11px;color:var(--text3);font-style:italic">${esc2(p.notes)}</div>`:''}
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0">
+          <button class="btn btn-sm" onclick="editPocket('${p.id}')">Edit</button>
+          <button class="btn btn-sm btn-del" onclick="deletePocket('${p.id}')">Remove</button>
+        </div>
+      </div>
+    </div>`;
+  });
+  el.innerHTML=html;
+  renderCurrentAccounts();
+  renderLivePocketCards();
+  updatePocketsGoal();
+}
+
+function renderCurrentAccounts(){
+  const el=document.getElementById('cc-list');if(!el)return;
+  let html='';
+  currentAccounts.forEach((acc,i)=>{
+    html+=`<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);gap:12px">
+      <div style="flex:1">
+        <div style="font-family:'Parkinsans',sans-serif;font-weight:600;font-size:14px;margin-bottom:6px">${esc2(acc.name)}</div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <input type="number" value="${acc.balance||''}" placeholder="Current balance €" style="max-width:160px" oninput="updateCCBalance(${i},this.value)">
+          ${acc.notes?`<span style="font-size:11px;color:var(--text3);font-style:italic">${esc2(acc.notes)}</span>`:''}
+        </div>
+      </div>
+      <div style="font-family:'Parkinsans',sans-serif;font-size:22px;font-weight:600">${fmtEur(acc.balance||0)}</div>
+    </div>`;
+  });
+  el.innerHTML=html;
+}
+function updateCCBalance(i,v){currentAccounts[i].balance=parseFloat(v)||0;save('current_accounts',currentAccounts);}
+
+function renderLivePocketCards(){
+  const grocPocket=pockets.find(p=>p.id==='groceries');
+  const leisPocket=pockets.find(p=>p.id==='leisure');
+  const budget_groc=finExpenses.find(e=>e.name==='Groceries');
+  const budget_leis=finExpenses.find(e=>e.name==='Leisure');
+  // Groceries
+  if(grocPocket){
+    const bal=calcPocketBalance(grocPocket);
+    const spent=monthlySpend.groceries||0;
+    const budg=parseFloat(budget_groc?.val||0)||0;
+    const pct=budg>0?Math.min((spent/budg)*100,100):0;
+    if(document.getElementById('live-groc-bal')) document.getElementById('live-groc-bal').textContent=fmtEur(bal);
+    if(document.getElementById('live-groc-spent')) document.getElementById('live-groc-spent').textContent=fmtEur(spent);
+    if(document.getElementById('live-groc-bar')) document.getElementById('live-groc-bar').style.width=pct+'%';
+    const gnEl=document.getElementById('live-groc-note');
+    if(gnEl) gnEl.textContent=budg?Math.round(pct)+'% of '+fmtEur(budg)+' budget used':'Set a budget in Monthly Budget to track usage.';
+  }
+  // Leisure
+  if(leisPocket){
+    const bal=calcPocketBalance(leisPocket);
+    const spent=monthlySpend.leisure||0;
+    const budg=parseFloat(budget_leis?.val||0)||0;
+    const pct=budg>0?Math.min((spent/budg)*100,100):0;
+    if(document.getElementById('live-leis-bal')) document.getElementById('live-leis-bal').textContent=fmtEur(bal);
+    if(document.getElementById('live-leis-spent')) document.getElementById('live-leis-spent').textContent=fmtEur(spent);
+    if(document.getElementById('live-leis-bar')) document.getElementById('live-leis-bar').style.width=pct+'%';
+    const lnEl=document.getElementById('live-leis-note');
+    if(lnEl) lnEl.textContent=budg?Math.round(pct)+'% of '+fmtEur(budg)+' budget used':'Set a budget in Monthly Budget to track usage.';
+  }
+}
+
+function updatePocketsGoal(){
+  const total=pockets.reduce((s,p)=>s+calcPocketBalance(p),0);
+  const pct=Math.min((total/6000)*100,100);
+  if(document.getElementById('ov-savings-total')) document.getElementById('ov-savings-total').textContent=fmtEur(total);
+  if(document.getElementById('ov-savings-bar')) document.getElementById('ov-savings-bar').style.width=pct+'%';
+  if(document.getElementById('goals-total-saved')) document.getElementById('goals-total-saved').textContent=fmtEur(total);
+  if(document.getElementById('goals-total-bar')) document.getElementById('goals-total-bar').style.width=pct+'%';
+  if(document.getElementById('goals-total-note')) document.getElementById('goals-total-note').textContent=Math.round(pct)+'% of €6 000 goal'+(total>=6000?' — 🎉 goal reached!':'');
+}
+
+function openPocketModal(editId){
+  editPocketId=editId||null;
+  const existing=editId?pockets.find(p=>p.id===editId):null;
+  document.getElementById('pocket-modal-title').textContent=existing?'Edit pocket: '+existing.name:'Add pocket';
+  document.getElementById('pm-save-btn').textContent=existing?'Save changes':'Add pocket';
+  document.getElementById('pm-name').value=existing?existing.name:'';
+  document.getElementById('pm-balance').value=existing?(existing.balance||''):'';
+  document.getElementById('pm-date').value=existing?(existing.balanceDate||_today):_today;
+  document.getElementById('pm-budgetlink').value=existing?(existing.budgetLink||''):'';
+  document.getElementById('pm-cat').value=existing?(existing.cat||'Other'):'Other';
+  document.getElementById('pm-notes').value=existing?(existing.notes||''):'';
+  openModal('pocket-modal');
+}
+function editPocket(id){openPocketModal(id);}
+function savePocket(){
+  const name=document.getElementById('pm-name').value.trim();
+  if(!name)return;
+  const data={
+    id:editPocketId||(name.toLowerCase().replace(/\s+/g,'-')+'-'+Date.now()),
+    name,
+    balance:parseFloat(document.getElementById('pm-balance').value)||0,
+    balanceDate:document.getElementById('pm-date').value||_today,
+    budgetLink:document.getElementById('pm-budgetlink').value.trim(),
+    cat:document.getElementById('pm-cat').value,
+    notes:document.getElementById('pm-notes').value.trim(),
+  };
+  if(editPocketId){
+    const idx=pockets.findIndex(p=>p.id===editPocketId);
+    if(idx>-1) pockets[idx]=data;
+  } else {
+    pockets.push(data);
+  }
+  save('pockets',pockets);closeModal('pocket-modal');renderPockets();renderFinance();refreshOverview();toast(editPocketId?'Pocket updated!':'Pocket added!');
+  editPocketId=null;
+}
+function deletePocket(id){
+  if(!confirm('Remove this pocket?'))return;
+  pockets=pockets.filter(p=>p.id!==id);
+  save('pockets',pockets);renderPockets();refreshOverview();toast('Pocket removed');
+}
+function openSpendModal(target){
+  spendTarget=target;
+  document.getElementById('spend-modal-title').textContent='Log spend — '+(target==='groceries'?'Groceries':'Leisure');
+  document.getElementById('sm-amount').value='';
+  document.getElementById('sm-note').value='';
+  openModal('spend-modal');
+}
+function saveSpend(){
+  const amt=parseFloat(document.getElementById('sm-amount').value)||0;
+  if(!amt)return;
+  monthlySpend[spendTarget]=(monthlySpend[spendTarget]||0)+amt;
+  save('monthly_spend',monthlySpend);
+  closeModal('spend-modal');
+  // also reduce pocket balance
+  const pid=spendTarget;
+  const pocket=pockets.find(p=>p.id===pid);
+  if(pocket){
+    pocket.balance=Math.max(0,calcPocketBalance(pocket)-amt);
+    pocket.balanceDate=new Date().toISOString().split('T')[0];
+    save('pockets',pockets);
+  }
+  renderPockets();renderFinance();toast('Spend logged!');
+}
+function resetMonthlySpend(target){
+  if(!confirm('Reset '+target+' monthly spend to €0?'))return;
+  monthlySpend[target]=0;save('monthly_spend',monthlySpend);renderLivePocketCards();toast('Monthly spend reset');
+}
+function initPockets(){renderPockets();}
+
+// Interest auto-refresh every 60s
+setInterval(()=>{if(pockets.length){renderLivePocketCards();updatePocketsGoal();}},60000);
+
+// ======== OVERVIEW REFRESH ========
+function refreshOverview(){
+  // urgent
+  const urgPending=urgents.filter(t=>!t.done);
+  const ucEl=document.getElementById('ov-urgent-count');if(ucEl) ucEl.textContent=urgPending.length;
+  const ulEl=document.getElementById('ov-urgent-list');
+  if(ulEl){
+    if(!urgPending.length) ulEl.innerHTML='<div class="empty" style="padding:.5rem 0">Nothing urgent — nice.</div>';
+    else ulEl.innerHTML=urgPending.slice(0,3).map(t=>`<div class="ov-row"><div class="ov-dot" style="background:var(--red-text)"></div><span style="font-size:13px">${esc2(t.text)}</span></div>`).join('')+(urgPending.length>3?`<div style="font-size:11px;color:var(--text3);padding:5px 0">+${urgPending.length-3} more</div>`:'');
+  }
+  // todo
+  const todoPending=todos.filter(t=>!t.done);
+  const tcEl=document.getElementById('ov-todo-count');if(tcEl) tcEl.textContent=todoPending.length;
+  const tlEl=document.getElementById('ov-todo-list');
+  if(tlEl){
+    if(!todoPending.length) tlEl.innerHTML='<div class="empty" style="padding:.5rem 0">All clear.</div>';
+    else tlEl.innerHTML=todoPending.slice(0,3).map(t=>`<div class="ov-row"><div class="ov-dot" style="background:var(--accent)"></div><span style="font-size:13px">${esc2(t.text)}</span></div>`).join('')+(todoPending.length>3?`<div style="font-size:11px;color:var(--text3);padding:5px 0">+${todoPending.length-3} more</div>`:'');
+  }
+  // meals today
+  const today=new Date();
+  const todayName=DAYS[today.getDay()===0?6:today.getDay()-1];
+  const mealData=load('mealplan',{});
+  const mealsEl=document.getElementById('ov-meals-today');
+  if(mealsEl){
+    const mealIcons={Breakfast:'🌅',Lunch:'☀️',Snack:'🍎',Dinner:'🌙'};
+    let hasAny=false;
+    let html='';
+    MEALS_OF_DAY.forEach(m=>{
+      const val=mealData[todayName+'_'+m]||'';
+      if(val){hasAny=true;}
+      html+=`<div style="display:flex;align-items:flex-start;gap:10px;padding:5px 0;border-bottom:1px solid var(--border)">
+        <span style="font-size:14px;width:22px;text-align:center;flex-shrink:0;margin-top:1px">${mealIcons[m]}</span>
+        <div><div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-weight:500">${m}</div>
+        <div style="font-size:13px;${val?'':'color:var(--text3);font-weight:300'}">${val||'—'}</div></div>
+      </div>`;
+    });
+    // also show tonight's dinner from dinner planner if meal planner is empty
+    const todayDinner=weekPlan.find(p=>p.day===todayName);
+    if(!mealData[todayName+'_Dinner'] && todayDinner){
+      html=html.replace(/<div style="font-size:13px;color:var\(--text3\);font-weight:300">—<\/div>(\s*<\/div>\s*<\/div>)$/,`<div style="font-size:13px">${esc2(todayDinner.meal.name)} <span class="badge b-${todayDinner.meal.diff==='easy'?'easy':todayDinner.meal.diff==='medium'?'med':'inv'}" style="font-size:10px">${todayDinner.meal.diff}</span></div>$1`);
+      hasAny=true;
+    }
+    if(!hasAny) mealsEl.innerHTML='<div class="empty" style="padding:.5rem 0">Set up your meal plan to see today\'s meals.</div>';
+    else mealsEl.innerHTML=`<div style="font-size:11px;color:var(--accent);margin-bottom:6px;font-weight:500">${todayName}</div>`+html;
+  }
+  // balance
+  const income=parseFloat(load('fin_income','')||0)||0;
+  const total=finExpenses.reduce((s,e)=>s+(parseFloat(e.val)||0),0);
+  const bal=income-total;
+  const fmt=v=>'€'+Math.abs(v).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const balEl=document.getElementById('ov-balance');
+  if(balEl){balEl.textContent=(bal<0?'-':'')+fmt(bal);balEl.style.color=bal>=0?'var(--sage)':'var(--red-text)';}
+  const pct=income>0?Math.min((total/income)*100,100):0;
+  const barEl=document.getElementById('ov-bal-bar');
+  if(barEl){barEl.style.width=(100-pct)+'%';barEl.style.background=bal>=0?'var(--sage)':'var(--red-text)';}
+  // savings total from pockets (with interest)
+  const totalSavings=pockets.reduce((s,p)=>s+calcPocketBalance(p),0);
+  const savingsEl=document.getElementById('ov-savings-total');
+  if(savingsEl) savingsEl.textContent='€'+totalSavings.toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const savPct=Math.min((totalSavings/6000)*100,100);
+  const savBar=document.getElementById('ov-savings-bar');if(savBar) savBar.style.width=savPct+'%';
+  // driving licence goal
+  const licAmt=parseFloat(load('goal_lic_saved','0')||0)||0;
+  const licPct=Math.min((licAmt/970)*100,100);
+  const gnEl=document.getElementById('ov-goal-nums');if(gnEl) gnEl.textContent='€'+licAmt.toFixed(2)+' / €970';
+  const gbEl=document.getElementById('ov-goal-bar');if(gbEl) gbEl.style.width=licPct+'%';
+  // Friday special — show on Fridays in meals section
+  const isFriday=new Date().getDay()===5;
+  if(isFriday&&fridayThisWeek){
+    const act=fridayActivities.find(a=>a.id===fridayThisWeek);
+    if(act&&mealsEl){
+      const icon=FRIDAY_CAT_ICONS[act.cat]||'✦';
+      // Replace or append evening slot with Friday activity
+      const fridayNote=`<div style="margin-top:8px;padding:10px 12px;background:var(--plum-light);border:1px solid var(--plum-border);border-radius:8px">
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--plum);font-weight:500;margin-bottom:4px">${icon} Tonight — Special Friday</div>
+        <div style="font-size:13px;font-weight:500">${esc2(act.name)}</div>
+        ${act.food?`<div style="font-size:11px;color:var(--text3);margin-top:3px">${esc2(act.food)}</div>`:''}
+      </div>`;
+      if(mealsEl.innerHTML.includes('Set up your meal plan')){
+        mealsEl.innerHTML=fridayNote;
+      } else {
+        mealsEl.innerHTML+=fridayNote;
+      }
+    }
+  }
+  const upcoming=window._upcomingBills||[];
+  let billsAlertHtml='';
+  upcoming.forEach(b=>{
+    const dtu=daysUntilDue(b.day);
+    const isToday=dtu===0;
+    billsAlertHtml+=`<div class="${isToday?'warn-strip':'info-strip'}" style="margin-bottom:8px;${isToday?'border-color:var(--red-border);background:var(--red-light);color:var(--red-text)':''}">
+      <span style="font-size:14px">${isToday?'🔴':'🔔'}</span>
+      <span><strong>${esc2(b.name)}</strong> — ${isToday?'due today!':dtu+' day'+(dtu>1?'s':'')+' until payment'}${b.amount?' · '+fmtEur(b.amount):''}</span>
+    </div>`;
+  });
+  const billsAlertEl=document.getElementById('ov-bills-alerts');
+  if(billsAlertEl) billsAlertEl.innerHTML=billsAlertHtml;
+}
+
+// ======== MODALS ========
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+// ======== DINNER PLANNER (original logic, adapted) ========
+const DP_DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+let difficulties=load('dp_diffs',['medium','medium','medium','medium','medium','easy','easy']);
+let weekPlan=load('dp_plan',[]);
+let expandedRows=new Set();
+let currentFilter='all';
+let editIdx=null;
+let lastDeletedMeal=null,lastDeletedIdx=null;
+let nextId=load('dp_nextid',100);
+
+function initDayGrid(){
+  const el=document.getElementById('day-grid');if(!el)return;
+  let html='';
+  DP_DAYS.forEach((day,i)=>{
+    html+=`<div class="day-card">
+      <div class="day-lbl">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][i]}</div>
+      <div class="day-name">${day}</div>
+      <select onchange="setDiff(${i},this.value)">
+        <option value="easy" ${difficulties[i]==='easy'?'selected':''}>Easy</option>
+        <option value="medium" ${difficulties[i]==='medium'?'selected':''}>Medium</option>
+        <option value="involved" ${difficulties[i]==='involved'?'selected':''}>Involved</option>
+      </select>
+    </div>`;
+  });
+  el.innerHTML=html;
+}
+function setDiff(i,v){difficulties[i]=v;save('dp_diffs',difficulties);}
+function resetDiffs(){difficulties=['medium','medium','medium','medium','medium','easy','easy'];save('dp_diffs',difficulties);initDayGrid();toast('Reset to medium');}
+function getMealsForDiff(diff){
+  if(diff==='easy') return meals.filter(m=>m.diff==='easy');
+  if(diff==='involved') return meals;
+  return meals.filter(m=>m.diff==='easy'||m.diff==='medium');
+}
+function generatePlan(){
+  weekPlan=[];const used=new Set();
+  DP_DAYS.forEach((day,i)=>{
+    const pool=getMealsForDiff(difficulties[i]).filter(m=>!used.has(m.id));
+    if(!pool.length)return;
+    const meal=pool[Math.floor(Math.random()*pool.length)];
+    used.add(meal.id);
+    weekPlan.push({day,meal:JSON.parse(JSON.stringify(meal)),diff:difficulties[i]});
+  });
+  save('dp_plan',weekPlan);renderPlan();renderDpGrocery();renderThaw();toast('Week generated!');refreshOverview();
+}
+function badge(diff){const m={easy:'b-easy',medium:'b-med',involved:'b-inv'};return `<span class="badge ${m[diff]}">${diff}</span>`;}
+function renderPlan(){
+  const el=document.getElementById('plan-content');if(!el)return;
+  if(!weekPlan.length){el.innerHTML='<div class="empty">No plan yet — head to Week setup to generate one.</div>';return;}
+  let html='<div class="plan-wrap">';
+  weekPlan.forEach((p,i)=>{
+    const isOpen=expandedRows.has(i);
+    const d=getDateForDayName(p.day);
+    const ds=d?d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'';
+    const tb=p.meal.thaw?'<span class="badge b-thaw">🧊 thaw tonight</span>':'<span class="badge b-nothaw">no thaw</span>';
+    const ings=p.meal.ingredients.map(g=>`<span class="ing-pill">${g}</span>`).join('');
+    html+=`<div>
+      <div class="plan-row">
+        <div class="pcell" style="border-right:1px solid var(--border)">
+          <div class="pday">${p.day}</div><div class="pdate">${ds}</div>
+        </div>
+        <div class="pcell" style="cursor:pointer;flex:1" onclick="toggleRow(${i})">
+          <div class="pmeal">${p.meal.name} <span class="chev ${isOpen?'open':''}" id="chev-${i}">▾</span></div>
+          <div class="pbadges">${badge(p.meal.diff)} ${tb}</div>
+        </div>
+        <div class="paction"><button class="rspin" onclick="respin(${i})" title="Swap">↻</button></div>
+      </div>
+      <div class="pexpand ${isOpen?'open':''}" id="expand-${i}">
+        <div class="pexpand-inner">
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--text3);margin-bottom:7px;font-weight:500">Ingredients · ${p.meal.ingredients.length}</div>
+          <div class="ing-grid">${ings}</div>
+        </div>
+      </div>
+    </div>`;
+  });
+  html+='</div>';el.innerHTML=html;
+}
+function toggleRow(i){
+  expandedRows.has(i)?expandedRows.delete(i):expandedRows.add(i);
+  const exp=document.getElementById('expand-'+i);const chev=document.getElementById('chev-'+i);
+  if(exp) exp.classList.toggle('open',expandedRows.has(i));
+  if(chev) chev.classList.toggle('open',expandedRows.has(i));
+}
+function respin(i){
+  const used=new Set(weekPlan.map((p,j)=>j!==i?p.meal.id:null).filter(Boolean));
+  const pool=getMealsForDiff(weekPlan[i].diff).filter(m=>!used.has(m.id));
+  if(!pool.length)return;
+  weekPlan[i].meal=JSON.parse(JSON.stringify(pool[Math.floor(Math.random()*pool.length)]));
+  expandedRows.delete(i);save('dp_plan',weekPlan);renderPlan();renderDpGrocery();renderThaw();toast('Meal swapped!');refreshOverview();
+}
+const BULKY=['whole chicken','whole fish','prime rib roast','pork spare ribs','roast beef'];
+function renderDpGrocery(){
+  const el=document.getElementById('dp-grocery-content');if(!el)return;
+  if(!weekPlan.length){el.innerHTML='<div class="empty">Generate a plan first to see the grocery list.</div>';return;}
+  const all=new Set();
+  weekPlan.forEach(p=>p.meal.ingredients.forEach(i=>all.add(i.toLowerCase())));
+  const del=[],store=[];
+  [...all].sort().forEach(ing=>{if(BULKY.some(k=>ing.includes(k)))store.push(ing);else del.push(ing);});
+  let html=`<div class="gsplit">
+    <div>
+      <div class="gcol-title">🛵 Delivery <span class="badge b-blue" style="margin-left:4px">${del.length} items</span></div>
+      <div class="chips">${del.map(i=>`<span class="chip" onclick="this.classList.toggle('done')">${i}</span>`).join('')}</div>
+      <button class="btn btn-sm" style="margin-top:12px" onclick="copyGroceryList(${JSON.stringify(del)},'del')">Copy list</button>
+      <span id="copy-del" style="font-size:12px;color:var(--text3);margin-left:8px;display:none">Copied!</span>
+    </div>`;
+  if(store.length){html+=`<div>
+      <div class="gcol-title">🛒 Store run <span class="badge b-grey" style="margin-left:4px">${store.length}</span></div>
+      <div class="chips">${store.map(i=>`<span class="chip" onclick="this.classList.toggle('done')">${i}</span>`).join('')}</div>
+    </div>`;}
+  html+='</div>';el.innerHTML=html;
+}
+function copyGroceryList(items,id){
+  navigator.clipboard.writeText(items.map(i=>'• '+i).join('\n')).then(()=>{
+    const el=document.getElementById('copy-'+id);el.style.display='inline';setTimeout(()=>el.style.display='none',2000);
+  });
+}
+function renderThaw(){
+  const el=document.getElementById('thaw-content');if(!el)return;
+  if(!weekPlan.length){el.innerHTML='<div class="empty">Generate a plan first.</div>';return;}
+  const tm=weekPlan.filter(p=>p.meal.thaw);
+  if(!tm.length){el.innerHTML='<div class="card" style="text-align:center;padding:2rem;color:var(--text3);font-weight:300">No meals need thawing this week — you\'re all set.</div>';return;}
+  let html=`<div style="margin-bottom:1rem"><button class="btn btn-p" onclick="downloadAllIcs()">⬇ Download all reminders</button></div><div class="card">`;
+  tm.forEach(p=>{
+    const prev=getPrevDay(p.day);
+    const d=getDateForDayName(p.day);
+    const ds=d?d.toLocaleDateString('en-GB',{day:'numeric',month:'long'}):'';
+    html+=`<div class="trow"><div><div class="tname">${p.meal.name}</div><div class="twhen">🧊 Take out: <strong style="color:var(--text2)">${prev} evening</strong></div><div style="font-size:11px;color:var(--text3);margin-top:2px">Cooking on ${ds}</div></div><button class="btn btn-sm" onclick="downloadIcs('${esc2(p.meal.name)}','${prev}','${p.day}')">⬇ .ics</button></div>`;
+  });
+  html+='</div>';el.innerHTML=html;
+}
+function getPrevDay(day){const i=DP_DAYS.indexOf(day);return i>0?DP_DAYS[i-1]:'Sunday (previous week)';}
+function getDateForDayName(dayName){
+  const today=new Date();today.setHours(0,0,0,0);
+  const dow=today.getDay();const diff=dow===0?-6:1-dow;
+  const mon=new Date(today);mon.setDate(today.getDate()+diff);
+  const idx=DP_DAYS.indexOf(dayName);if(idx<0)return null;
+  const t=new Date(mon);t.setDate(mon.getDate()+idx);return t;
+}
+function fmtIcs(d){return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;}
+function esc2(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function makeIcs(mealName,remDay,cookDay){
+  const now=new Date();const stamp=now.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+  const uid=`thaw-${mealName.replace(/\s/g,'-')}-${Date.now()}@hb`;
+  const rd=getDateForDayName(remDay);const ds=rd?fmtIcs(rd):fmtIcs(new Date());
+  const de=rd?(()=>{const x=new Date(rd);x.setDate(x.getDate()+1);return fmtIcs(x);})():ds;
+  return `BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Me & You//EN\r\nCALSCALE:GREGORIAN\r\nMETHOD:PUBLISH\r\nBEGIN:VEVENT\r\nUID:${uid}\r\nDTSTAMP:${stamp}\r\nDTSTART;VALUE=DATE:${ds}\r\nDTEND;VALUE=DATE:${de}\r\nSUMMARY:🧊 Thaw ${mealName} tonight\r\nDESCRIPTION:Take ${mealName} out of the freezer tonight so it's ready to cook on ${cookDay}.\r\nBEGIN:VALARM\r\nTRIGGER:PT18H\r\nACTION:DISPLAY\r\nDESCRIPTION:Reminder: thaw ${mealName} for tomorrow\r\nEND:VALARM\r\nEND:VEVENT\r\nEND:VCALENDAR`;
+}
+function downloadIcs(mealName,remDay,cookDay){
+  const blob=new Blob([makeIcs(mealName,remDay,cookDay)],{type:'text/calendar'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`thaw-${mealName.replace(/\s+/g,'-').toLowerCase()}.ics`;a.click();toast('Downloading reminder');
+}
+function downloadAllIcs(){weekPlan.filter(p=>p.meal.thaw).forEach(p=>downloadIcs(p.meal.name,getPrevDay(p.day),p.day));}
+function filterMeals(f){
+  currentFilter=f;
+  document.querySelectorAll('[id^="fb-"]').forEach(b=>{b.style.fontWeight='300';b.style.borderColor='';b.style.color='';});
+  const btn=document.getElementById('fb-'+f);
+  if(btn){btn.style.fontWeight='500';btn.style.borderColor='var(--accent)';btn.style.color='var(--accent)';}
+  renderMealsList();
+}
+function renderMealsList(){
+  const el=document.getElementById('meals-list');if(!el)return;
+  let filtered=meals;
+  if(currentFilter==='easy') filtered=meals.filter(m=>m.diff==='easy');
+  else if(currentFilter==='medium') filtered=meals.filter(m=>m.diff==='medium');
+  else if(currentFilter==='involved') filtered=meals.filter(m=>m.diff==='involved');
+  else if(currentFilter==='nothaw') filtered=meals.filter(m=>!m.thaw);
+  filtered=[...filtered].sort((a,b)=>a.name.localeCompare(b.name));
+  let html='';
+  filtered.forEach(m=>{
+    const idx=meals.indexOf(m);
+    const tags=m.ingredients.map(i=>`<span class="ing-pill">${i}</span>`).join('');
+    html+=`<div class="card-sm" style="margin-bottom:10px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px">
+        <div>
+          <div style="font-family:'Parkinsans',sans-serif;font-size:17px;margin-bottom:6px;font-weight:600">${m.name}</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap">${badge(m.diff)} ${m.thaw?'<span class="badge b-thaw">thaw required</span>':'<span class="badge b-nothaw">no thaw needed</span>'}</div>
+        </div>
+        <div style="display:flex;gap:7px;flex-shrink:0">
+          <button class="btn btn-sm" onclick="openEdit(${idx})">Edit</button>
+          <button class="btn btn-sm btn-del" onclick="deleteMeal(${idx})">Remove</button>
+        </div>
+      </div>
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);margin-bottom:7px;font-weight:500">Ingredients · ${m.ingredients.length}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px">${tags}</div>
+    </div>`;
+  });
+  el.innerHTML=html||'<div class="empty">No meals match this filter.</div>';
+}
+function openEdit(idx){
+  editIdx=idx;const m=meals[idx];
+  document.getElementById('edit-modal-title').textContent=m.name;
+  document.getElementById('edit-diff').innerHTML=`<option value="easy" ${m.diff==='easy'?'selected':''}>Easy</option><option value="medium" ${m.diff==='medium'?'selected':''}>Medium</option><option value="involved" ${m.diff==='involved'?'selected':''}>Involved</option>`;
+  document.getElementById('edit-thaw').value=m.thaw?'true':'false';
+  renderEditTags(m.ingredients);openModal('edit-modal');
+}
+function renderEditTags(ings){document.getElementById('edit-ing-tags').innerHTML=ings.map((ing,i)=>`<span class="ing-tag">${ing} <span class="ing-x" onclick="removeIng(${i})">✕</span></span>`).join('');}
+function removeIng(i){meals[editIdx].ingredients.splice(i,1);renderEditTags(meals[editIdx].ingredients);}
+function addIngToEdit(){
+  const inp=document.getElementById('edit-ing-input');const v=inp.value.trim().toLowerCase();if(!v)return;
+  if(!meals[editIdx].ingredients.includes(v))meals[editIdx].ingredients.push(v);
+  inp.value='';renderEditTags(meals[editIdx].ingredients);
+}
+function saveEdit(){meals[editIdx].diff=document.getElementById('edit-diff').value;meals[editIdx].thaw=document.getElementById('edit-thaw').value==='true';closeModal('edit-modal');renderMealsList();toast('Saved!');}
+function deleteMeal(idx){
+  if(!confirm(`Remove "${meals[idx].name}" from the rotation?`))return;
+  lastDeletedMeal=JSON.parse(JSON.stringify(meals[idx]));lastDeletedIdx=idx;meals.splice(idx,1);renderMealsList();toast(`"${lastDeletedMeal.name}" removed`);
+}
+function openAddMeal(){openModal('add-modal');}
+function addNewMeal(){
+  const name=document.getElementById('new-name').value.trim();
+  if(!name){alert('Please enter a meal name.');return;}
+  const diff=document.getElementById('new-diff').value;
+  const thaw=document.getElementById('new-thaw').value==='true';
+  const ings=document.getElementById('new-ings').value.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
+  meals.push({id:nextId++,name,diff,thaw,ingredients:ings});
+  document.getElementById('new-name').value='';document.getElementById('new-ings').value='';
+  save('dp_nextid',nextId);closeModal('add-modal');renderMealsList();toast(`"${name}" added!`);
+}
+
+// ======== MEALS DATA ========
+const meals=[
+  {id:1,name:'Cheeseburger pasta',diff:'medium',thaw:true,ingredients:['ground beef','pasta','cheddar cheese','tomato sauce','onion','garlic','butter','salt','pepper','paprika']},
+  {id:2,name:'Meatloaf',diff:'medium',thaw:true,ingredients:['ground beef','breadcrumbs','eggs','ketchup','onion','garlic','worcestershire sauce','salt','pepper','olive oil']},
+  {id:3,name:'Fried chicken',diff:'involved',thaw:true,ingredients:['chicken pieces','all-purpose flour','eggs','vegetable oil','buttermilk','garlic powder','paprika','salt','pepper','cayenne']},
+  {id:4,name:'Chick-fil-a sandwiches',diff:'easy',thaw:true,ingredients:['chicken breasts','pickle juice','brioche buns','vegetable oil','powdered sugar','paprika','salt','pepper','cayenne','butter']},
+  {id:5,name:'Beef stew',diff:'involved',thaw:true,ingredients:['beef chuck','potatoes','carrots','celery','onion','garlic','beef broth','tomato paste','red wine','olive oil','thyme','bay leaves','salt','pepper','flour']},
+  {id:6,name:'Broccoli cheddar soup',diff:'easy',thaw:false,ingredients:['broccoli','cheddar cheese','heavy cream','onion','garlic','butter','all-purpose flour','chicken broth','salt','pepper','nutmeg']},
+  {id:7,name:'Grilled cheese & tomato soup',diff:'easy',thaw:false,ingredients:['sandwich bread','cheddar cheese','butter','canned crushed tomatoes','heavy cream','onion','garlic','olive oil','salt','pepper','sugar','basil']},
+  {id:8,name:'Pasta bolognese',diff:'medium',thaw:true,ingredients:['ground beef','pasta','canned tomatoes','onion','carrot','celery','garlic','red wine','olive oil','tomato paste','salt','pepper','parmesan','bay leaves','thyme']},
+  {id:9,name:'Spaghetti & meatballs',diff:'medium',thaw:true,ingredients:['ground beef','spaghetti','canned tomatoes','onion','garlic','eggs','breadcrumbs','parmesan','olive oil','salt','pepper','Italian seasoning','fresh parsley']},
+  {id:10,name:'Homemade pizza',diff:'medium',thaw:false,ingredients:['pizza dough','mozzarella','tomato sauce','olive oil','garlic','salt','sugar','yeast','all-purpose flour','toppings of choice']},
+  {id:11,name:'Seafood stew',diff:'involved',thaw:true,ingredients:['mixed seafood','potatoes','canned tomatoes','onion','garlic','fish stock','olive oil','white wine','saffron','paprika','salt','pepper','fresh parsley']},
+  {id:12,name:'Smash burgers',diff:'easy',thaw:true,ingredients:['ground beef','burger buns','cheddar cheese','onion','butter','vegetable oil','salt','pepper','mustard','ketchup','mayonnaise','pickles']},
+  {id:13,name:'British roast',diff:'involved',thaw:true,ingredients:['whole chicken or beef roast','potatoes','carrots','parsnips','onion','garlic','beef or chicken broth','all-purpose flour','butter','olive oil','rosemary','thyme','salt','pepper']},
+  {id:14,name:'Chicken casserole',diff:'medium',thaw:true,ingredients:['chicken thighs','cream of mushroom soup','chicken broth','mixed vegetables','rice','onion','garlic','butter','salt','pepper','thyme']},
+  {id:15,name:'Chicken & dumplings',diff:'medium',thaw:true,ingredients:['chicken','all-purpose flour','baking powder','milk','butter','chicken broth','carrots','celery','onion','garlic','salt','pepper','thyme']},
+  {id:16,name:'Chicken pot pie',diff:'involved',thaw:true,ingredients:['chicken','pie crust dough','peas','carrots','celery','onion','garlic','heavy cream','chicken broth','all-purpose flour','butter','salt','pepper','thyme','eggs']},
+  {id:17,name:'Ramen',diff:'medium',thaw:true,ingredients:['pork belly or chicken','ramen noodles','eggs','soy sauce','mirin','sesame oil','chicken or pork broth','garlic','ginger','bok choy','green onions','nori','chili oil']},
+  {id:18,name:'Tacos',diff:'easy',thaw:true,ingredients:['ground beef or chicken','corn or flour tortillas','cheddar cheese','salsa','sour cream','lettuce','tomato','onion','garlic','cumin','chili powder','salt','pepper','lime','vegetable oil']},
+  {id:19,name:'Nachos',diff:'easy',thaw:false,ingredients:['tortilla chips','cheddar cheese','jalapeños','sour cream','salsa','black beans','avocado','lime','cumin','salt']},
+  {id:20,name:'Chicken tikka masala',diff:'medium',thaw:true,ingredients:['chicken breasts','canned tomatoes','heavy cream','onion','garlic','ginger','butter','vegetable oil','garam masala','cumin','coriander','turmeric','paprika','salt','yogurt']},
+  {id:21,name:'Steaks & wedges',diff:'medium',thaw:true,ingredients:['steaks','potatoes','garlic','rosemary','butter','olive oil','salt','pepper','thyme']},
+  {id:22,name:'Bitoque',diff:'medium',thaw:true,ingredients:['beef steak','eggs','fries or rice','garlic','mustard','butter','olive oil','salt','pepper','bay leaves','white wine']},
+  {id:23,name:'Quesadillas',diff:'easy',thaw:false,ingredients:['flour tortillas','cheddar or Mexican blend cheese','salsa','sour cream','butter or oil','salt']},
+  {id:24,name:'Buffalo chicken quesadillas',diff:'easy',thaw:true,ingredients:['chicken breasts','flour tortillas','cheddar cheese','buffalo sauce','butter','ranch dressing','garlic powder','salt','pepper']},
+  {id:25,name:'Mac & cheese',diff:'easy',thaw:false,ingredients:['macaroni','cheddar cheese','butter','whole milk','all-purpose flour','salt','pepper','mustard powder','breadcrumbs']},
+  {id:26,name:'Hot dogs',diff:'easy',thaw:false,ingredients:['hot dogs','hot dog buns','mustard','ketchup','onion','relish','butter']},
+  {id:27,name:'Chili',diff:'medium',thaw:true,ingredients:['ground beef','kidney beans','canned tomatoes','onion','garlic','vegetable or beef broth','olive oil','chili powder','cumin','paprika','salt','pepper','cayenne']},
+  {id:28,name:'Chili dogs',diff:'easy',thaw:true,ingredients:['hot dogs','hot dog buns','ground beef chili','cheddar cheese','onion','mustard','chili powder','cumin','salt','pepper']},
+  {id:29,name:'Chili & rice',diff:'medium',thaw:true,ingredients:['ground beef','kidney beans','canned tomatoes','onion','garlic','olive oil','rice','chili powder','cumin','paprika','salt','pepper']},
+  {id:30,name:'Curry',diff:'medium',thaw:true,ingredients:['chicken or beef','coconut milk','curry paste','onion','garlic','ginger','tomatoes','rice','vegetable oil','salt','coriander','cumin','turmeric']},
+  {id:31,name:'Chicken noodle soup',diff:'easy',thaw:true,ingredients:['chicken breasts or thighs','egg noodles','carrots','celery','onion','garlic','chicken broth','butter','olive oil','salt','pepper','thyme','bay leaves','fresh parsley']},
+  {id:32,name:'Deep fried tacos',diff:'involved',thaw:true,ingredients:['ground beef','corn tortillas','vegetable oil','cheddar cheese','lettuce','tomato','sour cream','onion','garlic','cumin','chili powder','salt','pepper']},
+  {id:33,name:'Stroganoff',diff:'medium',thaw:true,ingredients:['beef strips','mushrooms','onion','garlic','sour cream','beef broth','butter','all-purpose flour','egg noodles or rice','salt','pepper','paprika','worcestershire sauce','fresh parsley']},
+  {id:34,name:'Pork chops & mash',diff:'medium',thaw:true,ingredients:['pork chops','potatoes','butter','milk','garlic','rosemary','olive oil','salt','pepper','dijon mustard']},
+  {id:35,name:'Fish & chips',diff:'medium',thaw:true,ingredients:['white fish fillets','potatoes','all-purpose flour','baking powder','beer or sparkling water','vegetable oil','salt','pepper','malt vinegar','tartar sauce']},
+];
+
+// ======== OUR FRIDAYS ========
+const FRIDAY_ACTIVITIES_DEFAULT=[
+  {id:'wine-paint',name:'Wine & Paint',cat:'Creative',desc:'Set up canvases, put on some music, open a bottle of wine and paint together — no skills needed.',food:'Wine, cheese board, crackers, grapes, olives'},
+  {id:'clay',name:'Clay & Create',cat:'Creative',desc:'Buy air-dry clay and sculpt something together — small figures, bowls, whatever feels fun.',food:'Sparkling water, snacks, fruit platter'},
+  {id:'special-film',name:'Movie & Special Dinner',cat:'Entertainment',desc:'Pick a film you\'ve both been meaning to watch. Cook something special or order from a favourite place.',food:'Popcorn, drinks, something indulgent for dinner'},
+  {id:'natural-diy',name:'Natural DIY Workshop',cat:'Nature',desc:'Make something natural together — DIY shampoo bar, body scrub, candles or skincare. Look up a simple recipe beforehand.',food:'Herbal tea, light snacks'},
+  {id:'cooking-challenge',name:'Cooking Challenge',cat:'Culinary',desc:'Pick a cuisine you\'ve never cooked before or a dish that feels ambitious. Cook it together from scratch.',food:'Whatever you\'re cooking + a good drink'},
+  {id:'kitchen-staples',name:'Kitchen Staples Day',cat:'Culinary',desc:'Spend the evening making things that make everyday cooking easier — fresh pasta, sauces, pickles, granola, nut butter.',food:'Taste everything as you go, wine or juice'},
+  {id:'picnic-indoor',name:'Indoor Picnic Night',cat:'Cozy',desc:'Spread a blanket on the floor, put on soft lighting, and have a spread of finger foods, dips and drinks. No plates required.',food:'Mezze spread — hummus, pita, veggies, charcuterie, sparkling drinks'},
+  {id:'cocktail-night',name:'Cocktail & Mocktail Night',cat:'Experience',desc:'Pick 2–3 drinks to make from scratch. Buy the ingredients, watch a tutorial together and experiment.',food:'Cocktail snacks — nuts, chips, something salty'},
+  {id:'flower-arrangement',name:'Flower Arranging',cat:'Creative',desc:'Buy a mix of flowers and greenery from a market and arrange them together in different vases around the home.',food:'Afternoon tea vibes — sandwiches, pastries, tea or prosecco'},
+  {id:'stargazing',name:'Stargazing Night',cat:'Experience',desc:'Find a clear spot away from lights, bring blankets, download a star map app, and spend the evening looking up.',food:'Thermos of hot chocolate or tea, biscuits, warm snacks'},
+  {id:'board-games',name:'Games Night',cat:'Entertainment',desc:'Pull out board games, card games or get a new one. Keep score, get competitive, have fun.',food:'Pizza or comfort food, drinks, sweet treats'},
+  {id:'spa-night',name:'Home Spa Night',cat:'Cozy',desc:'Face masks, foot soaks, candles, calm music. Take turns with a shoulder massage. Total wind-down.',food:'Cucumber water, herbal tea, light fruit'},
+];
+let fridayActivities=load('friday_activities',FRIDAY_ACTIVITIES_DEFAULT);
+let fridayThisWeek=load('friday_this_week',null);
+let fridayItems=load('friday_items',[]);
+let editFridayId=null;
+
+const FRIDAY_CAT_COLORS={Creative:'var(--plum)',Culinary:'var(--amber)',Nature:'var(--sage)',Entertainment:'var(--accent)',Experience:'#6BAEC4',Cozy:'var(--text2)'};
+const FRIDAY_CAT_ICONS={Creative:'🎨',Culinary:'🍳',Nature:'🌿',Entertainment:'🎬',Experience:'✨',Cozy:'🛋️'};
+
+function renderFridays(){
+  renderFridayThisWeek();
+  renderFridayItems();
+  renderFridayActivitiesList();
+}
+function renderFridayThisWeek(){
+  const el=document.getElementById('friday-this-week');if(!el)return;
+  const act=fridayThisWeek?fridayActivities.find(a=>a.id===fridayThisWeek):null;
+  if(!act){el.innerHTML=`<div class="empty" style="padding:.5rem 0">No activity selected.</div><button class="btn btn-sm btn-p" style="margin-top:10px" onclick="pickFridayActivity()">Pick random</button>`;return;}
+  const col=FRIDAY_CAT_COLORS[act.cat]||'var(--text3)';
+  const icon=FRIDAY_CAT_ICONS[act.cat]||'✦';
+  el.innerHTML=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+    <span style="font-size:22px">${icon}</span>
+    <div><div style="font-family:'Parkinsans',sans-serif;font-weight:600;font-size:17px">${esc2(act.name)}</div>
+    <span style="font-size:10px;color:${col};font-weight:500">${act.cat}</span></div>
+  </div>
+  ${act.desc?`<div style="font-size:13px;color:var(--text2);margin-bottom:10px;font-weight:300;line-height:1.6">${esc2(act.desc)}</div>`:''}
+  ${act.food?`<div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--text2)"><span style="color:var(--amber);font-weight:500">🍽 Food & drinks: </span>${esc2(act.food)}</div>`:''}
+  <div style="margin-top:12px;display:flex;gap:8px">
+    <button class="btn btn-sm" onclick="pickFridayActivity()">↻ Pick another</button>
+    <button class="btn btn-sm" onclick="clearFridayActivity()">Clear</button>
+  </div>`;
+}
+function pickFridayActivity(){
+  if(!fridayActivities.length) return;
+  const idx=Math.floor(Math.random()*fridayActivities.length);
+  fridayThisWeek=fridayActivities[idx].id;
+  save('friday_this_week',fridayThisWeek);
+  renderFridayThisWeek();
+  toast('Friday activity picked!');
+  refreshOverview();
+}
+function clearFridayActivity(){fridayThisWeek=null;save('friday_this_week',fridayThisWeek);renderFridayThisWeek();refreshOverview();}
+function renderFridayItems(){
+  const el=document.getElementById('friday-items-list');if(!el)return;
+  if(!fridayItems.length){el.innerHTML='<div style="font-size:13px;color:var(--text3);padding:.25rem 0">No items yet.</div>';return;}
+  el.innerHTML=fridayItems.map((item,i)=>`<div class="task-row${item.done?' done':''}">
+    <input type="checkbox" ${item.done?'checked':''} onchange="toggleFridayItem(${i})">
+    <div class="task-name" style="flex:1">${esc2(item.name)}</div>
+    <button class="task-del" onclick="deleteFridayItem(${i})">✕</button>
+  </div>`).join('');
+  save('friday_items',fridayItems);
+}
+function addFridayItem(){
+  const inp=document.getElementById('friday-item-input');
+  const v=inp.value.trim();if(!v)return;
+  fridayItems.push({name:v,done:false});inp.value='';renderFridayItems();
+}
+function toggleFridayItem(i){fridayItems[i].done=!fridayItems[i].done;renderFridayItems();}
+function deleteFridayItem(i){fridayItems.splice(i,1);renderFridayItems();}
+function renderFridayActivitiesList(){
+  const el=document.getElementById('friday-activities-list');if(!el)return;
+  if(!fridayActivities.length){el.innerHTML='<div class="empty">No activities yet.</div>';return;}
+  const grouped={};
+  fridayActivities.forEach(a=>{if(!grouped[a.cat])grouped[a.cat]=[];grouped[a.cat].push(a);});
+  let html='';
+  Object.entries(grouped).forEach(([cat,acts])=>{
+    const col=FRIDAY_CAT_COLORS[cat]||'var(--text3)';
+    const icon=FRIDAY_CAT_ICONS[cat]||'✦';
+    html+=`<div style="margin-bottom:1rem"><div style="font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:${col};font-weight:500;margin-bottom:8px">${icon} ${cat}</div>`;
+    acts.forEach(act=>{
+      const isCurrent=fridayThisWeek===act.id;
+      html+=`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)">
+        <div style="flex:1">
+          <div style="font-size:13.5px;font-weight:${isCurrent?600:400};${isCurrent?'color:var(--accent)':''}">${esc2(act.name)}${isCurrent?' <span style="font-size:10px">← this Friday</span>':''}</div>
+          ${act.food?`<div style="font-size:11px;color:var(--text3);margin-top:2px">${esc2(act.food)}</div>`:''}
+        </div>
+        <button class="btn btn-sm" onclick="selectFridayActivity('${act.id}')">Pick</button>
+        <button class="btn btn-sm" onclick="openFridayActivityModal('${act.id}')">Edit</button>
+        <button class="task-del" onclick="deleteFridayActivity('${act.id}')">✕</button>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  el.innerHTML=html;
+}
+function selectFridayActivity(id){fridayThisWeek=id;save('friday_this_week',fridayThisWeek);renderFridays();refreshOverview();toast('Activity selected for this Friday!');}
+function openFridayActivityModal(editId){
+  editFridayId=editId||null;
+  const existing=editId?fridayActivities.find(a=>a.id===editId):null;
+  document.getElementById('fam-title').textContent=existing?'Edit activity':'Add Friday activity';
+  document.getElementById('fam-save-btn').textContent=existing?'Save changes':'Add activity';
+  document.getElementById('fam-name').value=existing?existing.name:'';
+  document.getElementById('fam-cat').value=existing?(existing.cat||'Creative'):'Creative';
+  document.getElementById('fam-desc').value=existing?(existing.desc||''):'';
+  document.getElementById('fam-food').value=existing?(existing.food||''):'';
+  openModal('friday-activity-modal');
+}
+function saveFridayActivity(){
+  const name=document.getElementById('fam-name').value.trim();if(!name)return;
+  const data={
+    id:editFridayId||(name.toLowerCase().replace(/\s+/g,'-')+'-'+Date.now()),
+    name,cat:document.getElementById('fam-cat').value,
+    desc:document.getElementById('fam-desc').value.trim(),
+    food:document.getElementById('fam-food').value.trim(),
+  };
+  if(editFridayId){const idx=fridayActivities.findIndex(a=>a.id===editFridayId);if(idx>-1)fridayActivities[idx]=data;}
+  else fridayActivities.push(data);
+  save('friday_activities',fridayActivities);closeModal('friday-activity-modal');renderFridayActivitiesList();toast(editFridayId?'Activity updated!':'Activity added!');editFridayId=null;
+}
+function deleteFridayActivity(id){
+  if(!confirm('Remove this activity?'))return;
+  fridayActivities=fridayActivities.filter(a=>a.id!==id);
+  if(fridayThisWeek===id){fridayThisWeek=null;save('friday_this_week',null);}
+  save('friday_activities',fridayActivities);renderFridays();toast('Activity removed');
+}
+function initFridays(){renderFridays();}
+
+// ======== FUTURE PLANS ========
+let futurePlans=load('future_plans',[]);
+let bucketList=load('bucket_list',[]);
+let ideas=load('ideas',[]);
+const PLAN_CAT_ICONS={'Travel':'✈️','Home':'🏠','Personal':'🌱','Together':'💛','Career':'💼','Other':'•'};
+
+function renderFuturePlans(){
+  const el=document.getElementById('future-plans-list');if(!el)return;
+  if(!futurePlans.length){el.innerHTML='<div class="empty">No plans yet — add something you\'re looking forward to.</div>';return;}
+  const cats={};
+  futurePlans.forEach((p,i)=>{if(!cats[p.cat])cats[p.cat]=[];cats[p.cat].push({...p,i});});
+  let html='';
+  Object.entries(cats).forEach(([cat,plans])=>{
+    const icon=PLAN_CAT_ICONS[cat]||'•';
+    html+=`<div style="margin-bottom:1.25rem"><div style="font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);font-weight:500;margin-bottom:8px">${icon} ${cat}</div>`;
+    plans.forEach(p=>{
+      html+=`<div class="dcard" style="margin-bottom:8px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+          <div style="flex:1">
+            <div style="font-family:'Parkinsans',sans-serif;font-weight:600;font-size:14px;margin-bottom:3px">${esc2(p.name)}</div>
+            ${p.when?`<div style="font-size:11px;color:var(--accent);margin-bottom:4px">⏱ ${esc2(p.when)}</div>`:''}
+            ${p.notes?`<div style="font-size:12px;color:var(--text3);font-weight:300">${esc2(p.notes)}</div>`:''}
+          </div>
+          <button class="task-del" onclick="deletePlanItem(${p.i})">✕</button>
+        </div>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  el.innerHTML=html;
+}
+function openPlanModal(){openModal('plan-modal');document.getElementById('pm2-name').value='';document.getElementById('pm2-when').value='';document.getElementById('pm2-notes').value='';}
+function savePlan(){
+  const name=document.getElementById('pm2-name').value.trim();if(!name)return;
+  futurePlans.push({name,cat:document.getElementById('pm2-cat').value,when:document.getElementById('pm2-when').value.trim(),notes:document.getElementById('pm2-notes').value.trim()});
+  save('future_plans',futurePlans);closeModal('plan-modal');renderFuturePlans();toast('Plan added!');
+}
+function deletePlanItem(i){futurePlans.splice(i,1);save('future_plans',futurePlans);renderFuturePlans();}
+
+function renderBucketList(){
+  const el=document.getElementById('bucket-list-content');if(!el)return;
+  if(!bucketList.length){el.innerHTML='<div class="empty">Start your bucket list.</div>';return;}
+  el.innerHTML=bucketList.map((item,i)=>`<div class="task-row${item.done?' done':''}">
+    <input type="checkbox" ${item.done?'checked':''} onchange="toggleBucket(${i})">
+    <div style="flex:1">
+      <div class="task-name">${esc2(item.name)}</div>
+      ${item.deadline||item.notes?`<div class="task-meta">${item.deadline?`<span>🗓 ${esc2(item.deadline)}</span>`:''}${item.notes?`<span>${esc2(item.notes)}</span>`:''}</div>`:''}
+    </div>
+    <button class="task-del" onclick="deleteBucket(${i})">✕</button>
+  </div>`).join('');
+  save('bucket_list',bucketList);
+}
+function openBucketModal(){openModal('bucket-modal');document.getElementById('bk-name').value='';document.getElementById('bk-deadline').value='';document.getElementById('bk-notes').value='';}
+function saveBucketItem(){
+  const name=document.getElementById('bk-name').value.trim();if(!name)return;
+  bucketList.push({name,deadline:document.getElementById('bk-deadline').value.trim(),notes:document.getElementById('bk-notes').value.trim(),done:false});
+  save('bucket_list',bucketList);closeModal('bucket-modal');renderBucketList();toast('Added to bucket list!');
+}
+function toggleBucket(i){bucketList[i].done=!bucketList[i].done;renderBucketList();}
+function deleteBucket(i){bucketList.splice(i,1);renderBucketList();}
+
+function renderIdeas(){
+  const el=document.getElementById('ideas-list');if(!el)return;
+  if(!ideas.length){el.innerHTML='<div class="empty">No ideas yet.</div>';return;}
+  el.innerHTML=ideas.map((idea,i)=>`<div class="task-row">
+    <div style="flex:1"><div class="task-name">${esc2(idea.text)}</div><div class="task-meta"><span>${idea.date||''}</span></div></div>
+    <button class="task-del" onclick="deleteIdea(${i})">✕</button>
+  </div>`).join('');
+  save('ideas',ideas);
+}
+function addIdea(){
+  const inp=document.getElementById('idea-input');const v=inp.value.trim();if(!v)return;
+  ideas.unshift({text:v,date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})});
+  inp.value='';renderIdeas();toast('Idea saved!');
+}
+function deleteIdea(i){ideas.splice(i,1);renderIdeas();}
+function initFuturePlans(){renderFuturePlans();renderBucketList();renderIdeas();}
+// ======== ONBOARDING ========
+function applyHouseholdName(name){
+  const el=document.getElementById('ov-family-name');
+  if(el) el.textContent=name;
+}
+function showOnboarding(){
+  const ov=document.getElementById('onboarding-overlay');
+  if(ov){ov.classList.add('open');setTimeout(()=>{const i=document.getElementById('onboard-name-input');if(i)i.focus();},200);}
+}
+function finishOnboarding(){
+  const inp=document.getElementById('onboard-name-input');
+  const name=(inp?inp.value.trim():'');
+  if(!name)return;
+  save('household_name',name);
+  applyHouseholdName(name);
+  const ov=document.getElementById('onboarding-overlay');
+  if(ov) ov.classList.remove('open');
+  toast('Welcome, '+name+'! 🎉');
+}
+function copyInviteLink(){
+  const txt=document.getElementById('invite-link-text').textContent;
+  navigator.clipboard.writeText(txt).then(()=>toast('Link copied! Send it to your partner.')).catch(()=>{});
+}
+
+// ======== INIT ========
+(function init(){
+  initTheme();
+  checkBillsAutoReset();
+  initDayGrid();
+  initWeeklyGrid();
+  initMealplanGrid();
+  initMealsTabs();
+  initFinance();
+  initGoals();
+  initPockets();
+  initFridays();
+  initFuturePlans();
+  renderTodos();
+  renderUrgents();
+  renderMealsList();
+  renderPlan();
+  renderDpGrocery();
+  renderThaw();
+  renderGroceryList();
+  initBillsMonthSel();
+  renderBillsTracker();
+  refreshOverview();
+})();
+</script>
+
+</div><!-- end .main -->
+</div><!-- end app-shell -->
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, collection, getDocs, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAI4J8XAAAYpXJE--UKnLQ0rm7v3g2qnes",
+  authDomain: "meandyou-plans.firebaseapp.com",
+  projectId: "meandyou-plans",
+  storageBucket: "meandyou-plans.firebasestorage.app",
+  messagingSenderId: "9211178895",
+  appId: "1:9211178895:web:e71151a5de19ce889665fa"
+};
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+// ---- Wire Google auth to both login buttons ----
+async function doGoogleSignIn() {
+  const errEl = document.getElementById('login-error');
+  if(errEl){ errEl.style.display='none'; errEl.textContent=''; }
+  try { await signInWithPopup(auth, provider); }
+  catch(e) {
+    if(errEl){
+      errEl.textContent = e.code === 'auth/popup-closed-by-user'
+        ? 'Sign-in cancelled. Try again.'
+        : 'Sign-in failed — ' + e.message;
+      errEl.style.display = 'block';
+    }
+  }
+}
+document.getElementById('login-btn-register').addEventListener('click', doGoogleSignIn);
+document.getElementById('login-btn-signin').addEventListener('click', doGoogleSignIn);
+
+// ---- Close avatar menu on outside click ----
+document.addEventListener('click', e => {
+  const wrap = document.getElementById('nav-avatar-wrap');
+  if(wrap && !wrap.contains(e.target)){
+    const m = document.getElementById('avatar-menu');
+    if(m) m.style.display = 'none';
+  }
+});
+
+// ---- Expose real sign-out and invite ----
+window.handleSignOut = () => signOut(auth).catch(()=>{});
+window.showInvitePartner = () => {
+  const hid = window._householdId;
+  toggleAvatarMenu();
+  if(!hid){ toast('Not signed in'); return; }
+  const url = window.location.origin + window.location.pathname + '?join=' + hid;
+  const el = document.getElementById('invite-link-text');
+  if(el) el.textContent = url;
+  document.getElementById('invite-banner').style.display = 'block';
+};
+
+// ---- Handle ?join= invite link ----
+async function handleInviteJoin(user) {
+  const joinId = new URLSearchParams(window.location.search).get('join');
+  if(!joinId) return null;
+  const memberRef = doc(db, 'households', joinId, 'members', user.uid);
+  await setDoc(memberRef, { uid:user.uid, email:user.email, name:user.displayName, joinedAt:serverTimestamp() }, {merge:true});
+  window.history.replaceState({}, '', window.location.pathname);
+  return joinId;
+}
+
+// ---- Get or create household ----
+async function getOrCreateHousehold(user) {
+  const userMetaRef = doc(db, 'userMeta', user.uid);
+  const userMeta    = await getDoc(userMetaRef);
+  if(userMeta.exists() && userMeta.data().householdId)
+    return userMeta.data().householdId;
+
+  const joinedId = await handleInviteJoin(user);
+  if(joinedId){
+    await setDoc(userMetaRef, { householdId: joinedId }, {merge:true});
+    return joinedId;
+  }
+
+  const hid = 'hh_' + user.uid;
+  await setDoc(doc(db,'households',hid), { createdAt:serverTimestamp(), createdBy:user.uid }, {merge:true});
+  await setDoc(doc(db,'households',hid,'members',user.uid), { uid:user.uid, email:user.email, name:user.displayName, joinedAt:serverTimestamp() });
+  await setDoc(userMetaRef, { householdId: hid }, {merge:true});
+  return hid;
+}
+
+// ---- Fill avatar UI ----
+function fillAvatar(user) {
+  const name     = user.displayName || 'User';
+  const photo    = user.photoURL;
+  const initials = name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+
+  const imgEl   = document.getElementById('nav-avatar-img');
+  const initEl  = document.getElementById('nav-avatar-initials');
+  const nameEl  = document.getElementById('nav-avatar-name');
+  const amName  = document.getElementById('am-name');
+  const amEmail = document.getElementById('am-email');
+
+  if(photo){ imgEl.src=photo; imgEl.style.display='block'; initEl.style.display='none'; }
+  else      { initEl.textContent=initials; initEl.style.display='flex'; imgEl.style.display='none'; }
+  if(nameEl)  nameEl.textContent  = name.split(' ')[0];
+  if(amName)  amName.textContent  = name;
+  if(amEmail) amEmail.textContent = user.email||'';
+  document.getElementById('nav-avatar-wrap').style.display = 'flex';
+  syncAvatarTheme();
+}
+
+// ---- Update household member count in avatar menu ----
+async function updateHouseholdLabel(hid) {
+  const amHH = document.getElementById('am-household');
+  if(!amHH) return;
+  try {
+    const snap  = await getDocs(collection(db,'households',hid,'members'));
+    amHH.textContent = snap.size > 1
+      ? `🏠 Shared household · ${snap.size} members`
+      : '🏠 Solo — invite your partner below';
+  } catch(e){ amHH.textContent=''; }
+}
+
+// ---- Auth state ----
+onAuthStateChanged(auth, async user => {
+  const loginScreen = document.getElementById('login-screen');
+  const appShell    = document.getElementById('app-shell');
+
+  if(user) {
+    loginScreen.style.display = 'none';
+    appShell.style.display    = 'flex';
+    fillAvatar(user);
+
+    // Set global db + householdId so save() works
+    window._db = db;
+    const hid  = await getOrCreateHousehold(user);
+    window._householdId = hid;
+    // Update the global _householdId in main script
+    if(typeof _householdId !== 'undefined') window._householdId = hid;
+
+    updateHouseholdLabel(hid);
+    await syncFromFirestore();
+
+    const name = load('household_name','');
+    if(!name) showOnboarding();
+    else applyHouseholdName(name);
+
+  } else {
+    loginScreen.style.display = 'flex';
+    appShell.style.display    = 'none';
+    document.getElementById('nav-avatar-wrap').style.display = 'none';
+    window._householdId = null;
+  }
+});
+</script>
+
+</body>
+</html>
